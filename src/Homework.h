@@ -7,6 +7,8 @@
 
 #include "../pugixml/pugixml.hpp"
 
+#include <cstdio>
+
 class Homework
 {
     enum States

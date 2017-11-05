@@ -1,7 +1,5 @@
 #include "Homework.h"
 
-#include <cstdio>
-
 Homework::Homework()
 {
     m_xmlConstants = new pugi::xml_document();
