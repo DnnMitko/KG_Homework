@@ -1,4 +1,4 @@
-OBJS = src/main.cpp src/Homework.cpp pugixml/pugixml.cpp
+OBJS = src/*.cpp pugixml/pugixml.cpp
 
 CC = g++
 
