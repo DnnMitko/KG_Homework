@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __HOMEWORK_H__
+#define __HOMEWORK_H__
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
@@ -34,3 +35,5 @@ private:
 
     pugi::xml_document* m_xmlConstants;
 };
+
+#endif //__HOMEWORK_H__

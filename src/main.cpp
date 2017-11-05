@@ -1,6 +1,6 @@
 #include "Homework.h"
 
-int main(int argc, char* args[])
+int main( int argc, char* args[] )
 {
     Homework hw;
 
