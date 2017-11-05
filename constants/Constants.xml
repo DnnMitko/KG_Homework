@@ -3,4 +3,10 @@
   <ScreenWidth>1350</ScreenWidth>
   <ScreenHeight>750</ScreenHeight>
   <WindowName>Homework by 45045</WindowName>
+  <GridPos>
+    <x>75</x>
+    <y>25</y>
+    <w>1200</w>
+    <h>700</h>
+  </GridPos>
 </Constants>
