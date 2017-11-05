@@ -4,7 +4,7 @@ CC = g++
 
 LIBS = -L/usr/include/SDL2/SDL_image -L/usr/include/SDL2/SDL_ttf
 
-COMPILER_FLAGS = -w 
+#COMPILER_FLAGS = -w 
 
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
