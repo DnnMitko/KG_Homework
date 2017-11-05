@@ -5,8 +5,9 @@
 Homework::Homework()
 {
     m_xmlConstants = new pugi::xml_document();
-    if( !m_xmlConstants->load_file( "Constants/Constants.xml " ) )
+    if( !m_xmlConstants->load_file( "constants/Constants.xml " ) )
     {
+        printf( "Couldn't load constants from xml!\n" );
         m_bQuit = true;
     }
     else
@@ -87,8 +88,9 @@ bool Homework::InitSDL()
 
         int iScreenHeight = m_xmlConstants->first_child().child( "ScreenHeight" ).text().as_int();
         int iScreenWidth = m_xmlConstants->first_child().child( "ScreenWidth" ).text().as_int();
+        std::string sWindowName = m_xmlConstants->first_child().child( "WindowName" ).text().as_string();
 
-        m_Window = SDL_CreateWindow( "Sunny Beach Holiday", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, iScreenWidth, iScreenHeight, SDL_WINDOW_SHOWN );
+        m_Window = SDL_CreateWindow( sWindowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, iScreenWidth, iScreenHeight, SDL_WINDOW_SHOWN );
         if( m_Window == NULL )
         {
             printf( "Couldn't create window! Error: %s\n", SDL_GetError() );
