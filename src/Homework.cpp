@@ -63,7 +63,7 @@ bool Homework::GetQuit() const
 
 void Homework::Draw()
 {
-    //TODO
+    m_pGrid->Draw();
 
     SDL_RenderPresent( m_Renderer );
 }
@@ -132,5 +132,7 @@ void Homework::DeInitSDL()
 
 void Homework::Create()
 {
-    //TODO
+    m_pGrid = new Grid();
+
+    m_pGrid->Init( m_xmlConstants, m_Renderer );
 }

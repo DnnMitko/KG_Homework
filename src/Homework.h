@@ -7,6 +7,8 @@
 
 #include "../pugixml/pugixml.hpp"
 
+#include "Grid.h"
+
 #include <cstdio>
 
 class Homework
@@ -36,6 +38,8 @@ private:
     States m_eCurState;
 
     pugi::xml_document* m_xmlConstants;
+
+    Grid* m_pGrid;
 };
 
 #endif //__HOMEWORK_H__

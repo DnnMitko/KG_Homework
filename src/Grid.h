@@ -11,11 +11,17 @@ using std::vector;
 
 class Grid
 {
-    struct MousePair
+    struct MouseClick
     {
-        MousePair() : x( -1 ), y( -1 ) {}
+        MouseClick() : x( -1 ), y( -1 ) {}
         int x;
         int y;
+    };
+
+    struct MousePair
+    {
+        MouseClick begin;
+        MouseClick end;
     };
 public:
     Grid();
@@ -26,7 +32,13 @@ public:
     void Draw();
     void EventHandler( SDL_Event& );
 private:
+    void DrawGrid();
+    void DrawPixelStatus();
+    void DrawLines();
+private:
     SDL_Renderer* m_Renderer;
+
+    bool m_bHasChanged;
 
     SDL_Rect m_GridPos;
     unsigned int m_uiPixelSize;

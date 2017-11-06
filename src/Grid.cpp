@@ -3,6 +3,8 @@
 Grid::Grid()
 {
     m_Renderer = NULL;
+
+    m_bHasChanged = false;
     
     m_GridPos.x = 0;
     m_GridPos.y = 0;
@@ -36,6 +38,8 @@ bool Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pRenderer )
 {
     m_Renderer = pRenderer;
 
+    m_bHasChanged = true;
+
     pugi::xml_node xGridPos = pConstants->first_child().child( "GridPos" );
 
     m_GridPos.x = xGridPos.child( "x" ).text().as_int();
@@ -46,8 +50,68 @@ bool Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pRenderer )
     m_uiPixelSize = 1;
 
     m_ppbPixelStatus = NULL;
-    m_uiPixelCountWidth = 0;;
+    m_uiPixelCountWidth = 0;
     m_uiPixelCountHeight = 0;
 
     m_pvMouseClicks = new vector<MousePair>;
+}
+
+void Grid::Draw()
+{
+    if( !m_bHasChanged )
+    {
+        return;
+    }
+
+    if( m_uiPixelSize == 1 )
+    {
+        DrawGrid();
+        DrawLines();
+    }
+    else
+    {
+        DrawGrid();
+        DrawPixelStatus();
+        DrawLines();
+    }
+}
+
+void Grid::EventHandler( SDL_Event& e )
+{
+    //TODO
+}
+
+void Grid::DrawGrid()
+{
+    SDL_SetRenderDrawColor( m_Renderer, 255, 255, 255, 255 );
+    SDL_RenderFillRect( m_Renderer, &m_GridPos );
+    
+    if( m_uiPixelSize != 1 )
+    {
+        SDL_SetRenderDrawColor( m_Renderer, 0, 0, 0, 255 );
+
+        SDL_Rect temp;
+        temp.w = m_uiPixelSize;
+        temp.h = m_uiPixelSize;
+
+        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_uiPixelSize )
+        {
+            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_uiPixelSize )
+            {
+                temp.x = iX;
+                temp.y = iY;
+                SDL_RenderDrawRect( m_Renderer, &temp );
+            }
+        }
+    }
+}
+
+void Grid::DrawPixelStatus()
+{
+    //TODO
+}
+
+void Grid::DrawLines()
+{
+    //TODO
 }
