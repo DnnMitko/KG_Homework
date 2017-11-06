@@ -74,14 +74,30 @@ void Grid::Draw()
         return;
     }
 
+    if( !m_pvMouseClicks->empty() )
+    {
+        Calculate();
+    }
+
     DrawGrid();
     DrawPixelStatus();
     DrawLines();
+
+    m_bHasChanged = false;
 }
 
 void Grid::EventHandler( SDL_Event& e )
 {
-    //TODO
+    if( e.type == SDL_MOUSEBUTTONDOWN )
+	{
+        MouseClick click;
+        SDL_GetMouseState( &( click.x ), &( click.y ) );
+
+        if( IsInGrid( click ) )
+        {
+            AddClick( click );
+        }
+    }
 }
 
 void Grid::DrawGrid()
@@ -100,12 +116,12 @@ void Grid::DrawGrid()
         temp.w = m_uiPixelSize;
         temp.h = m_uiPixelSize;
 
-        for( unsigned int uiX = m_GridPos.x; uiX < m_GridPos.x + m_GridPos.w; uiX += m_uiPixelSize )
+        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_uiPixelSize )
         {
-            for( unsigned int uiY = m_GridPos.y; uiY < m_GridPos.y + m_GridPos.h; uiY += m_uiPixelSize )
+            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_uiPixelSize )
             {
-                temp.x = uiX;
-                temp.y = uiY;
+                temp.x = iX;
+                temp.y = iY;
                 SDL_RenderDrawRect( m_Renderer, &temp );
             }
         }
@@ -122,17 +138,17 @@ void Grid::DrawPixelStatus()
         temp.w = m_uiPixelSize - 2;
         temp.h = m_uiPixelSize - 2;
 
-        for( unsigned int uiX = m_GridPos.x; uiX < m_GridPos.x + m_GridPos.w; uiX += m_uiPixelSize )
+        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_uiPixelSize )
         {
-            for( unsigned int uiY = m_GridPos.y; uiY < m_GridPos.y + m_GridPos.h; uiY += m_uiPixelSize )
+            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_uiPixelSize )
             {
-                unsigned int uiSquarePosX = ( uiX - m_GridPos.x ) / m_uiPixelSize;
-                unsigned int uiSquarePosY = ( uiY - m_GridPos.y ) / m_uiPixelSize;
+                int iSquarePosX = ( iX - m_GridPos.x ) / m_uiPixelSize;
+                int iSquarePosY = ( iY - m_GridPos.y ) / m_uiPixelSize;
 
-                if( m_ppbPixelStatus[uiSquarePosX][uiSquarePosY] )
+                if( m_ppbPixelStatus[iSquarePosX][iSquarePosY] )
                 {
-                    temp.x = uiX + 1;
-                    temp.y = uiY + 1;
+                    temp.x = iX + 1;
+                    temp.y = iY + 1;
                     SDL_RenderFillRect( m_Renderer, &temp );
                 }
             }
@@ -142,7 +158,22 @@ void Grid::DrawPixelStatus()
 
 void Grid::DrawLines()
 {
-    //TODO
+    vector<MousePair>::iterator it;
+    
+    int x1, y1, x2, y2;
+    int iRise, iRun;
+
+    SDL_SetRenderDrawColor( m_Renderer, 0, 0, 0, 255 );
+    
+    for( it = m_pvMouseClicks->begin(); it != m_pvMouseClicks->end(); it++ )
+    {
+        x1 = it->begin.x;
+        y1 = it->begin.y;
+        x2 = it->end.x;
+        y2 = it->end.y;
+
+        SDL_RenderDrawLine( m_Renderer, x1, y1, x2, y2 );
+    }
 }
 
 void Grid::ClearStatus()
@@ -151,12 +182,155 @@ void Grid::ClearStatus()
     {
         for( unsigned int row = 0; row < m_uiPixelCountHeight; row++ )
         {
-            if(col == 1)
-            {
-                m_ppbPixelStatus[col][row] = true;
-                continue;
-            }
             m_ppbPixelStatus[col][row] = false;
         }
     }
+}
+
+bool Grid::IsInGrid( MouseClick click )
+{
+    if( click.x > m_GridPos.x || click.x < ( m_GridPos.x + m_GridPos.w ) )
+    {
+        if( click.y > m_GridPos.y || click.y < ( m_GridPos.y + m_GridPos.h ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void Grid::AddClick( MouseClick click )
+{
+    if( m_pvMouseClicks->empty()
+        || m_pvMouseClicks->back().end.x != -1 )
+    {
+        MousePair mpTemp;
+        mpTemp.begin = click;
+        mpTemp.end.x = -1;
+        mpTemp.end.y = -1;
+        m_pvMouseClicks->push_back( mpTemp );
+    }
+    else
+    {
+        m_bHasChanged = true;
+
+        if( m_pvMouseClicks->back().begin.x < click.x )
+        {
+            m_pvMouseClicks->back().end = click;
+        }
+        else
+        {
+            m_pvMouseClicks->back().end = m_pvMouseClicks->back().begin;
+            m_pvMouseClicks->back().begin = click;
+        }
+    }
+}
+
+void Grid::Calculate()
+{
+    vector<MousePair>::iterator it;
+    
+    int x1, y1, x2, y2;
+    int iRun;
+    
+    for( it = m_pvMouseClicks->begin(); it != m_pvMouseClicks->end(); it++ )
+    {
+        x1 = it->begin.x;
+        y1 = it->begin.y;
+        x2 = it->end.x;
+        y2 = it->end.y;
+
+        iRun = x2 - x1;
+
+        if( iRun == 0 )
+        {
+            SetVertical( x1, y1, y2 );
+        }
+        else
+        {
+            SetSlope( x1, y1, x2, y2 );
+        }
+    }
+}
+
+void Grid::PutPixel( int iX, int iY )
+{
+    int iSquarePosX = ( iX - m_GridPos.x ) / m_uiPixelSize;
+    int iSquarePosY = ( iY - m_GridPos.y ) / m_uiPixelSize;
+
+    m_ppbPixelStatus[iSquarePosX][iSquarePosY] = true;
+}
+
+void Grid::SetVertical( int x, int y1, int y2 )
+{
+    int iCol = ( x - m_GridPos.x ) / m_uiPixelSize;
+
+    int iRowStart, iRowEnd;
+
+    if( y1 < y2 )
+    {
+        iRowStart = ( y1 - m_GridPos.y ) / m_uiPixelSize;
+        iRowEnd = ( y2 - m_GridPos.y ) / m_uiPixelSize;
+    }
+    else
+    {
+        iRowStart = ( y2 - m_GridPos.y ) / m_uiPixelSize;
+        iRowEnd = ( y1 - m_GridPos.y ) / m_uiPixelSize;
+    }
+
+    for( int iRow = iRowStart; iRow <= iRowEnd; iRow++ )
+    {
+        m_ppbPixelStatus[iCol][iRow] = true;
+    }
+}
+
+void Grid::SetSlope( int x1, int y1, int x2, int y2 )
+{
+    int iRise = y2 - y1;
+    int iRun = x2 - x1;
+
+    float fSlope = iRise / (float)iRun;
+
+    if( fSlope <= 1 && fSlope >= -1 )
+    {
+        SetSlopeNormal( x1, y1, x2, y2, fSlope );
+    }
+    else
+    {
+        SetSlopeInverse( x1, y1, x2, y2, fSlope );
+    }
+}
+
+void Grid::SetSlopeNormal( int x1, int y1, int x2, int y2, float fSlope )
+{
+    int iDirection = ( fSlope >= 0 ) ? 1 : -1;
+
+    float fDelta = fabsf( fSlope );
+
+    float fOffset = 0;
+
+    float fThreshold = ( y1 - m_GridPos.y ) % m_uiPixelSize;
+    if( fSlope > 0 )
+    {
+        fThreshold = m_uiPixelSize - fThreshold;
+    }
+    
+    int iY = y1;
+    for( int iX = x1; iX <= x2; iX += m_uiPixelSize )
+    {
+        PutPixel( iX, iY );
+
+        fOffset += fDelta * m_uiPixelSize;
+        if( fOffset >= fThreshold )
+        {
+            iY += iDirection * m_uiPixelSize;
+            fThreshold += m_uiPixelSize;
+        }
+    }
+}
+
+void Grid::SetSlopeInverse( int x1, int y1, int x2, int y2, float fSlope )
+{
+    //TODO
 }

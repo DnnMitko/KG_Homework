@@ -6,6 +6,7 @@
 #include "../pugixml/pugixml.hpp"
 
 #include <vector>
+// #include <cmath>
 
 using std::vector;
 
@@ -19,7 +20,6 @@ class Grid
     
     struct MouseClick
     {
-        MouseClick() : x( -1 ), y( -1 ) {}
         int x;
         int y;
     };
@@ -43,6 +43,18 @@ private:
     void DrawLines();
 
     void ClearStatus();
+
+    bool IsInGrid( MouseClick );
+    void AddClick( MouseClick );
+
+    void Calculate();
+    void PutPixel( int, int );
+
+    // Bresenham
+    void SetVertical( int, int, int );
+    void SetSlope( int, int, int, int );
+    void SetSlopeNormal( int, int, int, int, float );
+    void SetSlopeInverse( int, int, int, int, float );
 private:
     SDL_Renderer* m_Renderer;
 
