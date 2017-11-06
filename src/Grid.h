@@ -3,7 +3,7 @@
 
 #include "SDL2/SDL.h"
 
-#include "../pugixml/pugixml.hpp"
+#include "pugixml/pugixml.hpp"
 
 #include <vector>
 

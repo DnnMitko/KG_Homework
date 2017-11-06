@@ -5,7 +5,7 @@
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_ttf.h"
 
-#include "../pugixml/pugixml.hpp"
+#include "pugixml/pugixml.hpp"
 
 #include "Grid.h"
 
