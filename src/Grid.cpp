@@ -74,7 +74,7 @@ void Grid::Draw()
         return;
     }
 
-    if( !m_pvMouseClicks->empty() )
+    if( !m_pvMouseClicks->empty() && m_uiPixelSize != 1 )
     {
         Calculate();
     }
@@ -161,7 +161,6 @@ void Grid::DrawLines()
     vector<MousePair>::iterator it;
     
     int x1, y1, x2, y2;
-    int iRise, iRun;
 
     SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
     
@@ -349,7 +348,7 @@ void Grid::SetSlopeNormal( int x1, int y1, int x2, int y2, float fSlope )
         PutPixel( iX, iY );
 
         fOffset += fDelta * m_uiPixelSize;
-        if( fOffset >= fThreshold )
+        if( fOffset > fThreshold )
         {
             iY += iDirection * m_uiPixelSize;
             fThreshold += m_uiPixelSize;
