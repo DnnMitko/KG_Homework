@@ -33,7 +33,7 @@ public:
     Grid();
     ~Grid();
 public:
-    bool Init( pugi::xml_document*, SDL_Renderer* );
+    void Init( pugi::xml_document*, SDL_Renderer* );
 
     void Draw();
     void EventHandler( SDL_Event& );

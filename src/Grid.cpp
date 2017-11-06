@@ -36,7 +36,7 @@ Grid::~Grid()
     m_pvMouseClicks = NULL;
 }
 
-bool Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pRenderer )
+void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pRenderer )
 {
     m_Renderer = pRenderer;
 
