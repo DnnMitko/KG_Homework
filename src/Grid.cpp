@@ -298,7 +298,7 @@ void Grid::SetSlope( int x1, int y1, int x2, int y2 )
     }
     else
     {
-        SetSlopeInverse( x1, y1, x2, y2, fSlope );
+        SetSlopeInverse( x1, y1, x2, y2 );
     }
 }
 
@@ -330,7 +330,47 @@ void Grid::SetSlopeNormal( int x1, int y1, int x2, int y2, float fSlope )
     }
 }
 
-void Grid::SetSlopeInverse( int x1, int y1, int x2, int y2, float fSlope )
+void Grid::SetSlopeInverse( int x1, int y1, int x2, int y2 )
 {
-    //TODO
+    int iRise = y2 - y1;
+    int iRun = x2 - x1;
+
+    float fSlope = iRun / (float)iRise;
+
+    int iDirection = ( fSlope >= 0 ) ? 1 : -1;
+
+    float fDelta = fabsf( fSlope );
+
+    float fOffset = 0;
+
+    float fThreshold = ( x1 - m_GridPos.x ) % m_uiPixelSize;
+    if( fSlope > 0 )
+    {
+        fThreshold = m_uiPixelSize - fThreshold;
+    }
+    
+    int iX;
+    if( y1 < y2 )
+    {
+        iX = x1;
+    }
+    else
+    {
+        iX = x2;
+        int iTemp = y1;
+        y1 = y2;
+        y2 = iTemp;
+    }
+
+    for( int iY = y1; iY <= y2; iY += m_uiPixelSize )
+    {
+        PutPixel( iX, iY );
+        
+        fOffset += fDelta * m_uiPixelSize;
+        if( fOffset >= fThreshold )
+        {
+            iX += iDirection * m_uiPixelSize;
+            fThreshold += m_uiPixelSize;
+        }
+    }
 }

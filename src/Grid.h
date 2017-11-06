@@ -54,7 +54,7 @@ private:
     void SetVertical( int, int, int );
     void SetSlope( int, int, int, int );
     void SetSlopeNormal( int, int, int, int, float );
-    void SetSlopeInverse( int, int, int, int, float );
+    void SetSlopeInverse( int, int, int, int );
 private:
     SDL_Renderer* m_Renderer;
 
