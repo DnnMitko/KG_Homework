@@ -185,9 +185,9 @@ void Grid::ClearStatus()
 
 bool Grid::IsInGrid( MouseClick click )
 {
-    if( click.x > m_GridPos.x || click.x < ( m_GridPos.x + m_GridPos.w ) )
+    if( click.x > m_GridPos.x && click.x < ( m_GridPos.x + m_GridPos.w ) )
     {
-        if( click.y > m_GridPos.y || click.y < ( m_GridPos.y + m_GridPos.h ) )
+        if( click.y > m_GridPos.y && click.y < ( m_GridPos.y + m_GridPos.h ) )
         {
             return true;
         }
