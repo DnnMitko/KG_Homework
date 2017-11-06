@@ -3,7 +3,7 @@
 Homework::Homework()
 {
     m_xmlConstants = new pugi::xml_document();
-    if( !m_xmlConstants->load_file( "constants/Constants.xml " ) )
+    if( !m_xmlConstants->load_file( "constants/Constants.xml" ) )
     {
         printf( "Couldn't load constants from xml!\n" );
         m_bQuit = true;
