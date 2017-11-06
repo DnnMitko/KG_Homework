@@ -48,6 +48,7 @@ private:
     void AddClick( MouseClick );
 
     void Calculate();
+    void Recalculate();
     void PutPixel( int, int );
 
     // Bresenham

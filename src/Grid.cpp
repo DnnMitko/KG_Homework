@@ -229,6 +229,28 @@ void Grid::AddClick( MouseClick click )
 
 void Grid::Calculate()
 {
+    int x1, y1, x2, y2;
+    int iRun;
+    
+    x1 = m_pvMouseClicks->back().begin.x;
+    y1 = m_pvMouseClicks->back().begin.y;
+    x2 = m_pvMouseClicks->back().end.x;
+    y2 = m_pvMouseClicks->back().end.y;
+
+    iRun = x2 - x1;
+
+    if( iRun == 0 )
+    {
+        SetVertical( x1, y1, y2 );
+    }
+    else
+    {
+        SetSlope( x1, y1, x2, y2 );
+    }
+}
+
+void Grid::Recalculate()
+{
     vector<MousePair>::iterator it;
     
     int x1, y1, x2, y2;
@@ -240,6 +262,11 @@ void Grid::Calculate()
         y1 = it->begin.y;
         x2 = it->end.x;
         y2 = it->end.y;
+
+        x1 = m_pvMouseClicks->back().begin.x;
+        y1 = m_pvMouseClicks->back().begin.y;
+        x2 = m_pvMouseClicks->back().end.x;
+        y2 = m_pvMouseClicks->back().end.y;
 
         iRun = x2 - x1;
 
