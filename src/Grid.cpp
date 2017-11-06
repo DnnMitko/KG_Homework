@@ -102,9 +102,6 @@ void Grid::EventHandler( SDL_Event& e )
 
 void Grid::DrawGrid()
 {
-    SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
-    SDL_RenderClear( m_Renderer );
-
     SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderFillRect( m_Renderer, &m_GridPos );
     

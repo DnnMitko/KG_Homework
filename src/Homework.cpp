@@ -20,7 +20,10 @@ Homework::Homework()
         else
         {
             m_bQuit = false;
-
+            
+            SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
+            SDL_RenderClear( m_Renderer );
+            
             Create();
         }
     }
