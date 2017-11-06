@@ -11,6 +11,12 @@ using std::vector;
 
 class Grid
 {
+    enum States
+    {
+        Bresenham,
+        NumStates
+    };
+    
     struct MouseClick
     {
         MouseClick() : x( -1 ), y( -1 ) {}
@@ -35,8 +41,12 @@ private:
     void DrawGrid();
     void DrawPixelStatus();
     void DrawLines();
+
+    void ClearStatus();
 private:
     SDL_Renderer* m_Renderer;
+
+    States m_eCurState;
 
     bool m_bHasChanged;
 

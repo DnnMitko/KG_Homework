@@ -4,6 +4,8 @@ Grid::Grid()
 {
     m_Renderer = NULL;
 
+    m_eCurState = NumStates;
+
     m_bHasChanged = false;
     
     m_GridPos.x = 0;
@@ -38,6 +40,8 @@ bool Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pRenderer )
 {
     m_Renderer = pRenderer;
 
+    m_eCurState = Bresenham;
+
     m_bHasChanged = true;
 
     pugi::xml_node xGridPos = pConstants->first_child().child( "GridPos" );
@@ -47,11 +51,18 @@ bool Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pRenderer )
     m_GridPos.w = xGridPos.child( "w" ).text().as_int();
     m_GridPos.h = xGridPos.child( "h" ).text().as_int();
 
-    m_uiPixelSize = 1;
+    m_uiPixelSize = pConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_int();
 
-    m_ppbPixelStatus = NULL;
-    m_uiPixelCountWidth = 0;
-    m_uiPixelCountHeight = 0;
+    int iSmallest = pConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
+    m_uiPixelCountWidth = m_GridPos.w / iSmallest;
+    m_uiPixelCountHeight = m_GridPos.h / iSmallest;
+
+    m_ppbPixelStatus = new bool*[m_uiPixelCountWidth];
+    for( unsigned int i = 0; i < m_uiPixelCountWidth; i++ )
+    {
+        m_ppbPixelStatus[i] = new bool[m_uiPixelCountHeight];
+    }
+    ClearStatus();
 
     m_pvMouseClicks = new vector<MousePair>;
 }
@@ -63,17 +74,9 @@ void Grid::Draw()
         return;
     }
 
-    if( m_uiPixelSize == 1 )
-    {
-        DrawGrid();
-        DrawLines();
-    }
-    else
-    {
-        DrawGrid();
-        DrawPixelStatus();
-        DrawLines();
-    }
+    DrawGrid();
+    DrawPixelStatus();
+    DrawLines();
 }
 
 void Grid::EventHandler( SDL_Event& e )
@@ -83,6 +86,9 @@ void Grid::EventHandler( SDL_Event& e )
 
 void Grid::DrawGrid()
 {
+    SDL_SetRenderDrawColor( m_Renderer, 0, 0, 0, 255 );
+    SDL_RenderClear( m_Renderer );
+
     SDL_SetRenderDrawColor( m_Renderer, 255, 255, 255, 255 );
     SDL_RenderFillRect( m_Renderer, &m_GridPos );
     
@@ -94,12 +100,12 @@ void Grid::DrawGrid()
         temp.w = m_uiPixelSize;
         temp.h = m_uiPixelSize;
 
-        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_uiPixelSize )
+        for( unsigned int uiX = m_GridPos.x; uiX < m_GridPos.x + m_GridPos.w; uiX += m_uiPixelSize )
         {
-            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_uiPixelSize )
+            for( unsigned int uiY = m_GridPos.y; uiY < m_GridPos.y + m_GridPos.h; uiY += m_uiPixelSize )
             {
-                temp.x = iX;
-                temp.y = iY;
+                temp.x = uiX;
+                temp.y = uiY;
                 SDL_RenderDrawRect( m_Renderer, &temp );
             }
         }
@@ -108,10 +114,49 @@ void Grid::DrawGrid()
 
 void Grid::DrawPixelStatus()
 {
-    //TODO
+    if( m_uiPixelSize != 1 )
+    {
+        SDL_SetRenderDrawColor( m_Renderer, 160, 160, 160, 255 );
+
+        SDL_Rect temp;
+        temp.w = m_uiPixelSize - 2;
+        temp.h = m_uiPixelSize - 2;
+
+        for( unsigned int uiX = m_GridPos.x; uiX < m_GridPos.x + m_GridPos.w; uiX += m_uiPixelSize )
+        {
+            for( unsigned int uiY = m_GridPos.y; uiY < m_GridPos.y + m_GridPos.h; uiY += m_uiPixelSize )
+            {
+                unsigned int uiSquarePosX = ( uiX - m_GridPos.x ) / m_uiPixelSize;
+                unsigned int uiSquarePosY = ( uiY - m_GridPos.y ) / m_uiPixelSize;
+
+                if( m_ppbPixelStatus[uiSquarePosX][uiSquarePosY] )
+                {
+                    temp.x = uiX + 1;
+                    temp.y = uiY + 1;
+                    SDL_RenderFillRect( m_Renderer, &temp );
+                }
+            }
+        }
+    }
 }
 
 void Grid::DrawLines()
 {
     //TODO
+}
+
+void Grid::ClearStatus()
+{
+    for( unsigned int col = 0; col < m_uiPixelCountWidth; col++ )
+    {
+        for( unsigned int row = 0; row < m_uiPixelCountHeight; row++ )
+        {
+            if(col == 1)
+            {
+                m_ppbPixelStatus[col][row] = true;
+                continue;
+            }
+            m_ppbPixelStatus[col][row] = false;
+        }
+    }
 }
