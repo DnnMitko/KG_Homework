@@ -9,4 +9,12 @@
     <w>1200</w>
     <h>700</h>
   </GridPos>
+  <GridScale>
+    <Initial>100</Initial>
+    <VerySmall>5</VerySmall>
+    <Small>10</Small>
+    <Medium>20</Medium>
+    <Large>50</Large>
+    <VeryLarge>100</VeryLarge>
+  </GridScale>
 </Constants>
