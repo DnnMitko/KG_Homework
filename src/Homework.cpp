@@ -22,8 +22,6 @@ Homework::Homework()
             m_bQuit = false;
 
             Create();
-
-            m_eCurState = Bresenham;
         }
     }
 }
@@ -49,10 +47,7 @@ void Homework::EventHandler( SDL_Event& e )
     }
     else
     {
-        switch( m_eCurState )
-        {
-            //TODO
-        }
+        m_pGrid->EventHandler( e );
     }
 }
 

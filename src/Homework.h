@@ -13,11 +13,6 @@
 
 class Homework
 {
-    enum States
-    {
-        Bresenham,
-        NumStates
-    };
 public:
     Homework();
     ~Homework();
@@ -35,7 +30,6 @@ private:
     SDL_Renderer* m_Renderer;
 
     bool m_bQuit;
-    States m_eCurState;
 
     pugi::xml_document* m_xmlConstants;
 
