@@ -6,7 +6,6 @@
 #include "../pugixml/pugixml.hpp"
 
 #include <vector>
-// #include <cmath>
 
 using std::vector;
 

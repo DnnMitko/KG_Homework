@@ -4,13 +4,13 @@
   <ScreenHeight>750</ScreenHeight>
   <WindowName>Homework by 45045</WindowName>
   <GridPos>
-    <x>75</x>
+    <x>125</x>
     <y>40</y>
-    <w>1200</w>
+    <w>1100</w>
     <h>700</h>
   </GridPos>
   <GridScale>
-    <Initial>100</Initial>
+    <Initial>1</Initial>
     <VerySmall>5</VerySmall>
     <Small>10</Small>
     <Medium>20</Medium>

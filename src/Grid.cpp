@@ -36,9 +36,9 @@ Grid::~Grid()
     m_pvMouseClicks = NULL;
 }
 
-void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pRenderer )
+void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
 {
-    m_Renderer = pRenderer;
+    m_Renderer = pNewRenderer;
 
     m_eCurState = Bresenham;
 
@@ -102,15 +102,15 @@ void Grid::EventHandler( SDL_Event& e )
 
 void Grid::DrawGrid()
 {
-    SDL_SetRenderDrawColor( m_Renderer, 0, 0, 0, 255 );
+    SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
     SDL_RenderClear( m_Renderer );
 
-    SDL_SetRenderDrawColor( m_Renderer, 255, 255, 255, 255 );
+    SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderFillRect( m_Renderer, &m_GridPos );
     
     if( m_uiPixelSize != 1 )
     {
-        SDL_SetRenderDrawColor( m_Renderer, 0, 0, 0, 255 );
+        SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
 
         SDL_Rect temp;
         temp.w = m_uiPixelSize;
@@ -132,7 +132,7 @@ void Grid::DrawPixelStatus()
 {
     if( m_uiPixelSize != 1 )
     {
-        SDL_SetRenderDrawColor( m_Renderer, 160, 160, 160, 255 );
+        SDL_SetRenderDrawColor( m_Renderer, 0xA0, 0xA0, 0xA0, 0xFF );
 
         SDL_Rect temp;
         temp.w = m_uiPixelSize - 2;
@@ -163,7 +163,7 @@ void Grid::DrawLines()
     int x1, y1, x2, y2;
     int iRise, iRun;
 
-    SDL_SetRenderDrawColor( m_Renderer, 0, 0, 0, 255 );
+    SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
     
     for( it = m_pvMouseClicks->begin(); it != m_pvMouseClicks->end(); it++ )
     {
