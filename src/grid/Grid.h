@@ -58,6 +58,8 @@ private:
     void SetSlope( MousePair );
     void SetSlopeNormal( MousePair, float );
     void SetSlopeInverse( MousePair );
+    void SortX( MousePair& );
+    void SortY( MousePair& );
 private:
     SDL_Renderer* m_Renderer;
 

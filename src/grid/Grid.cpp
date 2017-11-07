@@ -227,15 +227,7 @@ void Grid::AddClick( MouseClick click )
     {
         m_bHasChanged = true;
 
-        if( m_pvMouseClicks->back().begin.x < click.x )
-        {
-            m_pvMouseClicks->back().end = click;
-        }
-        else
-        {
-            m_pvMouseClicks->back().end = m_pvMouseClicks->back().begin;
-            m_pvMouseClicks->back().begin = click;
-        }
+        m_pvMouseClicks->back().end = click;
     }
 }
 

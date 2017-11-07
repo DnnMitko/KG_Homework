@@ -73,6 +73,8 @@ void Grid::SetSlope( MousePair coords )
 
 void Grid::SetSlopeNormal( MousePair coords, float fSlope )
 {
+    SortX( coords );
+    
     int x1 = coords.begin.x;
     int y1 = coords.begin.y;
     int x2 = coords.end.x;
@@ -106,6 +108,8 @@ void Grid::SetSlopeNormal( MousePair coords, float fSlope )
 
 void Grid::SetSlopeInverse( MousePair coords )
 {
+    SortY( coords );
+
     int x1 = coords.begin.x;
     int y1 = coords.begin.y;
     int x2 = coords.end.x;
@@ -127,20 +131,8 @@ void Grid::SetSlopeInverse( MousePair coords )
     {
         fThreshold = m_iPixelSize - fThreshold;
     }
-    
-    int iX;
-    if( y1 < y2 )
-    {
-        iX = x1;
-    }
-    else
-    {
-        iX = x2;
-        int iTemp = y1;
-        y1 = y2;
-        y2 = iTemp;
-    }
 
+    int iX = x1;
     for( int iY = y1; iY <= y2; iY += m_iPixelSize )
     {
         PutPixel( iX, iY );
@@ -151,5 +143,25 @@ void Grid::SetSlopeInverse( MousePair coords )
             iX += iDirection * m_iPixelSize;
             fThreshold += m_iPixelSize;
         }
+    }
+}
+
+void Grid::SortX( MousePair& coords )
+{
+    if( coords.begin.x > coords.end.x )
+    {
+        MouseClick temp = coords.begin;
+        coords.begin = coords.end;
+        coords.end = temp;
+    }
+}
+
+void Grid::SortY( MousePair& coords )
+{
+    if( coords.begin.y > coords.end.y )
+    {
+        MouseClick temp = coords.begin;
+        coords.begin = coords.end;
+        coords.end = temp;
     }
 }
