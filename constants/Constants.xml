@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Constants>
-  <ScreenWidth>1350</ScreenWidth>
-  <ScreenHeight>750</ScreenHeight>
-  <WindowName>Homework by 45045</WindowName>
-  <GridPos>
-    <x>125</x>
-    <y>40</y>
-    <w>1100</w>
-    <h>700</h>
-  </GridPos>
-  <GridScale>
-    <Initial>1</Initial>
-    <VerySmall>5</VerySmall>
-    <Small>10</Small>
-    <Medium>20</Medium>
-    <Large>50</Large>
-    <VeryLarge>100</VeryLarge>
-  </GridScale>
+    <ScreenWidth>1350</ScreenWidth>
+    <ScreenHeight>750</ScreenHeight>
+    <WindowName>Homework by 45045</WindowName>
+    <GridPos>
+        <x>125</x>
+        <y>40</y>
+        <w>1100</w>
+        <h>700</h>
+    </GridPos>
+    <GridScale>
+        <Initial>1</Initial>
+        <VerySmall>5</VerySmall>
+        <Small>10</Small>
+        <Medium>20</Medium>
+        <Large>50</Large>
+        <VeryLarge>100</VeryLarge>
+    </GridScale>
+    <Button>
+        <Sprite>resources/ButtonSprite.png</Sprite>
+        <Font>resources/Roboto-Medium.ttf</Font>
+        <FontSize>50</FontSize>
+        <SpriteWidth>296</SpriteWidth>
+        <SpriteHeight>87</SpriteHeight>
+        <GridX>15</GridX>
+        <GridY>40</GridY>
+        <GridWidth>100</GridWidth>
+        <GridHeight>100</GridHeight>
+    </Button>
 </Constants>

@@ -51,7 +51,7 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
     m_GridPos.w = xGridPos.child( "w" ).text().as_int();
     m_GridPos.h = xGridPos.child( "h" ).text().as_int();
 
-    m_uiPixelSize = pConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_int();
+    m_uiPixelSize = pConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_uint();
 
     int iSmallest = pConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
     m_uiPixelCountWidth = m_GridPos.w / iSmallest;

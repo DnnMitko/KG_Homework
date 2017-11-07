@@ -1,8 +1,10 @@
 #ifndef __BUTTON_H__
 #define __BUTTON_H__
 
-#include <SDL2/SDL_image.h>
 #include "TextField.h"
+#include "../pugixml/pugixml.hpp"
+
+#include <SDL2/SDL_image.h>
 
 class Button: public TextField
 {
@@ -10,7 +12,7 @@ public:
     Button();
     virtual ~Button();
 public:
-    void Init( SDL_Renderer* );
+    void Init( pugi::xml_document*, SDL_Renderer* );
     
     void Draw();
 
@@ -25,6 +27,8 @@ public:
     void Release();
     bool IsPressed() const;
 private:
+    pugi::xml_document* m_xmlConstants;
+
     bool m_bIsPressed;
     bool m_bEnabled;
 

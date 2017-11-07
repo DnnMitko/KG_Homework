@@ -4,6 +4,8 @@ SDL_Texture* Button::m_TextureButton = NULL;
 
 Button::Button() : TextField()
 {
+    m_xmlConstants = NULL;
+
     m_TextureTextPressed = NULL;
 
     m_bIsPressed = false;
@@ -19,9 +21,11 @@ Button::~Button()
     m_TextureButton = NULL;
 }
 
-void Button::Init( SDL_Renderer* pNewRenderer )
+void Button::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
 {
     TextField::Init( pNewRenderer );
+
+    m_xmlConstants = pConstants;
 
     m_TextureTextPressed = NULL;
 
@@ -30,7 +34,8 @@ void Button::Init( SDL_Renderer* pNewRenderer )
 
     if( !m_TextureButton )
     {
-        m_TextureButton = IMG_LoadTexture( m_Renderer, g_ButtonSprite );
+        std::string sSprite = m_xmlConstants->first_child().child( "Button" ).child( "Sprite" ).text().as_string();
+        m_TextureButton = IMG_LoadTexture( m_Renderer, sSprite.c_str() );
 
         if( m_TextureButton == NULL )
         {
@@ -53,18 +58,21 @@ void Button::Draw()
     {
         m_bHasChanged = false;
 
+        int iWidth = m_xmlConstants->first_child().child( "Button" ).child( "SpriteWidth" ).text().as_int();
+        int iHeight = m_xmlConstants->first_child().child( "Button" ).child( "SpriteHeight" ).text().as_int();
+
         SDL_Rect tempRect;
-        tempRect.w = g_ButtonSpriteWidth;
-        tempRect.h = g_ButtonSpriteHeight;
+        tempRect.w = iWidth;
+        tempRect.h = iHeight;
         tempRect.x = 0;
 
         if( !m_bEnabled )
         {
-            tempRect.y = g_ButtonSpriteHeight * 2;
+            tempRect.y = iHeight * 2;
         }
         else if( m_bIsPressed )
         {
-            tempRect.y = g_ButtonSpriteHeight;
+            tempRect.y = iHeight;
         }
         else
         {
@@ -93,7 +101,7 @@ void Button::SetText( std::string newText, TTF_Font* font, SDL_Color color )
 
     SDL_DestroyTexture( m_TextureTextPressed );
 
-    SDL_Surface* tempSurface = TTF_RenderText_Solid( font, newText.c_str(), g_ColorWhite );
+    SDL_Surface* tempSurface = TTF_RenderText_Blended( font, newText.c_str(), {0xFF, 0xFF, 0xFF, 0xFF} );
 
     m_TextureTextPressed = SDL_CreateTextureFromSurface( m_Renderer, tempSurface );
 

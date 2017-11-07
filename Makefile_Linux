@@ -1,10 +1,10 @@
-OBJS = src/main.cpp src/interface/Homework.cpp src/grid/Grid.cpp src/pugixml/pugixml.cpp src/grid/Bresenham.cpp src/interface/Label.cpp src/interface/TextField.cpp src/interface/Button.cpp
+OBJS = src/main.cpp src/interface/Homework.cpp src/interface/HomeworkButtons.cpp src/grid/Grid.cpp src/pugixml/pugixml.cpp src/grid/Bresenham.cpp src/interface/Label.cpp src/interface/TextField.cpp src/interface/Button.cpp
 
 CC = g++
 
 LIBS = -L/usr/include/SDL2/SDL_image -L/usr/include/SDL2/SDL_ttf
 
-#COMPILER_FLAGS = -w 
+COMPILER_FLAGS = -g
 
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 

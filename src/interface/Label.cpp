@@ -79,7 +79,7 @@ void Label::SetText( std::string newText, TTF_Font* font, SDL_Color color )
 
     m_bHasChanged = true;
 
-    SDL_Surface* tempSurface = TTF_RenderText_Solid( font, newText.c_str(), color );
+    SDL_Surface* tempSurface = TTF_RenderText_Blended( font, newText.c_str(), color );
 
     m_TextRect.w = tempSurface->w;
     m_TextRect.h = tempSurface->h;

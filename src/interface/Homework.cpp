@@ -32,12 +32,16 @@ Homework::Homework()
 Homework::~Homework()
 {
     delete m_xmlConstants;
+    delete m_pGrid;
     SDL_DestroyRenderer(m_Renderer);
     SDL_DestroyWindow(m_Window);
 
     m_xmlConstants = NULL;
+    m_pGrid = NULL;
     m_Renderer = NULL;
     m_Window = NULL;
+
+    DeleteButtons();
 
     DeInitSDL();
 }
@@ -62,6 +66,13 @@ bool Homework::GetQuit() const
 void Homework::Draw()
 {
     m_pGrid->Draw();
+
+    m_ButtonGridInitial->Draw();
+    m_ButtonGridVerySmall->Draw();
+    m_ButtonGridSmall->Draw();
+    m_ButtonGridMedium->Draw();
+    m_ButtonGridLarge->Draw();
+    m_ButtonGridVeryLarge->Draw();
 
     SDL_RenderPresent( m_Renderer );
 }
@@ -131,6 +142,7 @@ void Homework::DeInitSDL()
 void Homework::Create()
 {
     m_pGrid = new Grid();
-
     m_pGrid->Init( m_xmlConstants, m_Renderer );
+
+    CreateButtons();
 }

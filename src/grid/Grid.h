@@ -50,7 +50,7 @@ private:
     void Recalculate();
     void PutPixel( int, int );
 
-    // Bresenham
+    // Bresenham.cpp
     void CalcBresenham( MousePair );
     void SetVertical( MousePair );
     void SetSlope( MousePair );
