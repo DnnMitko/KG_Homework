@@ -225,55 +225,16 @@ void Grid::AddClick( MouseClick click )
 
 void Grid::Calculate()
 {
-    int x1, y1, x2, y2;
-    int iRun;
-    
-    x1 = m_pvMouseClicks->back().begin.x;
-    y1 = m_pvMouseClicks->back().begin.y;
-    x2 = m_pvMouseClicks->back().end.x;
-    y2 = m_pvMouseClicks->back().end.y;
-
-    iRun = x2 - x1;
-
-    if( iRun == 0 )
-    {
-        SetVertical( x1, y1, y2 );
-    }
-    else
-    {
-        SetSlope( x1, y1, x2, y2 );
-    }
+    CalcBresenham( m_pvMouseClicks->back() );
 }
 
 void Grid::Recalculate()
 {
     vector<MousePair>::iterator it;
     
-    int x1, y1, x2, y2;
-    int iRun;
-    
     for( it = m_pvMouseClicks->begin(); it != m_pvMouseClicks->end(); it++ )
     {
-        x1 = it->begin.x;
-        y1 = it->begin.y;
-        x2 = it->end.x;
-        y2 = it->end.y;
-
-        x1 = m_pvMouseClicks->back().begin.x;
-        y1 = m_pvMouseClicks->back().begin.y;
-        x2 = m_pvMouseClicks->back().end.x;
-        y2 = m_pvMouseClicks->back().end.y;
-
-        iRun = x2 - x1;
-
-        if( iRun == 0 )
-        {
-            SetVertical( x1, y1, y2 );
-        }
-        else
-        {
-            SetSlope( x1, y1, x2, y2 );
-        }
+        CalcBresenham( *it );
     }
 }
 
@@ -283,117 +244,4 @@ void Grid::PutPixel( int iX, int iY )
     int iSquarePosY = ( iY - m_GridPos.y ) / m_uiPixelSize;
 
     m_ppbPixelStatus[iSquarePosX][iSquarePosY] = true;
-}
-
-void Grid::SetVertical( int x, int y1, int y2 )
-{
-    int iCol = ( x - m_GridPos.x ) / m_uiPixelSize;
-
-    int iRowStart, iRowEnd;
-
-    if( y1 < y2 )
-    {
-        iRowStart = ( y1 - m_GridPos.y ) / m_uiPixelSize;
-        iRowEnd = ( y2 - m_GridPos.y ) / m_uiPixelSize;
-    }
-    else
-    {
-        iRowStart = ( y2 - m_GridPos.y ) / m_uiPixelSize;
-        iRowEnd = ( y1 - m_GridPos.y ) / m_uiPixelSize;
-    }
-
-    for( int iRow = iRowStart; iRow <= iRowEnd; iRow++ )
-    {
-        m_ppbPixelStatus[iCol][iRow] = true;
-    }
-}
-
-void Grid::SetSlope( int x1, int y1, int x2, int y2 )
-{
-    int iRise = y2 - y1;
-    int iRun = x2 - x1;
-
-    float fSlope = iRise / (float)iRun;
-
-    if( fSlope <= 1 && fSlope >= -1 )
-    {
-        SetSlopeNormal( x1, y1, x2, y2, fSlope );
-    }
-    else
-    {
-        SetSlopeInverse( x1, y1, x2, y2 );
-    }
-}
-
-void Grid::SetSlopeNormal( int x1, int y1, int x2, int y2, float fSlope )
-{
-    int iDirection = ( fSlope >= 0 ) ? 1 : -1;
-
-    float fDelta = fabsf( fSlope );
-
-    float fOffset = 0;
-
-    float fThreshold = ( y1 - m_GridPos.y ) % m_uiPixelSize;
-    if( fSlope > 0 )
-    {
-        fThreshold = m_uiPixelSize - fThreshold;
-    }
-    
-    int iY = y1;
-    for( int iX = x1; iX <= x2; iX += m_uiPixelSize )
-    {
-        PutPixel( iX, iY );
-
-        fOffset += fDelta * m_uiPixelSize;
-        if( fOffset > fThreshold )
-        {
-            iY += iDirection * m_uiPixelSize;
-            fThreshold += m_uiPixelSize;
-        }
-    }
-}
-
-void Grid::SetSlopeInverse( int x1, int y1, int x2, int y2 )
-{
-    int iRise = y2 - y1;
-    int iRun = x2 - x1;
-
-    float fSlope = iRun / (float)iRise;
-
-    int iDirection = ( fSlope >= 0 ) ? 1 : -1;
-
-    float fDelta = fabsf( fSlope );
-
-    float fOffset = 0;
-
-    float fThreshold = ( x1 - m_GridPos.x ) % m_uiPixelSize;
-    if( fSlope > 0 )
-    {
-        fThreshold = m_uiPixelSize - fThreshold;
-    }
-    
-    int iX;
-    if( y1 < y2 )
-    {
-        iX = x1;
-    }
-    else
-    {
-        iX = x2;
-        int iTemp = y1;
-        y1 = y2;
-        y2 = iTemp;
-    }
-
-    for( int iY = y1; iY <= y2; iY += m_uiPixelSize )
-    {
-        PutPixel( iX, iY );
-        
-        fOffset += fDelta * m_uiPixelSize;
-        if( fOffset >= fThreshold )
-        {
-            iX += iDirection * m_uiPixelSize;
-            fThreshold += m_uiPixelSize;
-        }
-    }
 }

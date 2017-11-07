@@ -3,7 +3,7 @@
 
 #include "SDL2/SDL.h"
 
-#include "pugixml/pugixml.hpp"
+#include "../pugixml/pugixml.hpp"
 
 #include <vector>
 
@@ -51,10 +51,11 @@ private:
     void PutPixel( int, int );
 
     // Bresenham
-    void SetVertical( int, int, int );
-    void SetSlope( int, int, int, int );
-    void SetSlopeNormal( int, int, int, int, float );
-    void SetSlopeInverse( int, int, int, int );
+    void CalcBresenham( MousePair );
+    void SetVertical( MousePair );
+    void SetSlope( MousePair );
+    void SetSlopeNormal( MousePair, float );
+    void SetSlopeInverse( MousePair );
 private:
     SDL_Renderer* m_Renderer;
 
