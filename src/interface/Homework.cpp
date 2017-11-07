@@ -54,7 +54,10 @@ void Homework::EventHandler( SDL_Event& e )
     }
     else
     {
-        m_pGrid->EventHandler( e );
+        if( !ButtonEvents( e ) )
+        {
+            m_pGrid->EventHandler( e );
+        }
     }
 }
 

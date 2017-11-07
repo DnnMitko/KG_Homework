@@ -19,10 +19,12 @@
     </GridScale>
     <Button>
         <Sprite>resources/ButtonSprite.png</Sprite>
-        <Font>resources/Roboto-Medium.ttf</Font>
-        <FontSize>50</FontSize>
         <SpriteWidth>296</SpriteWidth>
         <SpriteHeight>87</SpriteHeight>
+
+        <Font>resources/Roboto-Medium.ttf</Font>
+        <FontSize>50</FontSize>
+        
         <GridX>15</GridX>
         <GridY>40</GridY>
         <GridWidth>100</GridWidth>

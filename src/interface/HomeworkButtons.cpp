@@ -60,6 +60,82 @@ void Homework::PositionButtons()
     m_ButtonGridVeryLarge->SetY( iGridY + 5 * iGridWidth );
 }
 
+bool Homework::ButtonEvents( SDL_Event& e )
+{
+    int x, y;
+
+    if( e.type == SDL_MOUSEBUTTONDOWN )
+	{
+		SDL_GetMouseState( &x, &y );
+
+        if( m_ButtonGridInitial->IsIn( x, y ) )
+        {
+            m_ButtonGridInitial->Press();
+        }
+        else if( m_ButtonGridVerySmall->IsIn( x, y ) )
+        {
+            m_ButtonGridVerySmall->Press();
+        }
+        else if( m_ButtonGridSmall->IsIn( x, y ) )
+        {
+            m_ButtonGridSmall->Press();
+        }
+        else if( m_ButtonGridMedium->IsIn( x, y ) )
+        {
+            m_ButtonGridMedium->Press();
+        }
+        else if( m_ButtonGridLarge->IsIn( x, y ) )
+        {
+            m_ButtonGridLarge->Press();
+        }
+        else if( m_ButtonGridVeryLarge->IsIn( x, y ) )
+        {
+            m_ButtonGridVeryLarge->Press();
+        }
+	}
+	else if(e.type == SDL_MOUSEBUTTONUP)
+	{
+		SDL_GetMouseState( &x, &y );
+
+		if( m_ButtonGridInitial->IsIn( x, y ) && m_ButtonGridInitial->IsPressed() )
+		{
+            m_pGrid->SetGridScale( "Initial" );
+        }
+        else if( m_ButtonGridVerySmall->IsIn( x, y ) && m_ButtonGridVerySmall->IsPressed() )
+		{
+            m_pGrid->SetGridScale( "VerySmall" );
+        }
+        else if( m_ButtonGridSmall->IsIn( x, y ) && m_ButtonGridSmall->IsPressed() )
+		{
+            m_pGrid->SetGridScale( "Small" );
+        }
+        else if( m_ButtonGridMedium->IsIn( x, y ) && m_ButtonGridMedium->IsPressed() )
+		{
+            m_pGrid->SetGridScale( "Medium" );
+        }
+        else if( m_ButtonGridLarge->IsIn( x, y ) && m_ButtonGridLarge->IsPressed() )
+		{
+            m_pGrid->SetGridScale( "Large" );
+        }
+        else if( m_ButtonGridVeryLarge->IsIn( x, y ) && m_ButtonGridVeryLarge->IsPressed() )
+		{
+            m_pGrid->SetGridScale( "VeryLarge" );
+        }
+
+        ReleaseButtons();
+    }
+}
+
+void Homework::ReleaseButtons()
+{
+    m_ButtonGridInitial->Release();
+    m_ButtonGridVerySmall->Release();
+    m_ButtonGridSmall->Release();
+    m_ButtonGridMedium->Release();
+    m_ButtonGridLarge->Release();
+    m_ButtonGridVeryLarge->Release();
+}
+
 void Homework::DeleteButtons()
 {
     delete m_ButtonGridInitial;

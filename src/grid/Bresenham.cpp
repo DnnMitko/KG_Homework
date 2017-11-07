@@ -28,19 +28,19 @@ void Grid::SetVertical( MousePair coords )
     int y1 = coords.begin.y;
     int y2 = coords.end.y;
 
-    int iCol = ( x - m_GridPos.x ) / m_uiPixelSize;
+    int iCol = ( x - m_GridPos.x ) / m_iPixelSize;
 
     int iRowStart, iRowEnd;
 
     if( y1 < y2 )
     {
-        iRowStart = ( y1 - m_GridPos.y ) / m_uiPixelSize;
-        iRowEnd = ( y2 - m_GridPos.y ) / m_uiPixelSize;
+        iRowStart = ( y1 - m_GridPos.y ) / m_iPixelSize;
+        iRowEnd = ( y2 - m_GridPos.y ) / m_iPixelSize;
     }
     else
     {
-        iRowStart = ( y2 - m_GridPos.y ) / m_uiPixelSize;
-        iRowEnd = ( y1 - m_GridPos.y ) / m_uiPixelSize;
+        iRowStart = ( y2 - m_GridPos.y ) / m_iPixelSize;
+        iRowEnd = ( y1 - m_GridPos.y ) / m_iPixelSize;
     }
 
     for( int iRow = iRowStart; iRow <= iRowEnd; iRow++ )
@@ -84,22 +84,22 @@ void Grid::SetSlopeNormal( MousePair coords, float fSlope )
 
     float fOffset = 0;
 
-    float fThreshold = ( y1 - m_GridPos.y ) % m_uiPixelSize;
+    float fThreshold = ( y1 - m_GridPos.y ) % m_iPixelSize;
     if( fSlope > 0 )
     {
-        fThreshold = m_uiPixelSize - fThreshold;
+        fThreshold = m_iPixelSize - fThreshold;
     }
     
     int iY = y1;
-    for( int iX = x1; iX <= x2; iX += m_uiPixelSize )
+    for( int iX = x1; iX <= x2; iX += m_iPixelSize )
     {
         PutPixel( iX, iY );
 
-        fOffset += fDelta * m_uiPixelSize;
+        fOffset += fDelta * m_iPixelSize;
         if( fOffset > fThreshold )
         {
-            iY += iDirection * m_uiPixelSize;
-            fThreshold += m_uiPixelSize;
+            iY += iDirection * m_iPixelSize;
+            fThreshold += m_iPixelSize;
         }
     }
 }
@@ -122,10 +122,10 @@ void Grid::SetSlopeInverse( MousePair coords )
 
     float fOffset = 0;
 
-    float fThreshold = ( x1 - m_GridPos.x ) % m_uiPixelSize;
+    float fThreshold = ( x1 - m_GridPos.x ) % m_iPixelSize;
     if( fSlope > 0 )
     {
-        fThreshold = m_uiPixelSize - fThreshold;
+        fThreshold = m_iPixelSize - fThreshold;
     }
     
     int iX;
@@ -141,15 +141,15 @@ void Grid::SetSlopeInverse( MousePair coords )
         y2 = iTemp;
     }
 
-    for( int iY = y1; iY <= y2; iY += m_uiPixelSize )
+    for( int iY = y1; iY <= y2; iY += m_iPixelSize )
     {
         PutPixel( iX, iY );
         
-        fOffset += fDelta * m_uiPixelSize;
+        fOffset += fDelta * m_iPixelSize;
         if( fOffset >= fThreshold )
         {
-            iX += iDirection * m_uiPixelSize;
-            fThreshold += m_uiPixelSize;
+            iX += iDirection * m_iPixelSize;
+            fThreshold += m_iPixelSize;
         }
     }
 }

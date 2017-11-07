@@ -30,6 +30,8 @@ private:
     //HomeworkButtons.cpp
     void CreateButtons();
     void PositionButtons();
+    bool ButtonEvents( SDL_Event& );
+    void ReleaseButtons();
     void DeleteButtons();
 private:
     SDL_Window* m_Window;

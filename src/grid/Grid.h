@@ -36,6 +36,8 @@ public:
 
     void Draw();
     void EventHandler( SDL_Event& );
+
+    void SetGridScale( std::string );
 private:
     void DrawGrid();
     void DrawPixelStatus();
@@ -59,12 +61,14 @@ private:
 private:
     SDL_Renderer* m_Renderer;
 
+    pugi::xml_document* m_xmlConstants;
+
     States m_eCurState;
 
     bool m_bHasChanged;
 
     SDL_Rect m_GridPos;
-    unsigned int m_uiPixelSize;
+    int m_iPixelSize;
 
     bool** m_ppbPixelStatus;
     unsigned int m_uiPixelCountWidth;

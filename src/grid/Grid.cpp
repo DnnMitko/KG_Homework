@@ -4,6 +4,8 @@ Grid::Grid()
 {
     m_Renderer = NULL;
 
+    m_xmlConstants = NULL;
+
     m_eCurState = NumStates;
 
     m_bHasChanged = false;
@@ -13,7 +15,7 @@ Grid::Grid()
     m_GridPos.w = 0;
     m_GridPos.h = 0;
 
-    m_uiPixelSize = 0;
+    m_iPixelSize = 0;
 
     m_ppbPixelStatus = NULL;
     m_uiPixelCountWidth = 0;;
@@ -40,20 +42,22 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
 {
     m_Renderer = pNewRenderer;
 
+    m_xmlConstants = pConstants;
+
     m_eCurState = Bresenham;
 
     m_bHasChanged = true;
 
-    pugi::xml_node xGridPos = pConstants->first_child().child( "GridPos" );
+    pugi::xml_node xGridPos = m_xmlConstants->first_child().child( "GridPos" );
 
     m_GridPos.x = xGridPos.child( "x" ).text().as_int();
     m_GridPos.y = xGridPos.child( "y" ).text().as_int();
     m_GridPos.w = xGridPos.child( "w" ).text().as_int();
     m_GridPos.h = xGridPos.child( "h" ).text().as_int();
 
-    m_uiPixelSize = pConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_uint();
+    m_iPixelSize = m_xmlConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_int();
 
-    int iSmallest = pConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
+    int iSmallest = m_xmlConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
     m_uiPixelCountWidth = m_GridPos.w / iSmallest;
     m_uiPixelCountHeight = m_GridPos.h / iSmallest;
 
@@ -74,7 +78,7 @@ void Grid::Draw()
         return;
     }
 
-    if( !m_pvMouseClicks->empty() && m_uiPixelSize != 1 )
+    if( !m_pvMouseClicks->empty() && m_iPixelSize != 1 )
     {
         Calculate();
     }
@@ -100,22 +104,34 @@ void Grid::EventHandler( SDL_Event& e )
     }
 }
 
+void Grid::SetGridScale( std::string sNewScale )
+{
+    m_iPixelSize = m_xmlConstants->first_child().child( "GridScale" ).child( sNewScale.c_str() ).text().as_int();
+    ClearStatus();
+    if( sNewScale != "Initial" )
+    {
+        Recalculate();
+    }
+
+    m_bHasChanged = true;
+}
+
 void Grid::DrawGrid()
 {
     SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderFillRect( m_Renderer, &m_GridPos );
     
-    if( m_uiPixelSize != 1 )
+    if( m_iPixelSize != 1 )
     {
         SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
 
         SDL_Rect temp;
-        temp.w = m_uiPixelSize;
-        temp.h = m_uiPixelSize;
+        temp.w = m_iPixelSize;
+        temp.h = m_iPixelSize;
 
-        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_uiPixelSize )
+        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_iPixelSize )
         {
-            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_uiPixelSize )
+            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_iPixelSize )
             {
                 temp.x = iX;
                 temp.y = iY;
@@ -127,20 +143,20 @@ void Grid::DrawGrid()
 
 void Grid::DrawPixelStatus()
 {
-    if( m_uiPixelSize != 1 )
+    if( m_iPixelSize != 1 )
     {
         SDL_SetRenderDrawColor( m_Renderer, 0xA0, 0xA0, 0xA0, 0xFF );
 
         SDL_Rect temp;
-        temp.w = m_uiPixelSize - 2;
-        temp.h = m_uiPixelSize - 2;
+        temp.w = m_iPixelSize - 2;
+        temp.h = m_iPixelSize - 2;
 
-        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_uiPixelSize )
+        for( int iX = m_GridPos.x; iX < m_GridPos.x + m_GridPos.w; iX += m_iPixelSize )
         {
-            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_uiPixelSize )
+            for( int iY = m_GridPos.y; iY < m_GridPos.y + m_GridPos.h; iY += m_iPixelSize )
             {
-                int iSquarePosX = ( iX - m_GridPos.x ) / m_uiPixelSize;
-                int iSquarePosY = ( iY - m_GridPos.y ) / m_uiPixelSize;
+                int iSquarePosX = ( iX - m_GridPos.x ) / m_iPixelSize;
+                int iSquarePosY = ( iY - m_GridPos.y ) / m_iPixelSize;
 
                 if( m_ppbPixelStatus[iSquarePosX][iSquarePosY] )
                 {
@@ -240,8 +256,8 @@ void Grid::Recalculate()
 
 void Grid::PutPixel( int iX, int iY )
 {
-    int iSquarePosX = ( iX - m_GridPos.x ) / m_uiPixelSize;
-    int iSquarePosY = ( iY - m_GridPos.y ) / m_uiPixelSize;
+    int iSquarePosX = ( iX - m_GridPos.x ) / m_iPixelSize;
+    int iSquarePosY = ( iY - m_GridPos.y ) / m_iPixelSize;
 
     m_ppbPixelStatus[iSquarePosX][iSquarePosY] = true;
 }
