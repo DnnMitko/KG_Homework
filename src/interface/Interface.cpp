@@ -1,6 +1,6 @@
-#include "Homework.h"
+#include "Interface.h"
 
-Homework::Homework()
+Interface::Interface()
 {
     m_xmlConstants = new pugi::xml_document();
     if( !m_xmlConstants->load_file( "constants/Constants.xml" ) )
@@ -29,7 +29,7 @@ Homework::Homework()
     }
 }
 
-Homework::~Homework()
+Interface::~Interface()
 {
     delete m_xmlConstants;
     delete m_pGrid;
@@ -46,7 +46,7 @@ Homework::~Homework()
     DeInitSDL();
 }
 
-void Homework::EventHandler( SDL_Event& e )
+void Interface::EventHandler( SDL_Event& e )
 {
     if( e.type == SDL_QUIT )
     {
@@ -61,12 +61,12 @@ void Homework::EventHandler( SDL_Event& e )
     }
 }
 
-bool Homework::GetQuit() const
+bool Interface::GetQuit() const
 {
     return m_bQuit;
 }
 
-void Homework::Draw()
+void Interface::Draw()
 {
     m_pGrid->Draw();
 
@@ -80,7 +80,7 @@ void Homework::Draw()
     SDL_RenderPresent( m_Renderer );
 }
 
-bool Homework::InitSDL()
+bool Interface::InitSDL()
 {
     bool bSuccess = true;
 
@@ -135,14 +135,14 @@ bool Homework::InitSDL()
     return bSuccess;
 }
 
-void Homework::DeInitSDL()
+void Interface::DeInitSDL()
 {
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
 }
 
-void Homework::Create()
+void Interface::Create()
 {
     m_pGrid = new Grid();
     m_pGrid->Init( m_xmlConstants, m_Renderer );

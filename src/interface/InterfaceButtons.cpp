@@ -1,6 +1,6 @@
-#include "Homework.h"
+#include "Interface.h"
 
-void Homework::CreateButtons()
+void Interface::CreateButtons()
 {
     m_ButtonGridInitial = new Button();
     m_ButtonGridVerySmall = new Button();
@@ -32,7 +32,7 @@ void Homework::CreateButtons()
     PositionButtons();
 }
 
-void Homework::PositionButtons()
+void Interface::PositionButtons()
 {
     int iGridWidth = m_xmlConstants->first_child().child( "Button" ).child( "GridWidth" ).text().as_int();
     int iGridHeight = m_xmlConstants->first_child().child( "Button" ).child( "GridHeight" ).text().as_int();
@@ -60,7 +60,7 @@ void Homework::PositionButtons()
     m_ButtonGridVeryLarge->SetY( iGridY + 5 * iGridWidth );
 }
 
-bool Homework::ButtonEvents( SDL_Event& e )
+bool Interface::ButtonEvents( SDL_Event& e )
 {
     int x, y;
 
@@ -126,7 +126,7 @@ bool Homework::ButtonEvents( SDL_Event& e )
     }
 }
 
-void Homework::ReleaseButtons()
+void Interface::ReleaseButtons()
 {
     m_ButtonGridInitial->Release();
     m_ButtonGridVerySmall->Release();
@@ -136,7 +136,7 @@ void Homework::ReleaseButtons()
     m_ButtonGridVeryLarge->Release();
 }
 
-void Homework::DeleteButtons()
+void Interface::DeleteButtons()
 {
     delete m_ButtonGridInitial;
     delete m_ButtonGridVerySmall;

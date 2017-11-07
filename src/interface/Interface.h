@@ -1,5 +1,5 @@
-#ifndef __HOMEWORK_H__
-#define __HOMEWORK_H__
+#ifndef __INTERFACE_H__
+#define __INTERFACE_H__
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
@@ -12,11 +12,11 @@
 
 #include <cstdio>
 
-class Homework
+class Interface
 {
 public:
-    Homework();
-    ~Homework();
+    Interface();
+    ~Interface();
 public:
     void EventHandler( SDL_Event& );
     bool GetQuit() const;
@@ -27,7 +27,7 @@ private:
 
     void Create();
 
-    //HomeworkButtons.cpp
+    //InterfaceButtons.cpp
     void CreateButtons();
     void PositionButtons();
     bool ButtonEvents( SDL_Event& );
@@ -51,4 +51,4 @@ private:
     Button* m_ButtonGridVeryLarge;
 };
 
-#endif //__HOMEWORK_H__
+#endif //__INTERFACE_H__

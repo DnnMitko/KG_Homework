@@ -1,19 +1,19 @@
-#include "interface/Homework.h"
+#include "interface/Interface.h"
 
 int main( int argc, char* args[] )
 {
-    Homework hw;
+    Interface controller;
 
     SDL_Event e;
 
-    while( !hw.GetQuit() )
+    while( !controller.GetQuit() )
     {
         while( SDL_PollEvent( &e ) != 0 )
         {
-            hw.EventHandler( e );
+            controller.EventHandler( e );
         }
 
-        hw.Draw();
+        controller.Draw();
     }
 
     return 0;
