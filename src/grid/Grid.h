@@ -38,10 +38,12 @@ public:
     void EventHandler( SDL_Event& );
 
     void SetGridScale( std::string );
+
+    void ToggleDrawBresenham();
 private:
     void DrawGrid();
     void DrawPixelStatus();
-    void DrawLines();
+    void DrawLines( bool );
 
     void ClearStatus();
 
@@ -50,7 +52,8 @@ private:
 
     void Calculate();
     void Recalculate();
-    void PutPixel( int, int );
+    void SetPixel( int, int );
+    void DrawPixel( int, int );
 
     // Bresenham.cpp
     void CalcBresenham( MousePair );
@@ -60,6 +63,11 @@ private:
     void SetSlopeInverse( MousePair );
     void SortX( MousePair& );
     void SortY( MousePair& );
+    void DrawBresenham( MousePair );
+    void DrawVertical( MousePair );
+    void DrawSlope( MousePair );
+    void DrawSlopeNormal( MousePair, float );
+    void DrawSlopeInverse( MousePair );
 private:
     SDL_Renderer* m_Renderer;
 
@@ -72,11 +80,13 @@ private:
     SDL_Rect m_GridPos;
     int m_iPixelSize;
 
+    bool m_bUseBresenham;
+
     bool** m_ppbPixelStatus;
     unsigned int m_uiPixelCountWidth;
     unsigned int m_uiPixelCountHeight;
 
-    vector<MousePair>* m_pvMouseClicks;
+    vector<MousePair>* m_pvMousePairs;
 };
 
 #endif //__GRID_H__

@@ -17,11 +17,13 @@ Grid::Grid()
 
     m_iPixelSize = 0;
 
+    m_bUseBresenham = false;
+
     m_ppbPixelStatus = NULL;
     m_uiPixelCountWidth = 0;;
     m_uiPixelCountHeight = 0;
 
-    m_pvMouseClicks = NULL;
+    m_pvMousePairs = NULL;
 }
 
 Grid::~Grid()
@@ -32,10 +34,10 @@ Grid::~Grid()
     }
     delete[] m_ppbPixelStatus;
 
-    delete m_pvMouseClicks;
+    delete m_pvMousePairs;
 
     m_ppbPixelStatus = NULL;
-    m_pvMouseClicks = NULL;
+    m_pvMousePairs = NULL;
 }
 
 void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
@@ -57,6 +59,8 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
 
     m_iPixelSize = m_xmlConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_int();
 
+    m_bUseBresenham = false;
+
     int iSmallest = m_xmlConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
     m_uiPixelCountWidth = m_GridPos.w / iSmallest;
     m_uiPixelCountHeight = m_GridPos.h / iSmallest;
@@ -68,7 +72,7 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
     }
     ClearStatus();
 
-    m_pvMouseClicks = new vector<MousePair>;
+    m_pvMousePairs = new vector<MousePair>;
 }
 
 void Grid::Draw()
@@ -78,14 +82,9 @@ void Grid::Draw()
         return;
     }
 
-    if( !m_pvMouseClicks->empty() && m_iPixelSize != 1 )
-    {
-        Calculate();
-    }
-
     DrawGrid();
     DrawPixelStatus();
-    DrawLines();
+    DrawLines( m_bUseBresenham );
 
     m_bHasChanged = false;
 }
@@ -113,6 +112,13 @@ void Grid::SetGridScale( std::string sNewScale )
         Recalculate();
     }
 
+    m_bHasChanged = true;
+}
+
+void Grid::ToggleDrawBresenham()
+{
+    m_bUseBresenham = !m_bUseBresenham;
+    
     m_bHasChanged = true;
 }
 
@@ -169,7 +175,7 @@ void Grid::DrawPixelStatus()
     }
 }
 
-void Grid::DrawLines()
+void Grid::DrawLines( bool bUseBresenham )
 {
     vector<MousePair>::iterator it;
     
@@ -177,14 +183,25 @@ void Grid::DrawLines()
 
     SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
     
-    for( it = m_pvMouseClicks->begin(); it != m_pvMouseClicks->end(); it++ )
+    for( it = m_pvMousePairs->begin(); it != m_pvMousePairs->end(); it++ )
     {
-        x1 = it->begin.x;
-        y1 = it->begin.y;
-        x2 = it->end.x;
-        y2 = it->end.y;
+        if( (*it).end.x == -1 )
+        {
+            break;
+        }
+        else if( bUseBresenham )
+        {
+            DrawBresenham( *it );
+        }
+        else
+        {
+            x1 = it->begin.x;
+            y1 = it->begin.y;
+            x2 = it->end.x;
+            y2 = it->end.y;
 
-        SDL_RenderDrawLine( m_Renderer, x1, y1, x2, y2 );
+            SDL_RenderDrawLine( m_Renderer, x1, y1, x2, y2 );
+        }
     }
 }
 
@@ -214,42 +231,55 @@ bool Grid::IsInGrid( MouseClick click )
 
 void Grid::AddClick( MouseClick click )
 {
-    if( m_pvMouseClicks->empty()
-        || m_pvMouseClicks->back().end.x != -1 )
+    if( m_pvMousePairs->empty()
+        || m_pvMousePairs->back().end.x != -1 )
     {
         MousePair mpTemp;
         mpTemp.begin = click;
         mpTemp.end.x = -1;
         mpTemp.end.y = -1;
-        m_pvMouseClicks->push_back( mpTemp );
+        m_pvMousePairs->push_back( mpTemp );
     }
     else
     {
+        m_pvMousePairs->back().end = click;
+        
+        if( m_iPixelSize != 1 )
+        {
+            Calculate();
+        }
+        
         m_bHasChanged = true;
-
-        m_pvMouseClicks->back().end = click;
     }
 }
 
 void Grid::Calculate()
 {
-    CalcBresenham( m_pvMouseClicks->back() );
+    CalcBresenham( m_pvMousePairs->back() );
 }
 
 void Grid::Recalculate()
 {
     vector<MousePair>::iterator it;
     
-    for( it = m_pvMouseClicks->begin(); it != m_pvMouseClicks->end(); it++ )
+    for( it = m_pvMousePairs->begin(); it != m_pvMousePairs->end(); it++ )
     {
-        CalcBresenham( *it );
+        if( (*it).end.x != -1 )
+        {
+            CalcBresenham( *it );
+        }
     }
 }
 
-void Grid::PutPixel( int iX, int iY )
+void Grid::SetPixel( int x, int y )
 {
-    int iSquarePosX = ( iX - m_GridPos.x ) / m_iPixelSize;
-    int iSquarePosY = ( iY - m_GridPos.y ) / m_iPixelSize;
+    int iSquarePosX = ( x - m_GridPos.x ) / m_iPixelSize;
+    int iSquarePosY = ( y - m_GridPos.y ) / m_iPixelSize;
 
     m_ppbPixelStatus[iSquarePosX][iSquarePosY] = true;
+}
+
+void Grid::DrawPixel( int x, int y )
+{
+    SDL_RenderDrawPoint( m_Renderer, x, y );
 }

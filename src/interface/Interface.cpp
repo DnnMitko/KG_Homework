@@ -70,12 +70,7 @@ void Interface::Draw()
 {
     m_pGrid->Draw();
 
-    m_ButtonGridInitial->Draw();
-    m_ButtonGridVerySmall->Draw();
-    m_ButtonGridSmall->Draw();
-    m_ButtonGridMedium->Draw();
-    m_ButtonGridLarge->Draw();
-    m_ButtonGridVeryLarge->Draw();
+    DrawButtons();
 
     SDL_RenderPresent( m_Renderer );
 }

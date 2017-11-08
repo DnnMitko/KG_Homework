@@ -32,6 +32,7 @@ private:
     void PositionButtons();
     bool ButtonEvents( SDL_Event& );
     void ReleaseButtons();
+    void DrawButtons();
     void DeleteButtons();
 private:
     SDL_Window* m_Window;
@@ -49,6 +50,7 @@ private:
     Button* m_ButtonGridMedium;
     Button* m_ButtonGridLarge;
     Button* m_ButtonGridVeryLarge;
+    Button* m_ButtonDraw;
 };
 
 #endif //__INTERFACE_H__
