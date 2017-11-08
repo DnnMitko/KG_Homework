@@ -92,7 +92,7 @@ void Grid::Draw()
 void Grid::EventHandler( SDL_Event& e )
 {
     if( e.type == SDL_MOUSEBUTTONDOWN )
-	{
+    {
         MouseClick click;
         SDL_GetMouseState( &( click.x ), &( click.y ) );
 

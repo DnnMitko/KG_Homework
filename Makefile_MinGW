@@ -12,5 +12,10 @@ LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 OBJ_NAME = run
 
-all : $(OBJS)
-	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+all : $(OBJ_NAME)
+
+$(OBJ_NAME) : $(OBJS)
+	$(CC) $(OBJS) $(LIBS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+
+clean :
+	del /f $(OBJ_NAME)

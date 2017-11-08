@@ -68,76 +68,101 @@ void Interface::PositionButtons()
 
 bool Interface::ButtonEvents( SDL_Event& e )
 {
+    bool bEventFound = false;
+
     int x, y;
 
     if( e.type == SDL_MOUSEBUTTONDOWN )
-	{
-		SDL_GetMouseState( &x, &y );
+    {
+        SDL_GetMouseState( &x, &y );
 
         if( m_ButtonGridInitial->IsIn( x, y ) )
         {
             m_ButtonGridInitial->Press();
+            bEventFound = true;
         }
         else if( m_ButtonGridVerySmall->IsIn( x, y ) )
         {
             m_ButtonGridVerySmall->Press();
+            bEventFound = true;
         }
         else if( m_ButtonGridSmall->IsIn( x, y ) )
         {
             m_ButtonGridSmall->Press();
+            bEventFound = true;
         }
         else if( m_ButtonGridMedium->IsIn( x, y ) )
         {
             m_ButtonGridMedium->Press();
+            bEventFound = true;
         }
         else if( m_ButtonGridLarge->IsIn( x, y ) )
         {
             m_ButtonGridLarge->Press();
+            bEventFound = true;
         }
         else if( m_ButtonGridVeryLarge->IsIn( x, y ) )
         {
             m_ButtonGridVeryLarge->Press();
+            bEventFound = true;
         }
         else if( m_ButtonDraw->IsIn( x, y ) )
         {
             m_ButtonDraw->Press();
+            bEventFound = true;
         }
-	}
-	else if(e.type == SDL_MOUSEBUTTONUP)
-	{
-		SDL_GetMouseState( &x, &y );
+    }
+    else if(e.type == SDL_MOUSEBUTTONUP)
+    {
+        SDL_GetMouseState( &x, &y );
 
-		if( m_ButtonGridInitial->IsIn( x, y ) && m_ButtonGridInitial->IsPressed() )
-		{
+        if( m_ButtonGridInitial->IsIn( x, y ) && m_ButtonGridInitial->IsPressed() )
+        {
             m_pGrid->SetGridScale( "Initial" );
+
+            bEventFound = true;
         }
         else if( m_ButtonGridVerySmall->IsIn( x, y ) && m_ButtonGridVerySmall->IsPressed() )
-		{
+        {
             m_pGrid->SetGridScale( "VerySmall" );
+
+            bEventFound = true;
         }
         else if( m_ButtonGridSmall->IsIn( x, y ) && m_ButtonGridSmall->IsPressed() )
-		{
+        {
             m_pGrid->SetGridScale( "Small" );
+
+            bEventFound = true;
         }
         else if( m_ButtonGridMedium->IsIn( x, y ) && m_ButtonGridMedium->IsPressed() )
-		{
+        {
             m_pGrid->SetGridScale( "Medium" );
+
+            bEventFound = true;
         }
         else if( m_ButtonGridLarge->IsIn( x, y ) && m_ButtonGridLarge->IsPressed() )
-		{
+        {
             m_pGrid->SetGridScale( "Large" );
+
+            bEventFound = true;
         }
         else if( m_ButtonGridVeryLarge->IsIn( x, y ) && m_ButtonGridVeryLarge->IsPressed() )
-		{
+        {
             m_pGrid->SetGridScale( "VeryLarge" );
+
+            bEventFound = true;
         }
         else if( m_ButtonDraw->IsIn( x, y ) && m_ButtonDraw->IsPressed() )
-		{
+        {
             m_pGrid->ToggleDrawBresenham();
+
+            bEventFound = true;
         }
 
         ReleaseButtons();
     }
+
+    return bEventFound;
 }
 
 void Interface::ReleaseButtons()

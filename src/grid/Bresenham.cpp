@@ -65,7 +65,6 @@ void Grid::SetSlopeNormal( MousePair coords, float fSlope )
     int x1 = coords.begin.x;
     int y1 = coords.begin.y;
     int x2 = coords.end.x;
-    int y2 = coords.end.y;
 
     int iDirection = ( fSlope >= 0 ) ? 1 : -1;
 
