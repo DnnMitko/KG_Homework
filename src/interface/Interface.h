@@ -51,6 +51,13 @@ private:
     Button* m_ButtonGridLarge;
     Button* m_ButtonGridVeryLarge;
     Button* m_ButtonDraw;
+    Button* m_ButtonStateTemp1;
+    Button* m_ButtonStateTemp2;
+    Button* m_ButtonStateTemp3;
+    Button* m_ButtonStateTemp4;
+    Button* m_ButtonStateTemp5;
+    Button* m_ButtonStateTemp6;
+    Button* m_ButtonStateTemp7;
 };
 
 #endif //__INTERFACE_H__
