@@ -35,11 +35,17 @@ Interface::~Interface()
     delete m_pGrid;
     SDL_DestroyRenderer(m_Renderer);
     SDL_DestroyWindow(m_Window);
-
+    TTF_CloseFont( m_Font );
+    
     m_xmlConstants = NULL;
     m_pGrid = NULL;
     m_Renderer = NULL;
     m_Window = NULL;
+    m_Font = NULL;
+
+
+    delete m_TextFieldTitle;
+    m_TextFieldTitle = NULL;
 
     DeleteButtons();
 
@@ -69,6 +75,8 @@ bool Interface::GetQuit() const
 void Interface::Draw()
 {
     m_pGrid->Draw();
+
+    m_TextFieldTitle->Draw();
 
     DrawButtons();
 
@@ -142,5 +150,27 @@ void Interface::Create()
     m_pGrid = new Grid();
     m_pGrid->Init( m_xmlConstants, m_Renderer );
 
+    std::string sFont = m_xmlConstants->first_child().child( "Button" ).child( "Font" ).text().as_string();
+    int iFont = m_xmlConstants->first_child().child( "Button" ).child( "FontSize" ).text().as_int();
+    m_Font = TTF_OpenFont( sFont.c_str(), iFont );
+
+    CreateTitle();
+
     CreateButtons();
+}
+
+void Interface::CreateTitle()
+{
+    m_TextFieldTitle = new TextField();
+    m_TextFieldTitle->Init( m_Renderer );
+
+    m_TextFieldTitle->SetText( "Bresenham", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
+
+    int iScreenWidth = m_xmlConstants->first_child().child( "ScreenWidth" ).text().as_int();
+    int iGridOffsetY = m_xmlConstants->first_child().child( "GridPos" ).child( "y" ).text().as_int();
+    int iWidth = m_xmlConstants->first_child().child( "TitleWidth" ).text().as_int();
+
+    m_TextFieldTitle->SetFieldSize( iWidth, iGridOffsetY );
+    m_TextFieldTitle->SetX( ( iScreenWidth - iWidth ) / 2 );
+    m_TextFieldTitle->SetY( 0 );
 }

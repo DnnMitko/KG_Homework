@@ -103,6 +103,13 @@ void Grid::EventHandler( SDL_Event& e )
     }
 }
 
+void Grid::SetState( State newState )
+{
+    m_eCurState = newState;
+    
+    ClearGrid();
+}
+
 void Grid::SetGridScale( std::string sNewScale )
 {
     m_iPixelSize = m_xmlConstants->first_child().child( "GridScale" ).child( sNewScale.c_str() ).text().as_int();
@@ -111,6 +118,15 @@ void Grid::SetGridScale( std::string sNewScale )
     {
         Recalculate();
     }
+
+    m_bHasChanged = true;
+}
+
+void Grid::ClearGrid()
+{
+    ClearStatus();
+
+    m_pvMousePairs->clear();
 
     m_bHasChanged = true;
 }
@@ -246,16 +262,24 @@ void Grid::AddClick( MouseClick click )
         
         if( m_iPixelSize != 1 )
         {
-            Calculate();
+            Calculate( m_pvMousePairs->back() );
         }
         
         m_bHasChanged = true;
     }
 }
 
-void Grid::Calculate()
+void Grid::Calculate( MousePair coords )
 {
-    CalcBresenham( m_pvMousePairs->back() );
+    switch( m_eCurState )
+    {
+        case Bresenham:
+            CalcBresenham( coords );
+            break;
+            //TODO
+        default:
+            printf( "State error, invalid state detected: %d\n", m_eCurState );
+    }
 }
 
 void Grid::Recalculate()
@@ -266,7 +290,7 @@ void Grid::Recalculate()
     {
         if( (*it).end.x != -1 )
         {
-            CalcBresenham( *it );
+            Calculate( *it );
         }
     }
 }

@@ -12,12 +12,6 @@ using std::vector;
 
 class Grid
 {
-    enum States
-    {
-        Bresenham,
-        NumStates
-    };
-    
     struct MouseClick
     {
         int x;
@@ -30,6 +24,12 @@ class Grid
         MouseClick end;
     };
 public:
+    enum State
+    {
+        Bresenham,
+        NumStates
+    };
+public:
     Grid();
     ~Grid();
 public:
@@ -38,7 +38,10 @@ public:
     void Draw();
     void EventHandler( SDL_Event& );
 
+    void SetState( State );
+
     void SetGridScale( std::string );
+    void ClearGrid();
 
     void ToggleDrawBresenham();
 private:
@@ -51,7 +54,7 @@ private:
     bool IsInGrid( MouseClick );
     void AddClick( MouseClick );
 
-    void Calculate();
+    void Calculate( MousePair );
     void Recalculate();
     void SetPixel( int, int );
     void DrawPixel( int, int );
@@ -74,7 +77,7 @@ private:
 
     pugi::xml_document* m_xmlConstants;
 
-    States m_eCurState;
+    State m_eCurState;
 
     bool m_bHasChanged;
 

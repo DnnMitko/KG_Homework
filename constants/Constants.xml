@@ -17,17 +17,22 @@
         <Large>50</Large>
         <VeryLarge>100</VeryLarge>
     </GridScale>
+    
+    <TitleWidth>200</TitleWidth>
+    
     <Button>
         <Sprite>resources/ButtonSprite.png</Sprite>
         <SpriteWidth>296</SpriteWidth>
         <SpriteHeight>87</SpriteHeight>
 
         <Font>resources/Roboto-Medium.ttf</Font>
-        <FontSize>50</FontSize>
+        <FontSize>35</FontSize>
         
-        <GridX>15</GridX>
-        <GridY>40</GridY>
-        <GridWidth>100</GridWidth>
-        <GridHeight>100</GridHeight>
+        <OffsetX>15</OffsetX>
+        <OffsetY>40</OffsetY>
+        <Width>100</Width>
+        <Height>70</Height>
+
+        <PaddingY>10</PaddingY>
     </Button>
 </Constants>

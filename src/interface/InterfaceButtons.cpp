@@ -12,13 +12,13 @@ void Interface::CreateButtons()
     m_ButtonDraw = new Button();
 
     // Right side
-    m_ButtonStateTemp1 = new Button();
+    m_ButtonStateBresenham = new Button();
     m_ButtonStateTemp2 = new Button();
     m_ButtonStateTemp3 = new Button();
     m_ButtonStateTemp4 = new Button();
     m_ButtonStateTemp5 = new Button();
     m_ButtonStateTemp6 = new Button();
-    m_ButtonStateTemp7 = new Button();
+    m_ButtonStateClear = new Button();
 
     // Left side
     m_ButtonGridInitial->Init( m_xmlConstants, m_Renderer );
@@ -30,102 +30,97 @@ void Interface::CreateButtons()
     m_ButtonDraw->Init( m_xmlConstants, m_Renderer );
 
     //Right side
-    m_ButtonStateTemp1->Init( m_xmlConstants, m_Renderer );
+    m_ButtonStateBresenham->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateTemp2->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateTemp3->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateTemp4->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateTemp5->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateTemp6->Init( m_xmlConstants, m_Renderer );
-    m_ButtonStateTemp7->Init( m_xmlConstants, m_Renderer );
-
-    std::string sFont = m_xmlConstants->first_child().child( "Button" ).child( "Font" ).text().as_string();
-    int iFont = m_xmlConstants->first_child().child( "Button" ).child( "FontSize" ).text().as_int();
-    TTF_Font* font = TTF_OpenFont( sFont.c_str(), iFont );
+    m_ButtonStateClear->Init( m_xmlConstants, m_Renderer );
 
     // Left side
-    m_ButtonGridInitial->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_string(), font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonGridVerySmall->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_string(), font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonGridSmall->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Small" ).text().as_string(), font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonGridMedium->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Medium" ).text().as_string(), font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonGridLarge->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Large" ).text().as_string(), font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonGridVeryLarge->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "VeryLarge" ).text().as_string(), font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonDraw->SetText( "Line", font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonGridInitial->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonGridVerySmall->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonGridSmall->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Small" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonGridMedium->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Medium" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonGridLarge->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Large" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonGridVeryLarge->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "VeryLarge" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonDraw->SetText( "Line", m_Font, {0x00, 0x00, 0x00, 0xFF} );
 
     // Right side
-    m_ButtonStateTemp1->SetText( "NaN", font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonStateTemp2->SetText( "NaN", font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonStateTemp3->SetText( "NaN", font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonStateTemp4->SetText( "NaN", font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonStateTemp5->SetText( "NaN", font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonStateTemp6->SetText( "NaN", font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonStateTemp7->SetText( "NaN", font, {0x00, 0x00, 0x00, 0xFF} );
-
-    TTF_CloseFont( font );
+    m_ButtonStateBresenham->SetText( "B", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateTemp2->SetText( "X", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateTemp3->SetText( "X", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateTemp4->SetText( "X", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateTemp5->SetText( "X", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateTemp6->SetText( "X", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateClear->SetText( "Clear", m_Font, {0x00, 0x00, 0x00, 0xFF} );
 
     PositionButtons();
 }
 
 void Interface::PositionButtons()
 {
-    int iGridWidth = m_xmlConstants->first_child().child( "Button" ).child( "GridWidth" ).text().as_int();
-    int iGridHeight = m_xmlConstants->first_child().child( "Button" ).child( "GridHeight" ).text().as_int();
+    int iWidth = m_xmlConstants->first_child().child( "Button" ).child( "Width" ).text().as_int();
+    int iHeight = m_xmlConstants->first_child().child( "Button" ).child( "Height" ).text().as_int();
 
     // Left side
-    m_ButtonGridInitial->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonGridVerySmall->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonGridSmall->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonGridMedium->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonGridLarge->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonGridVeryLarge->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonDraw->SetFieldSize( iGridWidth, iGridHeight );
+    m_ButtonGridInitial->SetFieldSize( iWidth, iHeight );
+    m_ButtonGridVerySmall->SetFieldSize( iWidth, iHeight );
+    m_ButtonGridSmall->SetFieldSize( iWidth, iHeight );
+    m_ButtonGridMedium->SetFieldSize( iWidth, iHeight );
+    m_ButtonGridLarge->SetFieldSize( iWidth, iHeight );
+    m_ButtonGridVeryLarge->SetFieldSize( iWidth, iHeight );
+    m_ButtonDraw->SetFieldSize( iWidth, iHeight );
 
     // Right side
-    m_ButtonStateTemp1->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonStateTemp2->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonStateTemp3->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonStateTemp4->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonStateTemp5->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonStateTemp6->SetFieldSize( iGridWidth, iGridHeight );
-    m_ButtonStateTemp7->SetFieldSize( iGridWidth, iGridHeight );
+    m_ButtonStateBresenham->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateTemp2->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateTemp3->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateTemp4->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateTemp5->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateTemp6->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateClear->SetFieldSize( iWidth, iHeight );
     
     // Left side
-    int iGridX = m_xmlConstants->first_child().child( "Button" ).child( "GridX" ).text().as_int();
-    m_ButtonGridInitial->SetX( iGridX );
-    m_ButtonGridVerySmall->SetX( iGridX );
-    m_ButtonGridSmall->SetX( iGridX );
-    m_ButtonGridMedium->SetX( iGridX );
-    m_ButtonGridLarge->SetX( iGridX );
-    m_ButtonGridVeryLarge->SetX( iGridX );
-    m_ButtonDraw->SetX( iGridX );
+    int iOffsetX = m_xmlConstants->first_child().child( "Button" ).child( "OffsetX" ).text().as_int();
+    m_ButtonGridInitial->SetX( iOffsetX );
+    m_ButtonGridVerySmall->SetX( iOffsetX );
+    m_ButtonGridSmall->SetX( iOffsetX );
+    m_ButtonGridMedium->SetX( iOffsetX );
+    m_ButtonGridLarge->SetX( iOffsetX );
+    m_ButtonGridVeryLarge->SetX( iOffsetX );
+    m_ButtonDraw->SetX( iOffsetX );
     
     // Right side
-    iGridX = m_xmlConstants->first_child().child( "ScreenWidth" ).text().as_int() - iGridX - iGridWidth;
-    m_ButtonStateTemp1->SetX( iGridX );
-    m_ButtonStateTemp2->SetX( iGridX );
-    m_ButtonStateTemp3->SetX( iGridX );
-    m_ButtonStateTemp4->SetX( iGridX );
-    m_ButtonStateTemp5->SetX( iGridX );
-    m_ButtonStateTemp6->SetX( iGridX );
-    m_ButtonStateTemp7->SetX( iGridX );
+    iOffsetX = m_xmlConstants->first_child().child( "ScreenWidth" ).text().as_int() - iOffsetX - iWidth;
+    m_ButtonStateBresenham->SetX( iOffsetX );
+    m_ButtonStateTemp2->SetX( iOffsetX );
+    m_ButtonStateTemp3->SetX( iOffsetX );
+    m_ButtonStateTemp4->SetX( iOffsetX );
+    m_ButtonStateTemp5->SetX( iOffsetX );
+    m_ButtonStateTemp6->SetX( iOffsetX );
+    m_ButtonStateClear->SetX( iOffsetX );
 
     // Left side
-    int iGridY = m_xmlConstants->first_child().child( "Button" ).child( "GridY" ).text().as_int();
-    m_ButtonGridInitial->SetY( iGridY );
-    m_ButtonGridVerySmall->SetY( iGridY + iGridHeight );
-    m_ButtonGridSmall->SetY( iGridY + 2 * iGridHeight );
-    m_ButtonGridMedium->SetY( iGridY + 3 * iGridHeight );
-    m_ButtonGridLarge->SetY( iGridY + 4 * iGridHeight );
-    m_ButtonGridVeryLarge->SetY( iGridY + 5 * iGridHeight );
-    m_ButtonDraw->SetY( iGridY + 6 * iGridHeight );
+    int iOffsetY = m_xmlConstants->first_child().child( "Button" ).child( "OffsetY" ).text().as_int();
+    int iPaddingY = m_xmlConstants->first_child().child( "Button" ).child( "PaddingY" ).text().as_int();
+    m_ButtonGridInitial->SetY( iOffsetY );
+    m_ButtonGridVerySmall->SetY( iOffsetY + ( iHeight + iPaddingY ) );
+    m_ButtonGridSmall->SetY( iOffsetY + 2 * ( iHeight + iPaddingY ) );
+    m_ButtonGridMedium->SetY( iOffsetY + 3 * ( iHeight + iPaddingY ) );
+    m_ButtonGridLarge->SetY( iOffsetY + 4 * ( iHeight + iPaddingY ) );
+    m_ButtonGridVeryLarge->SetY( iOffsetY + 5 * ( iHeight + iPaddingY ) );
+    m_ButtonDraw->SetY( iOffsetY + 6 * ( iHeight + iPaddingY ) );
 
     // Right side
-    m_ButtonStateTemp1->SetY( iGridY );
-    m_ButtonStateTemp2->SetY( iGridY + iGridHeight );
-    m_ButtonStateTemp3->SetY( iGridY + 2 * iGridHeight );
-    m_ButtonStateTemp4->SetY( iGridY + 3 * iGridHeight );
-    m_ButtonStateTemp5->SetY( iGridY + 4 * iGridHeight );
-    m_ButtonStateTemp6->SetY( iGridY + 5 * iGridHeight );
-    m_ButtonStateTemp7->SetY( iGridY + 6 * iGridHeight );
+    m_ButtonStateBresenham->SetY( iOffsetY );
+    m_ButtonStateTemp2->SetY( iOffsetY + ( iHeight + iPaddingY ) );
+    m_ButtonStateTemp3->SetY( iOffsetY + 2 * ( iHeight + iPaddingY ) );
+    m_ButtonStateTemp4->SetY( iOffsetY + 3 * ( iHeight + iPaddingY ) );
+    m_ButtonStateTemp5->SetY( iOffsetY + 4 * ( iHeight + iPaddingY ) );
+    m_ButtonStateTemp6->SetY( iOffsetY + 5 * ( iHeight + iPaddingY ) );
+    m_ButtonStateClear->SetY( iOffsetY + 6 * ( iHeight + iPaddingY ) );
 }
 
 bool Interface::ButtonEvents( SDL_Event& e )
@@ -173,9 +168,9 @@ bool Interface::ButtonEvents( SDL_Event& e )
             m_ButtonDraw->Press();
             bEventFound = true;
         }
-        else if( m_ButtonStateTemp1->IsIn( x, y ) )
+        else if( m_ButtonStateBresenham->IsIn( x, y ) )
         {
-            m_ButtonStateTemp1->Press();
+            m_ButtonStateBresenham->Press();
             bEventFound = true;
         }
         else if( m_ButtonStateTemp2->IsIn( x, y ) )
@@ -203,9 +198,9 @@ bool Interface::ButtonEvents( SDL_Event& e )
             m_ButtonStateTemp6->Press();
             bEventFound = true;
         }
-        else if( m_ButtonStateTemp7->IsIn( x, y ) )
+        else if( m_ButtonStateClear->IsIn( x, y ) )
         {
-            m_ButtonStateTemp7->Press();
+            m_ButtonStateClear->Press();
             bEventFound = true;
         }
     }
@@ -255,9 +250,12 @@ bool Interface::ButtonEvents( SDL_Event& e )
 
             bEventFound = true;
         }
-        else if( m_ButtonStateTemp1->IsIn( x, y ) && m_ButtonStateTemp1->IsPressed() )
+        else if( m_ButtonStateBresenham->IsIn( x, y ) && m_ButtonStateBresenham->IsPressed() )
         {
-            //TODO
+            m_pGrid->SetState( Grid::Bresenham );
+
+            m_TextFieldTitle->SetText( "Bresenham", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
+
             bEventFound = true;
         }
         else if( m_ButtonStateTemp2->IsIn( x, y ) && m_ButtonStateTemp2->IsPressed() )
@@ -285,9 +283,9 @@ bool Interface::ButtonEvents( SDL_Event& e )
             //TODO
             bEventFound = true;
         }
-        else if( m_ButtonStateTemp7->IsIn( x, y ) && m_ButtonStateTemp7->IsPressed() )
+        else if( m_ButtonStateClear->IsIn( x, y ) && m_ButtonStateClear->IsPressed() )
         {
-            //TODO
+            m_pGrid->ClearGrid();
             bEventFound = true;
         }
 
@@ -309,13 +307,13 @@ void Interface::ReleaseButtons()
     m_ButtonDraw->Release();
 
     // Right side
-    m_ButtonStateTemp1->Release();
+    m_ButtonStateBresenham->Release();
     m_ButtonStateTemp2->Release();
     m_ButtonStateTemp3->Release();
     m_ButtonStateTemp4->Release();
     m_ButtonStateTemp5->Release();
     m_ButtonStateTemp6->Release();
-    m_ButtonStateTemp7->Release();
+    m_ButtonStateClear->Release();
 }
 
 void Interface::DrawButtons()
@@ -330,13 +328,13 @@ void Interface::DrawButtons()
     m_ButtonDraw->Draw();
 
     // Right side
-    m_ButtonStateTemp1->Draw();
+    m_ButtonStateBresenham->Draw();
     m_ButtonStateTemp2->Draw();
     m_ButtonStateTemp3->Draw();
     m_ButtonStateTemp4->Draw();
     m_ButtonStateTemp5->Draw();
     m_ButtonStateTemp6->Draw();
-    m_ButtonStateTemp7->Draw();
+    m_ButtonStateClear->Draw();
 }
 
 void Interface::DeleteButtons()
@@ -359,20 +357,20 @@ void Interface::DeleteButtons()
     m_ButtonDraw = NULL;
 
     // Right side
-    delete m_ButtonStateTemp1;
+    delete m_ButtonStateBresenham;
     delete m_ButtonStateTemp2;
     delete m_ButtonStateTemp3;
     delete m_ButtonStateTemp4;
     delete m_ButtonStateTemp5;
     delete m_ButtonStateTemp6;
-    delete m_ButtonStateTemp7;
+    delete m_ButtonStateClear;
 
 
-    m_ButtonStateTemp1 = NULL;
+    m_ButtonStateBresenham = NULL;
     m_ButtonStateTemp2 = NULL;
     m_ButtonStateTemp3 = NULL;
     m_ButtonStateTemp4 = NULL;
     m_ButtonStateTemp5 = NULL;
     m_ButtonStateTemp6 = NULL;
-    m_ButtonStateTemp7 = NULL;
+    m_ButtonStateClear = NULL;
 }

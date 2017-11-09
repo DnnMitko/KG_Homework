@@ -26,6 +26,7 @@ private:
     void DeInitSDL();
 
     void Create();
+    void CreateTitle();
 
     //InterfaceButtons.cpp
     void CreateButtons();
@@ -44,6 +45,10 @@ private:
 
     Grid* m_pGrid;
 
+    TTF_Font* m_Font;
+
+    TextField* m_TextFieldTitle;
+
     Button* m_ButtonGridInitial;
     Button* m_ButtonGridVerySmall;
     Button* m_ButtonGridSmall;
@@ -51,13 +56,13 @@ private:
     Button* m_ButtonGridLarge;
     Button* m_ButtonGridVeryLarge;
     Button* m_ButtonDraw;
-    Button* m_ButtonStateTemp1;
+    Button* m_ButtonStateBresenham;
     Button* m_ButtonStateTemp2;
     Button* m_ButtonStateTemp3;
     Button* m_ButtonStateTemp4;
     Button* m_ButtonStateTemp5;
     Button* m_ButtonStateTemp6;
-    Button* m_ButtonStateTemp7;
+    Button* m_ButtonStateClear;
 };
 
 #endif //__INTERFACE_H__
