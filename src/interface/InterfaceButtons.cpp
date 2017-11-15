@@ -45,7 +45,7 @@ void Interface::CreateButtons()
     m_ButtonGridMedium->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Medium" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonGridLarge->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "Large" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonGridVeryLarge->SetText( m_xmlConstants->first_child().child( "GridScale" ).child( "VeryLarge" ).text().as_string(), m_Font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonDraw->SetText( "Line", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonDraw->SetText( "> > >", m_Font, {0x00, 0x00, 0x00, 0xFF} );
 
     // Right side
     m_ButtonStateBresenham->SetText( "B", m_Font, {0x00, 0x00, 0x00, 0xFF} );
@@ -246,7 +246,14 @@ bool Interface::ButtonEvents( SDL_Event& e )
         }
         else if( m_ButtonDraw->IsIn( x, y ) && m_ButtonDraw->IsPressed() )
         {
-            m_pGrid->ToggleDrawBresenham();
+            if( m_pGrid->ToggleDrawBresenham() )
+            {
+                m_ButtonDraw->SetText( "> > >", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+            }
+            else
+            {
+                m_ButtonDraw->SetText( ">> <<", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+            }
 
             bEventFound = true;
         }

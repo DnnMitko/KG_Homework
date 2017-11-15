@@ -43,7 +43,7 @@ public:
     void SetGridScale( std::string );
     void ClearGrid();
 
-    void ToggleDrawBresenham();
+    bool ToggleDrawBresenham();
 private:
     void DrawGrid();
     void DrawPixelStatus();
@@ -58,20 +58,32 @@ private:
     void Recalculate();
     void SetPixel( int, int );
     void DrawPixel( int, int );
+    
+    void SortUpX( MousePair& );
+    void SortUpY( MousePair& );
+    void SortDownX( MousePair& );
+    void SortDownY( MousePair& );
 
-    // Bresenham.cpp
-    void CalcBresenham( MousePair );
+    // SetBresenham.cpp
+    void SetBresenham( MousePair );
     void SetVertical( MousePair );
     void SetSlope( MousePair );
     void SetSlopeNormal( MousePair, float );
     void SetSlopeInverse( MousePair );
-    void SortX( MousePair& );
-    void SortY( MousePair& );
+
+    // DrawBresenham.cpp
     void DrawBresenham( MousePair );
     void DrawVertical( MousePair );
     void DrawSlope( MousePair );
     void DrawSlopeNormal( MousePair, float );
     void DrawSlopeInverse( MousePair );
+
+    // DrawRevBresenham.cpp
+    void DrawRevBresenham( MousePair );
+    void DrawRevVertical( MousePair );
+    void DrawRevSlope( MousePair );
+    void DrawRevSlopeNormal( MousePair, float );
+    void DrawRevSlopeInverse( MousePair );
 private:
     SDL_Renderer* m_Renderer;
 
@@ -84,7 +96,7 @@ private:
     SDL_Rect m_GridPos;
     int m_iPixelSize;
 
-    bool m_bUseBresenham;
+    bool m_bUseNormalBresenham;
 
     bool** m_ppbPixelStatus;
     unsigned int m_uiPixelCountWidth;

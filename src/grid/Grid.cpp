@@ -17,7 +17,7 @@ Grid::Grid()
 
     m_iPixelSize = 0;
 
-    m_bUseBresenham = false;
+    m_bUseNormalBresenham = true;
 
     m_ppbPixelStatus = NULL;
     m_uiPixelCountWidth = 0;;
@@ -59,7 +59,7 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
 
     m_iPixelSize = m_xmlConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_int();
 
-    m_bUseBresenham = false;
+    m_bUseNormalBresenham = true;
 
     int iSmallest = m_xmlConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
     m_uiPixelCountWidth = m_GridPos.w / iSmallest;
@@ -84,7 +84,7 @@ void Grid::Draw()
 
     DrawGrid();
     DrawPixelStatus();
-    DrawLines( m_bUseBresenham );
+    DrawLines( m_bUseNormalBresenham );
 
     m_bHasChanged = false;
 }
@@ -131,11 +131,13 @@ void Grid::ClearGrid()
     m_bHasChanged = true;
 }
 
-void Grid::ToggleDrawBresenham()
+bool Grid::ToggleDrawBresenham()
 {
-    m_bUseBresenham = !m_bUseBresenham;
+    m_bUseNormalBresenham = !m_bUseNormalBresenham;
     
     m_bHasChanged = true;
+
+    return m_bUseNormalBresenham;
 }
 
 void Grid::DrawGrid()
@@ -191,11 +193,9 @@ void Grid::DrawPixelStatus()
     }
 }
 
-void Grid::DrawLines( bool bUseBresenham )
+void Grid::DrawLines( bool bUseNormalBresenham )
 {
     vector<MousePair>::iterator it;
-    
-    int x1, y1, x2, y2;
 
     SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
     
@@ -205,18 +205,34 @@ void Grid::DrawLines( bool bUseBresenham )
         {
             break;
         }
-        else if( bUseBresenham )
+        else if( bUseNormalBresenham )
         {
             DrawBresenham( *it );
         }
         else
         {
-            x1 = it->begin.x;
-            y1 = it->begin.y;
-            x2 = it->end.x;
-            y2 = it->end.y;
+            SortUpX( *it );
+            int iMiddleX = ( ( (*it).end.x - (*it).begin.x ) / 2 ) + (*it).begin.x;
 
-            SDL_RenderDrawLine( m_Renderer, x1, y1, x2, y2 );
+            SortUpY( *it );
+            int iMiddleY = ( ( (*it).end.y - (*it).begin.y ) / 2 ) + (*it).begin.y;
+
+            MousePair mpFirstHalf;
+            mpFirstHalf.begin.x = (*it).begin.x;
+            mpFirstHalf.begin.y = (*it).begin.y;
+            mpFirstHalf.end.x = iMiddleX;
+            mpFirstHalf.end.y = iMiddleY;
+
+            MousePair mpSecondHalf;
+            mpSecondHalf.begin.x = iMiddleX;
+            mpSecondHalf.begin.y = iMiddleY;
+            mpSecondHalf.end.x = (*it).end.x;
+            mpSecondHalf.end.y = (*it).end.y;
+
+            DrawBresenham( mpFirstHalf );
+            DrawBresenham( mpSecondHalf );
+            // DrawBresenham( mpFirstHalf );
+            // DrawRevBresenham( mpSecondHalf );
         }
     }
 }
@@ -274,7 +290,7 @@ void Grid::Calculate( MousePair coords )
     switch( m_eCurState )
     {
         case Bresenham:
-            CalcBresenham( coords );
+            SetBresenham( coords );
             break;
             //TODO
         default:
@@ -306,4 +322,44 @@ void Grid::SetPixel( int x, int y )
 void Grid::DrawPixel( int x, int y )
 {
     SDL_RenderDrawPoint( m_Renderer, x, y );
+}
+
+void Grid::SortUpX( MousePair& coords )
+{
+    if( coords.begin.x > coords.end.x )
+    {
+        MouseClick temp = coords.begin;
+        coords.begin = coords.end;
+        coords.end = temp;
+    }
+}
+
+void Grid::SortUpY( MousePair& coords )
+{
+    if( coords.begin.y > coords.end.y )
+    {
+        MouseClick temp = coords.begin;
+        coords.begin = coords.end;
+        coords.end = temp;
+    }
+}
+
+void Grid::SortDownX( MousePair& coords )
+{
+    if( coords.begin.x < coords.end.x )
+    {
+        MouseClick temp = coords.begin;
+        coords.begin = coords.end;
+        coords.end = temp;
+    }
+}
+
+void Grid::SortDownY( MousePair& coords )
+{
+    if( coords.begin.y < coords.end.y )
+    {
+        MouseClick temp = coords.begin;
+        coords.begin = coords.end;
+        coords.end = temp;
+    }
 }

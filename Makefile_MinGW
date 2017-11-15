@@ -1,4 +1,4 @@
-OBJS = src/main.cpp src/interface/Interface.cpp src/interface/InterfaceButtons.cpp src/grid/Grid.cpp src/pugixml/pugixml.cpp src/grid/Bresenham.cpp src/interface/Label.cpp src/interface/TextField.cpp src/interface/Button.cpp
+OBJS = src/main.cpp src/pugixml/pugixml.cpp src/interface/Interface.cpp src/interface/InterfaceButtons.cpp src/grid/Grid.cpp src/grid/bresenham/SetBresenham.cpp src/grid/bresenham/DrawBresenham.cpp src/grid/bresenham/DrawRevBresenham.cpp src/interface/Label.cpp src/interface/TextField.cpp src/interface/Button.cpp
 
 CC = g++
 
