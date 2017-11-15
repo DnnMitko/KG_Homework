@@ -230,9 +230,8 @@ void Grid::DrawLines( bool bUseNormalBresenham )
             mpSecondHalf.end.y = (*it).end.y;
 
             DrawBresenham( mpFirstHalf );
-            DrawBresenham( mpSecondHalf );
-            // DrawBresenham( mpFirstHalf );
-            // DrawRevBresenham( mpSecondHalf );
+            
+            DrawRevBresenham( mpSecondHalf );
         }
     }
 }
