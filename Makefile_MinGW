@@ -1,4 +1,8 @@
-OBJS = src/main.cpp src/pugixml/pugixml.cpp src/interface/Interface.cpp src/interface/InterfaceButtons.cpp src/grid/Grid.cpp src/grid/bresenham/SetBresenham.cpp src/grid/bresenham/DrawBresenham.cpp src/grid/bresenham/DrawRevBresenham.cpp src/interface/Label.cpp src/interface/TextField.cpp src/interface/Button.cpp
+SRCS = src/main.cpp
+
+OBJ_DIR = src/obj
+
+OBJS = $(patsubst src/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 CC = g++
 
@@ -6,16 +10,28 @@ INCLUDE_PATHS = -IC:\MinGW\include\SDL2
 
 LIBRARY_PATHS = -LC:\MinGW\lib
 
-#COMPILER_FLAGS = -w -Wl,-subsystem,windows
+COMPILER_FLAGS = -Wall
 
 LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
-OBJ_NAME = run
+EXE = run
 
-all : $(OBJ_NAME)
+all : $(SRCS) $(OBJ_DIR) $(OBJS) submodules $(EXE)
 
-$(OBJ_NAME) : $(OBJS)
-	$(CC) $(OBJS) $(LIBS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+$(OBJ_DIR) :
+	mkdir $(OBJ_DIR)
+
+$(OBJS) : $(OBJ_DIR)/%.o : src/%.cpp
+	$(CC) $(COMPILER_FLAGS) -c $< -o $@
+
+submodules :
+	$(MAKE) -C src/grid
+	$(MAKE) -C src/interface
+	$(MAKE) -C src/pugixml
+
+$(EXE) :
+	$(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
 clean :
-	del /f $(OBJ_NAME)
+	del /Q $(EXE)
+	rmdir /Q /S src/obj
