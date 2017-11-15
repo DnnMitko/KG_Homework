@@ -217,6 +217,7 @@ void Grid::DrawLines( bool bUseNormalBresenham )
             SortUpY( *it );
             int iMiddleY = ( ( (*it).end.y - (*it).begin.y ) / 2 ) + (*it).begin.y;
 
+            SortUpX( *it );
             MousePair mpFirstHalf;
             mpFirstHalf.begin.x = (*it).begin.x;
             mpFirstHalf.begin.y = (*it).begin.y;
@@ -230,7 +231,7 @@ void Grid::DrawLines( bool bUseNormalBresenham )
             mpSecondHalf.end.y = (*it).end.y;
 
             DrawBresenham( mpFirstHalf );
-            
+
             DrawRevBresenham( mpSecondHalf );
         }
     }
