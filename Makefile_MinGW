@@ -6,7 +6,7 @@ OBJS = $(patsubst src\\%.cpp,$(OBJ_DIR)\\%.o,$(SRCS))
 
 CC = g++
 
-COMPILER_FLAGS = -Wall
+COMPILER_FLAGS = -Wall -Wextra
 
 LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
