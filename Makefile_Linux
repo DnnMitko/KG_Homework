@@ -1,3 +1,5 @@
+include Makefile_Common
+
 SRCS = src/main.cpp
 
 OBJ_DIR = src/obj
@@ -6,8 +8,6 @@ OBJS = $(patsubst src/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 CC = g++
 
-COMPILER_FLAGS = -Wall -Wextra
-
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 EXE = run
@@ -15,19 +15,30 @@ EXE = run
 all : $(SRCS) $(OBJ_DIR) $(OBJS) submodules $(EXE)
 
 $(OBJ_DIR) :
-	mkdir $(OBJ_DIR)
+	@mkdir $(OBJ_DIR)
+
+$(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : src/%.cpp
-	$(CC) $(COMPILER_FLAGS) -c $< -o $@
+	@printf "$(LABEL_COLOR)------------Main------------$(NO_COLOR)\n"
+	@$(PRINT)
 
 submodules :
-	$(MAKE) -C src/grid
-	$(MAKE) -C src/interface
-	$(MAKE) -C src/pugixml
+	@printf "$(LABEL_COLOR)-----------PugiXML----------$(NO_COLOR)\n"
+	@$(MAKE) --no-print-directory -C src/pugixml
+	@printf "$(LABEL_COLOR)------------Grid------------$(NO_COLOR)\n"
+	@$(MAKE) --no-print-directory -C src/grid
+	@printf "$(LABEL_COLOR)----------Interface---------$(NO_COLOR)\n"
+	@$(MAKE) --no-print-directory -C src/interface
+
+$(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
 $(EXE) :
-	$(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
+	@printf "$(LABEL_COLOR)-----Linking executable-----$(NO_COLOR)\n"
+	@$(PRINT_EXE)
+
+clean : CMD = rm $(EXE) && rm -r src/obj
 
 clean :
-	rm $(EXE)
-	rm -r src/obj
+	@printf "$(LABEL_COLOR)----------Cleaning----------$(NO_COLOR)\n"
+	@$(PRINT_EXE)

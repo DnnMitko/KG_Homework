@@ -1,3 +1,5 @@
+include ../../Makefile_Common
+
 SRCS = Grid.cpp
 
 HDRS = Grid.h
@@ -8,10 +10,11 @@ OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 CC = g++
 
-COMPILER_FLAGS = -Wall
-
 all : $(SRCS) $(HDRS) $(OBJS)
-	$(MAKE) -C bresenham
+	@printf "   $(LABEL_COLOR)----------Bresenham---------$(NO_COLOR)\n"
+	@$(MAKE) --no-print-directory -C bresenham
+
+$(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
-	$(CC) $(COMPILER_FLAGS) -c $< -o $@
+	@$(PRINT)
