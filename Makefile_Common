@@ -11,7 +11,7 @@ WARN_STR       = $(WARN_COLOR)[WARNINGS]$(NO_COLOR)
 FILE_STR       = $(FILE_COLOR)$<$(NO_COLOR)
 EXE_STR        = $(FILE_COLOR)$@$(NO_COLOR)
 
-PADDING        = awk '{ printf "%-35s %-10s\n",$$1, $$2; }'
+PADDING        = awk '{ printf "%-33s %-10s\n",$$1, $$2; }'
 
 ERR_MSG        = printf "$(FILE_STR) $(ERR_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n" && false
 WARN_MSG       = printf "$(FILE_STR) $(WARN_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n"

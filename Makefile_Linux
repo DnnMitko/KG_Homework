@@ -20,25 +20,31 @@ $(OBJ_DIR) :
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : src/%.cpp
-	@printf "$(LABEL_COLOR)------------Main------------$(NO_COLOR)\n"
-	@$(PRINT)
+	@printf "$(LABEL_COLOR)╔══════════[Main]═══════════$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
 
 submodules :
-	@printf "$(LABEL_COLOR)-----------PugiXML----------$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╔═════════[PugiXML]═════════$(NO_COLOR)\n"
 	@$(MAKE) --no-print-directory -C src/pugixml
-	@printf "$(LABEL_COLOR)------------Grid------------$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╔══════════[Grid]═══════════$(NO_COLOR)\n"
 	@$(MAKE) --no-print-directory -C src/grid
-	@printf "$(LABEL_COLOR)----------Interface---------$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╔════════[Interface]════════$(NO_COLOR)\n"
 	@$(MAKE) --no-print-directory -C src/interface
+	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
 
 $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
 $(EXE) :
-	@printf "$(LABEL_COLOR)-----Linking executable-----$(NO_COLOR)\n"
-	@$(PRINT_EXE)
+	@printf "$(LABEL_COLOR)╔═══[Linking executable]════$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
+	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
 
 clean : CMD = rm $(EXE) && rm -r src/obj
 
 clean :
-	@printf "$(LABEL_COLOR)----------Cleaning----------$(NO_COLOR)\n"
-	@$(PRINT_EXE)
+	@printf "$(LABEL_COLOR)╔════════[Cleaning]═════════$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
+	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"

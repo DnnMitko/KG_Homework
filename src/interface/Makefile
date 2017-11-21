@@ -15,4 +15,4 @@ all : $(SRCS) $(HDRS) $(OBJS)
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
-	@$(PRINT)
+	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)

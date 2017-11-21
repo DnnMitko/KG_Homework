@@ -11,10 +11,10 @@ OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 CC = g++
 
 all : $(SRCS) $(HDRS) $(OBJS)
-	@printf "   $(LABEL_COLOR)----------Bresenham---------$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╠══╦══════[Bresenham]══════════$(NO_COLOR)\n"
 	@$(MAKE) --no-print-directory -C bresenham
 
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
-	@$(PRINT)
+	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
