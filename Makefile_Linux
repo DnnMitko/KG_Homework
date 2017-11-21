@@ -12,15 +12,17 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 EXE = run
 
-all : $(SRCS) $(OBJ_DIR) $(OBJS) submodules $(EXE)
+all : $(SRCS) $(OBJ_DIR) header $(OBJS) submodules $(EXE)
 
 $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)
 
+header :
+	@printf "$(LABEL_COLOR)╔══════════[Main]═══════════$(NO_COLOR)\n"
+
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : src/%.cpp
-	@printf "$(LABEL_COLOR)╔══════════[Main]═══════════$(NO_COLOR)\n"
 	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
 
 submodules :
