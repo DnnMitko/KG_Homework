@@ -81,7 +81,7 @@ void Interface::PositionButtons()
     m_ButtonStateTemp5->SetFieldSize( iWidth, iHeight );
     m_ButtonStateTemp6->SetFieldSize( iWidth, iHeight );
     m_ButtonStateClear->SetFieldSize( iWidth, iHeight );
-    
+
     // Left side
     int iOffsetX = m_xmlConstants->first_child().child( "Button" ).child( "OffsetX" ).text().as_int();
     m_ButtonGridInitial->SetX( iOffsetX );
@@ -91,7 +91,7 @@ void Interface::PositionButtons()
     m_ButtonGridLarge->SetX( iOffsetX );
     m_ButtonGridVeryLarge->SetX( iOffsetX );
     m_ButtonDraw->SetX( iOffsetX );
-    
+
     // Right side
     iOffsetX = m_xmlConstants->first_child().child( "ScreenWidth" ).text().as_int() - iOffsetX - iWidth;
     m_ButtonStateBresenham->SetX( iOffsetX );

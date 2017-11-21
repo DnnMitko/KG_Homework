@@ -58,7 +58,7 @@ private:
     void Recalculate();
     void SetPixel( int, int );
     void DrawPixel( int, int );
-    
+
     void SortUpX( MousePair& );
     void SortUpY( MousePair& );
     void SortDownX( MousePair& );

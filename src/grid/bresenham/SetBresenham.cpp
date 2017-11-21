@@ -4,7 +4,7 @@ void Grid::SetBresenham( MousePair coords )
 {
     int x1, x2;
     int iRun;
-    
+
     x1 = coords.begin.x;
     x2 = coords.end.x;
 
@@ -61,7 +61,7 @@ void Grid::SetSlope( MousePair coords )
 void Grid::SetSlopeNormal( MousePair coords, float fSlope )
 {
     SortUpX( coords );
-    
+
     int x1 = coords.begin.x;
     int y1 = coords.begin.y;
     int x2 = coords.end.x;
@@ -77,7 +77,7 @@ void Grid::SetSlopeNormal( MousePair coords, float fSlope )
     {
         iThreshold = m_iPixelSize - iThreshold;
     }
-    
+
     int iY = y1;
     for( int iX = x1; iX <= x2; iX += m_iPixelSize )
     {

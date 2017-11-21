@@ -4,7 +4,7 @@ void Grid::DrawRevBresenham( MousePair coords )
 {
     int x1, x2;
     int iRun;
-    
+
     x1 = coords.begin.x;
     x2 = coords.end.x;
 
@@ -61,7 +61,7 @@ void Grid::DrawRevSlope( MousePair coords )
 void Grid::DrawRevSlopeNormal( MousePair coords, float fSlope )
 {
     SortDownX( coords );
-    
+
     int x1 = coords.begin.x;
     int y1 = coords.begin.y;
     int x2 = coords.end.x;
@@ -81,7 +81,7 @@ void Grid::DrawRevSlopeNormal( MousePair coords, float fSlope )
     int iThreshold = abs( iRun );
 
     int iThresholdInc = abs( iRun ) * 2;
-    
+
     int iY = y1;
     for( int iX = x1; iX >= x2; iX-- )
     {
@@ -101,7 +101,7 @@ void Grid::DrawRevSlopeNormal( MousePair coords, float fSlope )
 void Grid::DrawRevSlopeInverse( MousePair coords )
 {
     SortDownY( coords );
-    
+
     int x1 = coords.begin.x;
     int y1 = coords.begin.y;
     int x2 = coords.end.x;
@@ -123,7 +123,7 @@ void Grid::DrawRevSlopeInverse( MousePair coords )
     int iThreshold = abs( iRise );
 
     int iThresholdInc = abs( iRise ) * 2;
-    
+
     int iX = x1;
     for( int iY = y1; iY >= y2; iY-- )
     {

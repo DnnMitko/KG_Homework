@@ -9,7 +9,7 @@ Grid::Grid()
     m_eCurState = NumStates;
 
     m_bHasChanged = false;
-    
+
     m_GridPos.x = 0;
     m_GridPos.y = 0;
     m_GridPos.w = 0;
@@ -106,7 +106,7 @@ void Grid::EventHandler( SDL_Event& e )
 void Grid::SetState( State newState )
 {
     m_eCurState = newState;
-    
+
     ClearGrid();
 }
 
@@ -134,7 +134,7 @@ void Grid::ClearGrid()
 bool Grid::ToggleDrawBresenham()
 {
     m_bUseNormalBresenham = !m_bUseNormalBresenham;
-    
+
     m_bHasChanged = true;
 
     return m_bUseNormalBresenham;
@@ -144,7 +144,7 @@ void Grid::DrawGrid()
 {
     SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderFillRect( m_Renderer, &m_GridPos );
-    
+
     if( m_iPixelSize != 1 )
     {
         SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
@@ -198,7 +198,7 @@ void Grid::DrawLines( bool bUseNormalBresenham )
     vector<MousePair>::iterator it;
 
     SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
-    
+
     for( it = m_pvMousePairs->begin(); it != m_pvMousePairs->end(); it++ )
     {
         if( (*it).end.x == -1 )
@@ -275,12 +275,12 @@ void Grid::AddClick( MouseClick click )
     else
     {
         m_pvMousePairs->back().end = click;
-        
+
         if( m_iPixelSize != 1 )
         {
             Calculate( m_pvMousePairs->back() );
         }
-        
+
         m_bHasChanged = true;
     }
 }
@@ -301,7 +301,7 @@ void Grid::Calculate( MousePair coords )
 void Grid::Recalculate()
 {
     vector<MousePair>::iterator it;
-    
+
     for( it = m_pvMousePairs->begin(); it != m_pvMousePairs->end(); it++ )
     {
         if( (*it).end.x != -1 )
