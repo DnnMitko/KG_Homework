@@ -8,10 +8,13 @@ OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 CC = g++
 
-all : $(SRCS) $(OBJS)
-	@printf "$(LABEL_COLOR)║  ╚$(NO_COLOR)\n"
+all : header $(SRCS) $(OBJS)
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+
+header :
+	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)╦════════[Bresenham]════════$(NO_COLOR)\n"
 
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
-	@printf "$(LABEL_COLOR)║  ╠═$(NO_COLOR)";$(PRINT)
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)

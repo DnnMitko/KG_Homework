@@ -6,7 +6,7 @@ OBJ_DIR = src/obj
 
 OBJS = $(patsubst src/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
-CC = g++
+export CC = g++
 
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
@@ -18,29 +18,23 @@ $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)
 
 header :
-	@printf "$(LABEL_COLOR)╔══════════[Main]═══════════$(NO_COLOR)\n"
+	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══════════[Src]═══════════$(NO_COLOR)\n"
 
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : src/%.cpp
-	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
 
 submodules :
-	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
-	@printf "$(LABEL_COLOR)╔═════════[PugiXML]═════════$(NO_COLOR)\n"
 	@$(MAKE) --no-print-directory -C src/pugixml
-	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
-	@printf "$(LABEL_COLOR)╔══════════[Grid]═══════════$(NO_COLOR)\n"
 	@$(MAKE) --no-print-directory -C src/grid
-	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
-	@printf "$(LABEL_COLOR)╔════════[Interface]════════$(NO_COLOR)\n"
 	@$(MAKE) --no-print-directory -C src/interface
 	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
 
 $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
 $(EXE) :
-	@printf "$(LABEL_COLOR)╔═══[Linking executable]════$(NO_COLOR)\n"
+	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══[Linking executable]════$(NO_COLOR)\n"
 	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
 
