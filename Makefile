@@ -6,8 +6,6 @@ OBJ_DIR = src/obj
 
 OBJS = $(patsubst src/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
-export CC = g++
-
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 EXE = run

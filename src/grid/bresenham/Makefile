@@ -6,8 +6,6 @@ OBJ_DIR = ../../obj
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
-CC = g++
-
 all : header $(SRCS) $(OBJS)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
