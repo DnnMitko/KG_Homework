@@ -35,12 +35,12 @@ $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
 $(EXE) :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══[Linking executable]════$(NO_COLOR)\n"
-	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
-	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
 
-clean : CMD = rm $(EXE) && rm -r src/obj
+clean : CMD = rm -f $(EXE); rm -r src/obj
 
 clean :
-	@printf "$(LABEL_COLOR)╔════════[Cleaning]═════════$(NO_COLOR)\n"
-	@printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
-	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[Cleaning]═════════$(NO_COLOR)\n"
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
