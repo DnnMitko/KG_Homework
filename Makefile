@@ -12,6 +12,7 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 EXE = run
 
+.PHONY: all
 all : $(SRCS) $(OBJ_DIR) header $(OBJS) submodules $(EXE)
 
 $(OBJ_DIR) :
@@ -38,6 +39,7 @@ $(EXE) :
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
 
+.PHONY: clean
 clean : headerClean remove_exe remove_obj
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
 
