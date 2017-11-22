@@ -1,5 +1,7 @@
 SHELL                = /bin/bash
 
+SCREEN_WIDTH         = $(shell tput cols)
+
 NO_COLOR             = \033[0m
 OK_COLOR             = \033[01;32m
 ERR_COLOR            = \033[01;31m
@@ -15,20 +17,23 @@ EXE_STR              = $(FILE_COLOR)$@$(NO_COLOR)
 
 PADDING              = awk '{ printf "%-33s %-10s\n",$$1, $$2; }'
 
-ERR_MSG              = printf "$(FILE_STR) $(ERR_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n" && false
+WARN_BORDER          = printf "\n" && for (( i=0; i<$(SCREEN_WIDTH); i++)); do printf "$(WARN_COLOR)═$(NO_COLOR)"; done && printf "\n"
+ERR_BORDER           = printf "\n" && for (( i=0; i<$(SCREEN_WIDTH); i++)); do printf "$(ERR_COLOR)═$(NO_COLOR)"; done && printf "\n"
+
+ERR_MSG              = printf "$(FILE_STR) $(ERR_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n"
 WARN_MSG             = printf "$(FILE_STR) $(WARN_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n"
 OK_MSG               = printf "$(FILE_STR) $(OK_STR)\n" | $(PADDING)
 
-ERR_MSG_EXE          = printf "$(EXE_STR) $(ERR_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n" && false
+ERR_MSG_EXE          = printf "$(EXE_STR) $(ERR_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n"
 WARN_MSG_EXE         = printf "$(EXE_STR) $(WARN_STR)\n" | $(PADDING) && printf "$(CMD)\n$$LOG\n"
 OK_MSG_EXE           = printf "$(EXE_STR) $(OK_STR)\n" | $(PADDING)
 
-PRINT                = LOG=$$($(CMD) 2>&1) ; if [ $$? -eq 1 ]; then $(ERR_MSG); elif [ "$$LOG" != "" ] ; then $(WARN_MSG); else $(OK_MSG); fi;
+PRINT                = LOG=$$($(CMD) 2>&1) ; if [ $$? -eq 1 ]; then $(ERR_BORDER) && $(ERR_MSG) && $(ERR_BORDER) && false; elif [ "$$LOG" != "" ]; then $(WARN_BORDER) && $(WARN_MSG) && $(WARN_BORDER); else $(OK_MSG); fi;
 
-PRINT_EXE            = LOG=$$($(CMD) 2>&1) ; if [ $$? -eq 1 ]; then $(ERR_MSG_EXE); elif [ "$$LOG" != "" ] ; then $(WARN_MSG_EXE); else $(OK_MSG_EXE); fi;
+PRINT_EXE            = LOG=$$($(CMD) 2>&1) ; if [ $$? -eq 1 ]; then $(ERR_BORDER) && $(ERR_MSG_EXE) && $(ERR_BORDER) && false; elif [ "$$LOG" != "" ]; then $(WARN_BORDER) && $(WARN_MSG_EXE) && $(WARN_BORDER); else $(OK_MSG_EXE); fi;
 
-PRINT_DEPTH        = for (( i=1; i<=$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)║  $(NO_COLOR)"; done;
+PRINT_DEPTH          = for (( i=1; i<=$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)║  $(NO_COLOR)"; done;
 
-PRINT_DEPTH_HEADER = if [ $(MAKELEVEL) -gt 0 ]; then printf "$(LABEL_COLOR)╠══$(NO_COLOR)"; else printf "$(LABEL_COLOR)╔$(NO_COLOR)"; fi;	for (( i=2; i<=$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)╬══$(NO_COLOR)"; done;
+PRINT_DEPTH_HEADER   = if [ $(MAKELEVEL) -gt 0 ]; then printf "$(LABEL_COLOR)╠══$(NO_COLOR)"; else printf "$(LABEL_COLOR)╔$(NO_COLOR)"; fi; for (( i=2; i<=$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)╬══$(NO_COLOR)"; done;
 
 COMPILER_FLAGS       = -Wall -Wextra -fdiagnostics-color -g
