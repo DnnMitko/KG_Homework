@@ -30,18 +30,18 @@ submodules :
 	@$(MAKE) --no-print-directory -C src/pugixml
 	@$(MAKE) --no-print-directory -C src/grid
 	@$(MAKE) --no-print-directory -C src/interface
-	@printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
 $(EXE) :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══[Linking executable]════$(NO_COLOR)\n"
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
-	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 .PHONY: clean
 clean : headerClean remove_exe remove_obj
-	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 headerClean :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[Cleaning]═════════$(NO_COLOR)\n"

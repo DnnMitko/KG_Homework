@@ -10,7 +10,7 @@ CC = g++
 
 all : header $(SRCS) $(OBJS)
 	@$(MAKE) --no-print-directory -C bresenham
-	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚$(NO_COLOR)\n"
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 header :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)══════════[Grid]═══════════$(NO_COLOR)\n"
