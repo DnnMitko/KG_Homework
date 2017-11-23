@@ -11,7 +11,7 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 EXE = run
 
 .PHONY: all
-all : $(SRCS) $(OBJ_DIR) header $(OBJS) submodules $(EXE)
+all : $(SRCS) $(OBJ_DIR) header $(EXE)
 
 $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)
@@ -32,7 +32,7 @@ submodules :
 
 $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
-$(EXE) :
+$(EXE) : $(OBJS) submodules
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══[Linking executable]════$(NO_COLOR)\n"
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
