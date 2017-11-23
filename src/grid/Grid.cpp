@@ -20,15 +20,15 @@ Grid::Grid()
     m_bUseNormalBresenham = true;
 
     m_ppbPixelStatus = NULL;
-    m_uiPixelCountWidth = 0;;
-    m_uiPixelCountHeight = 0;
+    m_iPixelCountWidth = 0;
+    m_iPixelCountHeight = 0;
 
     m_pvMousePairs = NULL;
 }
 
 Grid::~Grid()
 {
-    for( unsigned int i = 0; i < m_uiPixelCountWidth; i++ )
+    for( int i = 0; i < m_iPixelCountWidth; i++ )
     {
         delete[] m_ppbPixelStatus[i];
     }
@@ -62,13 +62,13 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
     m_bUseNormalBresenham = true;
 
     int iSmallest = m_xmlConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
-    m_uiPixelCountWidth = m_GridPos.w / iSmallest;
-    m_uiPixelCountHeight = m_GridPos.h / iSmallest;
+    m_iPixelCountWidth = m_GridPos.w / iSmallest;
+    m_iPixelCountHeight = m_GridPos.h / iSmallest;
 
-    m_ppbPixelStatus = new bool*[m_uiPixelCountWidth];
-    for( unsigned int i = 0; i < m_uiPixelCountWidth; i++ )
+    m_ppbPixelStatus = new bool*[m_iPixelCountWidth];
+    for( int i = 0; i < m_iPixelCountWidth; i++ )
     {
-        m_ppbPixelStatus[i] = new bool[m_uiPixelCountHeight];
+        m_ppbPixelStatus[i] = new bool[m_iPixelCountHeight];
     }
     ClearStatus();
 
@@ -243,9 +243,9 @@ void Grid::DrawSim( bool bUseNormalBresenham )
 
 void Grid::ClearStatus()
 {
-    for( unsigned int col = 0; col < m_uiPixelCountWidth; col++ )
+    for( int col = 0; col < m_iPixelCountWidth; col++ )
     {
-        for( unsigned int row = 0; row < m_uiPixelCountHeight; row++ )
+        for( int row = 0; row < m_iPixelCountHeight; row++ )
         {
             m_ppbPixelStatus[col][row] = false;
         }
@@ -254,9 +254,9 @@ void Grid::ClearStatus()
 
 bool Grid::IsInGrid( MouseClick click )
 {
-    if( click.x > m_GridPos.x && click.x < ( m_GridPos.x + m_GridPos.w ) )
+    if( click.x >= m_GridPos.x && click.x <= ( m_GridPos.x + m_GridPos.w ) )
     {
-        if( click.y > m_GridPos.y && click.y < ( m_GridPos.y + m_GridPos.h ) )
+        if( click.y >= m_GridPos.y && click.y <= ( m_GridPos.y + m_GridPos.h ) )
         {
             return true;
         }
@@ -307,7 +307,7 @@ void Grid::Calculate( MousePair coords )
         }
         case Michener:
         {
-            //TODO
+            SetMichener( coords );
             break;
         }
         default:
@@ -330,14 +330,6 @@ void Grid::Recalculate()
     }
 }
 
-void Grid::SetPixel( int x, int y )
-{
-    int iSquarePosX = ( x - m_GridPos.x ) / m_iPixelSize;
-    int iSquarePosY = ( y - m_GridPos.y ) / m_iPixelSize;
-
-    m_ppbPixelStatus[iSquarePosX][iSquarePosY] = true;
-}
-
 void Grid::DrawPixel( int x, int y )
 {
     MouseClick temp;
@@ -350,19 +342,51 @@ void Grid::DrawPixel( int x, int y )
     }
 }
 
+void Grid::SetPixel( int x, int y )
+{
+    MouseClick temp;
+    temp.x = x;
+    temp.y = y;
+
+    if( IsInGrid( temp ) )
+    {
+        int iSquarePosX = ( x - m_GridPos.x ) / m_iPixelSize;
+        int iSquarePosY = ( y - m_GridPos.y ) / m_iPixelSize;
+
+        m_ppbPixelStatus[iSquarePosX][iSquarePosY] = true;
+    }
+}
+
+void Grid::SetPixelByIndex( int x, int y )
+{
+    if( x >= 0 && x < m_iPixelCountWidth )
+    {
+        if( y >= 0 && y < m_iPixelCountHeight )
+        {
+            m_ppbPixelStatus[x][y] = true;
+        }
+    }
+}
+
 void Grid::SetPixelOctant( MouseClick center, int x, int y )
 {
-    int x0 = center.x;
-    int y0 = center.y;
+    int iSquareCenterPosX = ( center.x - m_GridPos.x ) / m_iPixelSize;
+    int iSquareCenterPosY = ( center.y - m_GridPos.y ) / m_iPixelSize;
 
-    SetPixel( x + x0, y + y0 );
-    SetPixel( y + x0, x + y0 );
-    SetPixel( -y + x0, x + y0 );
-    SetPixel( -x + x0, y + y0 );
-    SetPixel( -x + x0, -y + y0 );
-    SetPixel( -y + x0, -x + y0 );
-    SetPixel( y + x0, -x + y0 );
-    SetPixel( x + x0, -y + y0 );
+    int iSquarePosX = ( x + center.x - m_GridPos.x ) / m_iPixelSize;
+    int iSquarePosY = ( y + center.y - m_GridPos.y ) / m_iPixelSize;
+    
+    iSquarePosX -= iSquareCenterPosX;
+    iSquarePosY -= iSquareCenterPosY;
+
+    SetPixelByIndex( iSquarePosX + iSquareCenterPosX, iSquarePosY + iSquareCenterPosY );
+    SetPixelByIndex( iSquarePosY + iSquareCenterPosX, iSquarePosX + iSquareCenterPosY );
+    SetPixelByIndex( -iSquarePosY + iSquareCenterPosX, iSquarePosX + iSquareCenterPosY );
+    SetPixelByIndex( -iSquarePosX + iSquareCenterPosX, iSquarePosY + iSquareCenterPosY );
+    SetPixelByIndex( -iSquarePosX + iSquareCenterPosX, -iSquarePosY + iSquareCenterPosY );
+    SetPixelByIndex( -iSquarePosY + iSquareCenterPosX, -iSquarePosX + iSquareCenterPosY );
+    SetPixelByIndex( iSquarePosY + iSquareCenterPosX, -iSquarePosX + iSquareCenterPosY );
+    SetPixelByIndex( iSquarePosX + iSquareCenterPosX, -iSquarePosY + iSquareCenterPosY );
 }
 
 void Grid::DrawPixelOctant( MouseClick center, int x, int y )

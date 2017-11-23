@@ -58,8 +58,9 @@ private:
     void Calculate( MousePair );
     void Recalculate();
 
-    void SetPixel( int, int );
     void DrawPixel( int, int );
+    void SetPixel( int, int );
+    void SetPixelByIndex( int, int );
 
     void SetPixelOctant( MouseClick, int, int );
     void DrawPixelOctant( MouseClick, int, int );
@@ -71,20 +72,6 @@ private:
 
     void SplitLineDraw( MousePair );
     void SplitLineSet( MousePair );
-
-    // SetBresenham.cpp
-    void SetBresenham( MousePair );
-    void SetVertical( MousePair );
-    void SetSlope( MousePair );
-    void SetSlopeNormal( MousePair, float );
-    void SetSlopeInverse( MousePair );
-
-    // SetRevBresenham.cpp
-    void SetRevBresenham( MousePair );
-    void SetRevVertical( MousePair );
-    void SetRevSlope( MousePair );
-    void SetRevSlopeNormal( MousePair, float );
-    void SetRevSlopeInverse( MousePair );
 
     // DrawBresenham.cpp
     void DrawBresenham( MousePair );
@@ -99,10 +86,28 @@ private:
     void DrawRevSlope( MousePair );
     void DrawRevSlopeNormal( MousePair, float );
     void DrawRevSlopeInverse( MousePair );
+    
+    // SetBresenham.cpp
+    void SetBresenham( MousePair );
+    void SetVertical( MousePair );
+    void SetSlope( MousePair );
+    void SetSlopeNormal( MousePair, float );
+    void SetSlopeInverse( MousePair );
+
+    // SetRevBresenham.cpp
+    void SetRevBresenham( MousePair );
+    void SetRevVertical( MousePair );
+    void SetRevSlope( MousePair );
+    void SetRevSlopeNormal( MousePair, float );
+    void SetRevSlopeInverse( MousePair );
 
     // DrawMichener.cpp
     void DrawMichener( MousePair );
     void DrawCircle( MouseClick, int );
+
+    // SetMichener.cpp
+    void SetMichener( MousePair );
+    void SetCircle( MouseClick, int );
 private:
     SDL_Renderer* m_Renderer;
 
@@ -118,8 +123,8 @@ private:
     bool m_bUseNormalBresenham;
 
     bool** m_ppbPixelStatus;
-    unsigned int m_uiPixelCountWidth;
-    unsigned int m_uiPixelCountHeight;
+    int m_iPixelCountWidth;
+    int m_iPixelCountHeight;
 
     vector<MousePair>* m_pvMousePairs;
 };
