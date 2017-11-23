@@ -136,9 +136,12 @@ bool Grid::ToggleDrawBresenham()
     m_bUseNormalBresenham = !m_bUseNormalBresenham;
 
     m_bHasChanged = true;
-
-    ClearStatus();
-    Recalculate();
+    
+    if( m_iPixelSize != 1 )
+    {
+        ClearStatus();
+        Recalculate();
+    }
 
     return m_bUseNormalBresenham;
 }

@@ -55,13 +55,11 @@ private:
     Button* m_ButtonGridMedium;
     Button* m_ButtonGridLarge;
     Button* m_ButtonGridVeryLarge;
-    Button* m_ButtonDraw;
     Button* m_ButtonStateBresenham;
-    Button* m_ButtonStateTemp2;
+    Button* m_ButtonDraw;
     Button* m_ButtonStateTemp3;
     Button* m_ButtonStateTemp4;
     Button* m_ButtonStateTemp5;
-    Button* m_ButtonStateTemp6;
     Button* m_ButtonStateClear;
 };
 
