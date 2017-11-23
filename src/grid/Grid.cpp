@@ -84,7 +84,7 @@ void Grid::Draw()
 
     DrawGrid();
     DrawPixelStatus();
-    DrawLines( m_bUseNormalBresenham );
+    DrawSim( m_bUseNormalBresenham );
 
     m_bHasChanged = false;
 }
@@ -199,7 +199,7 @@ void Grid::DrawPixelStatus()
     }
 }
 
-void Grid::DrawLines( bool bUseNormalBresenham )
+void Grid::DrawSim( bool bUseNormalBresenham )
 {
     vector<MousePair>::iterator it;
 
@@ -211,13 +211,32 @@ void Grid::DrawLines( bool bUseNormalBresenham )
         {
             break;
         }
-        else if( bUseNormalBresenham )
-        {
-            DrawBresenham( *it );
-        }
         else
         {
-            SplitLineDraw( *it );
+            switch( m_eCurState )
+            {
+                case Bresenham:
+                {
+                    if( bUseNormalBresenham )
+                    {
+                        DrawBresenham( *it );
+                    }
+                    else
+                    {
+                        SplitLineDraw( *it );
+                    }
+                    break;
+                }
+                case Michener:
+                {
+                    DrawMichener( *it );
+                    break;
+                }
+                default:
+                {
+                    printf( "Error in recognizing state. Won't draw simulation figure.\n" );
+                }
+            }
         }
     }
 }
@@ -275,6 +294,7 @@ void Grid::Calculate( MousePair coords )
     switch( m_eCurState )
     {
         case Bresenham:
+        {
             if( m_bUseNormalBresenham )
             {
                 SetBresenham( coords );
@@ -284,9 +304,16 @@ void Grid::Calculate( MousePair coords )
                 SplitLineSet( coords );
             }
             break;
+        }
+        case Michener:
+        {
             //TODO
+            break;
+        }
         default:
-            printf( "State error, invalid state detected: %d\n", m_eCurState );
+        {
+            printf( "Error in recognizing state. Won't calculate grid highlight.\n" );
+        }
     }
 }
 
@@ -313,7 +340,44 @@ void Grid::SetPixel( int x, int y )
 
 void Grid::DrawPixel( int x, int y )
 {
-    SDL_RenderDrawPoint( m_Renderer, x, y );
+    MouseClick temp;
+    temp.x = x;
+    temp.y = y;
+
+    if( IsInGrid( temp ) )
+    {
+        SDL_RenderDrawPoint( m_Renderer, x, y );
+    }
+}
+
+void Grid::SetPixelOctant( MouseClick center, int x, int y )
+{
+    int x0 = center.x;
+    int y0 = center.y;
+
+    SetPixel( x + x0, y + y0 );
+    SetPixel( y + x0, x + y0 );
+    SetPixel( -y + x0, x + y0 );
+    SetPixel( -x + x0, y + y0 );
+    SetPixel( -x + x0, -y + y0 );
+    SetPixel( -y + x0, -x + y0 );
+    SetPixel( y + x0, -x + y0 );
+    SetPixel( x + x0, -y + y0 );
+}
+
+void Grid::DrawPixelOctant( MouseClick center, int x, int y )
+{
+    int x0 = center.x;
+    int y0 = center.y;
+
+    DrawPixel( x + x0, y + y0 );
+    DrawPixel( y + x0, x + y0 );
+    DrawPixel( -y + x0, x + y0 );
+    DrawPixel( -x + x0, y + y0 );
+    DrawPixel( -x + x0, -y + y0 );
+    DrawPixel( -y + x0, -x + y0 );
+    DrawPixel( y + x0, -x + y0 );
+    DrawPixel( x + x0, -y + y0 );
 }
 
 void Grid::SortUpX( MousePair& coords )

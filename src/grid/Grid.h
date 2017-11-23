@@ -27,6 +27,7 @@ public:
     enum State
     {
         Bresenham,
+        Michener,
         NumStates
     };
 public:
@@ -47,7 +48,7 @@ public:
 private:
     void DrawGrid();
     void DrawPixelStatus();
-    void DrawLines( bool );
+    void DrawSim( bool );
 
     void ClearStatus();
 
@@ -56,8 +57,12 @@ private:
 
     void Calculate( MousePair );
     void Recalculate();
+
     void SetPixel( int, int );
     void DrawPixel( int, int );
+
+    void SetPixelOctant( MouseClick, int, int );
+    void DrawPixelOctant( MouseClick, int, int );
 
     void SortUpX( MousePair& );
     void SortUpY( MousePair& );
@@ -94,6 +99,10 @@ private:
     void DrawRevSlope( MousePair );
     void DrawRevSlopeNormal( MousePair, float );
     void DrawRevSlopeInverse( MousePair );
+
+    // DrawMichener.cpp
+    void DrawMichener( MousePair );
+    void DrawCircle( MouseClick, int );
 private:
     SDL_Renderer* m_Renderer;
 
