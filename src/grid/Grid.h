@@ -64,12 +64,22 @@ private:
     void SortDownX( MousePair& );
     void SortDownY( MousePair& );
 
+    void SplitLineDraw( MousePair );
+    void SplitLineSet( MousePair );
+
     // SetBresenham.cpp
     void SetBresenham( MousePair );
     void SetVertical( MousePair );
     void SetSlope( MousePair );
     void SetSlopeNormal( MousePair, float );
     void SetSlopeInverse( MousePair );
+
+    // SetRevBresenham.cpp
+    void SetRevBresenham( MousePair );
+    void SetRevVertical( MousePair );
+    void SetRevSlope( MousePair );
+    void SetRevSlopeNormal( MousePair, float );
+    void SetRevSlopeInverse( MousePair );
 
     // DrawBresenham.cpp
     void DrawBresenham( MousePair );

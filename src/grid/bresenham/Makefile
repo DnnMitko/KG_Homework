@@ -1,6 +1,6 @@
 include ../../../Makefile_Common
 
-SRCS = SetBresenham.cpp DrawBresenham.cpp DrawRevBresenham.cpp
+SRCS = SetBresenham.cpp SetRevBresenham.cpp DrawBresenham.cpp DrawRevBresenham.cpp
 
 OBJ_DIR = ../../obj
 

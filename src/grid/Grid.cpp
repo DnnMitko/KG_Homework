@@ -137,6 +137,9 @@ bool Grid::ToggleDrawBresenham()
 
     m_bHasChanged = true;
 
+    ClearStatus();
+    Recalculate();
+
     return m_bUseNormalBresenham;
 }
 
@@ -211,28 +214,7 @@ void Grid::DrawLines( bool bUseNormalBresenham )
         }
         else
         {
-            SortUpX( *it );
-            int iMiddleX = ( ( (*it).end.x - (*it).begin.x ) / 2 ) + (*it).begin.x;
-
-            SortUpY( *it );
-            int iMiddleY = ( ( (*it).end.y - (*it).begin.y ) / 2 ) + (*it).begin.y;
-
-            SortUpX( *it );
-            MousePair mpFirstHalf;
-            mpFirstHalf.begin.x = (*it).begin.x;
-            mpFirstHalf.begin.y = (*it).begin.y;
-            mpFirstHalf.end.x = iMiddleX;
-            mpFirstHalf.end.y = iMiddleY;
-
-            MousePair mpSecondHalf;
-            mpSecondHalf.begin.x = iMiddleX;
-            mpSecondHalf.begin.y = iMiddleY;
-            mpSecondHalf.end.x = (*it).end.x;
-            mpSecondHalf.end.y = (*it).end.y;
-
-            DrawBresenham( mpFirstHalf );
-
-            DrawRevBresenham( mpSecondHalf );
+            SplitLineDraw( *it );
         }
     }
 }
@@ -290,7 +272,14 @@ void Grid::Calculate( MousePair coords )
     switch( m_eCurState )
     {
         case Bresenham:
-            SetBresenham( coords );
+            if( m_bUseNormalBresenham )
+            {
+                SetBresenham( coords );
+            }
+            else
+            {
+                SplitLineSet( coords );
+            }
             break;
             //TODO
         default:
@@ -362,4 +351,57 @@ void Grid::SortDownY( MousePair& coords )
         coords.begin = coords.end;
         coords.end = temp;
     }
+}
+
+void Grid::SplitLineDraw( MousePair coords )
+{
+    SortUpX( coords );
+    int iMiddleX = ( ( coords.end.x - coords.begin.x ) / 2 ) + coords.begin.x;
+
+    SortUpY( coords );
+    int iMiddleY = ( ( coords.end.y - coords.begin.y ) / 2 ) + coords.begin.y;
+
+    SortUpX( coords );
+    MousePair mpFirstHalf;
+    mpFirstHalf.begin.x = coords.begin.x;
+    mpFirstHalf.begin.y = coords.begin.y;
+    mpFirstHalf.end.x = iMiddleX;
+    mpFirstHalf.end.y = iMiddleY;
+
+    MousePair mpSecondHalf;
+    mpSecondHalf.begin.x = iMiddleX;
+    mpSecondHalf.begin.y = iMiddleY;
+    mpSecondHalf.end.x = coords.end.x;
+    mpSecondHalf.end.y = coords.end.y;
+
+    DrawBresenham( mpFirstHalf );
+
+    DrawRevBresenham( mpSecondHalf );
+}
+void Grid::SplitLineSet( MousePair coords )
+{
+    SortUpX( coords );
+    int iMiddleX = ( ( coords.end.x - coords.begin.x ) / 2 ) + coords.begin.x;
+
+    SortUpY( coords );
+    int iMiddleY = ( ( coords.end.y - coords.begin.y ) / 2 ) + coords.begin.y;
+
+    SortUpX( coords );
+    MousePair mpFirstHalf;
+    mpFirstHalf.begin.x = coords.begin.x;
+    mpFirstHalf.begin.y = coords.begin.y;
+    mpFirstHalf.end.x = iMiddleX;
+    mpFirstHalf.end.y = iMiddleY;
+
+    MousePair mpSecondHalf;
+    mpSecondHalf.begin.x = iMiddleX;
+    mpSecondHalf.begin.y = iMiddleY;
+    mpSecondHalf.end.x = coords.end.x;
+    mpSecondHalf.end.y = coords.end.y;
+
+    SetBresenham( mpFirstHalf );
+
+    SetRevBresenham( mpSecondHalf );
+
+    SetPixel( iMiddleX, iMiddleY );
 }
