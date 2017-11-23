@@ -1,6 +1,6 @@
 include ../../../Makefile_Common
 
-SRCS = SetBresenham.cpp SetRevBresenham.cpp DrawBresenham.cpp DrawRevBresenham.cpp
+SRCS = $(wildcard *.cpp)
 
 OBJ_DIR = ../../obj
 
@@ -16,3 +16,8 @@ $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
+
+.PHONY : tree
+tree : $(SRCS) header
+	@$(LIST)
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"

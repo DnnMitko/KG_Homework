@@ -1,6 +1,6 @@
 include Makefile_Common
 
-SRCS = src/main.cpp
+SRCS = $(wildcard src/*.cpp)
 
 OBJ_DIR = src/obj
 
@@ -10,8 +10,10 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 EXE = run
 
-.PHONY: all
-all : $(SRCS) $(OBJ_DIR) header $(EXE)
+# ============================================================================================
+
+.PHONY : all
+all : $(SRCS) $(OBJ_DIR) header $(OBJS) submodules $(EXE)
 
 $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)
@@ -32,24 +34,78 @@ submodules :
 
 $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
-$(EXE) : $(OBJS) submodules
+$(EXE) :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══[Linking executable]════$(NO_COLOR)\n"
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
-.PHONY: clean
-clean : headerClean remove_exe remove_obj
-	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
+# ============================================================================================
+
+.PHONY : help
+help : TARGET_COLOR = \033[01;35m
+
+help :
+	@printf "$(TARGET_COLOR)\"all\" or leave blank$(LABEL_COLOR):\n\
+    1. Builds source files.\n\
+    2. If there is no executable, links one together.\n\n"
+	@printf "$(TARGET_COLOR)\"relink\"$(LABEL_COLOR):\n\
+    1. Deletes executable.\n\
+    2. Builds source files.\n\
+    3. Links executable.\n\n"
+	@printf "$(TARGET_COLOR)\"nolink\"$(LABEL_COLOR):\n\
+    1. Builds source files.\n\n"
+	@printf "$(TARGET_COLOR)\"tree\"$(LABEL_COLOR):\n\
+    1. Print source tree.\n\n"
+	@printf "$(TARGET_COLOR)\"clean\"$(LABEL_COLOR):\n\
+    1. Deletes executable.\n\
+    2. Deletes objects directory.\n\n"
+	@printf "$(TARGET_COLOR)\"delete_executable\"$(LABEL_COLOR):\n\
+    1. Deletes executable.\n\n"
+	@printf "$(TARGET_COLOR)\"delete_objects\"$(LABEL_COLOR):\n\
+    1. Deletes objects directory.\n\n"
+
+# ============================================================================================
+
+.PHONY : relink
+relink : headerClean delete_executable footerClean all
+
+# ============================================================================================
+
+.PHONY : nolink
+nolink : $(SRCS) $(OBJ_DIR) header $(OBJS) submodules
+
+# ============================================================================================
+
+.PHONY : tree filetree
+tree : header filetree
+	@printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
+
+filetree : $(SRCS)
+	@$(LIST)
+	@$(MAKE) --no-print-directory -C src/pugixml tree
+	@$(MAKE) --no-print-directory -C src/grid tree
+	@$(MAKE) --no-print-directory -C src/interface tree
+
+
+# ============================================================================================
+
+.PHONY : clean
+clean : headerClean delete_executable delete_objects footerClean
 
 headerClean :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[Cleaning]═════════$(NO_COLOR)\n"
 
-remove_exe : CMD = rm $(EXE)
+delete_executable : CMD = rm $(EXE)
 
-remove_exe :
+delete_executable :
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 
-remove_obj : CMD = rm -r src/obj
+delete_objects : CMD = rm -r src/obj
 
-remove_obj : $(OBJ_DIR)
+delete_objects : $(OBJ_DIR)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
+
+footerClean :
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
+
+# ============================================================================================

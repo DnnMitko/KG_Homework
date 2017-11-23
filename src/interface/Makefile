@@ -1,6 +1,6 @@
 include ../../Makefile_Common
 
-SRCS = Button.cpp Interface.cpp InterfaceButtons.cpp Label.cpp TextField.cpp
+SRCS = $(wildcard *.cpp)
 
 OBJ_DIR = ../obj
 
@@ -16,3 +16,8 @@ $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
+
+.PHONY : tree
+tree : $(SRCS) header
+	@$(LIST)
+	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
