@@ -4,9 +4,11 @@ SRCS = $(wildcard *.cpp)
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
+.PHONY : all
 all : header $(SRCS) $(OBJS)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
+.PHONY : header
 header :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[Bresenham]════════$(NO_COLOR)\n"
 

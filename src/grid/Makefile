@@ -4,11 +4,13 @@ SRCS = $(wildcard *.cpp)
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
+.PHONY : all
 all : header $(SRCS) $(OBJS)
 	@$(MAKE) --no-print-directory -C bresenham
 	@$(MAKE) --no-print-directory -C michener
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
+.PHONY : header
 header :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)══════════[Grid]═══════════$(NO_COLOR)\n"
 
