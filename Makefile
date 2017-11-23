@@ -1,8 +1,10 @@
-include Makefile_Common
+export COMMON = $(PWD)/Makefile_Common
+
+include $(COMMON)
 
 SRCS = $(wildcard src/*.cpp)
 
-OBJ_DIR = src/obj
+export OBJ_DIR = $(PWD)/obj
 
 OBJS = $(patsubst src/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
@@ -100,7 +102,7 @@ delete_executable : CMD = rm $(EXE)
 delete_executable :
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 
-delete_objects : CMD = rm -r src/obj
+delete_objects : CMD = rm -r $(OBJ_DIR)
 
 delete_objects : $(OBJ_DIR)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)

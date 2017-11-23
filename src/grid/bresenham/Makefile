@@ -1,8 +1,6 @@
-include ../../../Makefile_Common
+include $(COMMON)
 
 SRCS = $(wildcard *.cpp)
-
-OBJ_DIR = ../../obj
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
