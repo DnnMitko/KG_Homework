@@ -19,7 +19,7 @@ EXE = run
 # ============================================================================================
 
 .PHONY : all
-all : $(SRCS) $(OBJ_DIR) _header $(OBJS) _submodules $(EXE)
+all : $(OBJ_DIR) _header $(OBJS) _submodules $(EXE)
 
 $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)

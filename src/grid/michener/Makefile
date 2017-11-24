@@ -5,7 +5,7 @@ SRCS = $(wildcard *.cpp)
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 .PHONY : all
-all : _header $(SRCS) $(OBJS)
+all : _header $(OBJS)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 .PHONY : _header
@@ -18,6 +18,6 @@ $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
 
 .PHONY : tree
-tree : $(SRCS) _header
+tree : _header
 	@$(LIST)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
