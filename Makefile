@@ -15,12 +15,13 @@ EXE = run
 # ============================================================================================
 
 .PHONY : all
-all : $(SRCS) $(OBJ_DIR) header $(OBJS) submodules $(EXE)
+all : $(SRCS) $(OBJ_DIR) _header $(OBJS) _submodules $(EXE)
 
 $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)
 
-header :
+.PHONY : _header
+_header :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══════════[Src]═══════════$(NO_COLOR)\n"
 
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
@@ -28,7 +29,8 @@ $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 $(OBJS) : $(OBJ_DIR)/%.o : src/%.cpp
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
 
-submodules :
+.PHONY : _submodules
+_submodules :
 	@$(MAKE) --no-print-directory -C src/pugixml
 	@$(MAKE) --no-print-directory -C src/grid
 	@$(MAKE) --no-print-directory -C src/interface
@@ -69,45 +71,46 @@ help :
 # ============================================================================================
 
 .PHONY : relink
-relink : headerClean delete_executable footerClean all
+relink : _headerClean delete_executable _footerClean all
 
 # ============================================================================================
 
 .PHONY : nolink
-nolink : $(SRCS) $(OBJ_DIR) header $(OBJS) submodules
+nolink : $(SRCS) $(OBJ_DIR) _header $(OBJS) _submodules
 
 # ============================================================================================
 
-.PHONY : tree filetree
-tree : header filetree
-	@printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
-
-filetree : $(SRCS)
+.PHONY : tree
+tree : _header
 	@$(LIST)
 	@$(MAKE) --no-print-directory -C src/pugixml tree
 	@$(MAKE) --no-print-directory -C src/grid tree
 	@$(MAKE) --no-print-directory -C src/interface tree
-
+	@printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 # ============================================================================================
 
 .PHONY : clean
-clean : headerClean delete_executable delete_objects footerClean
+clean : _headerClean delete_executable delete_objects _footerClean
 
-headerClean :
+.PHONY : _headerClean
+_headerClean :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[Cleaning]═════════$(NO_COLOR)\n"
 
+.PHONY : delete_executable
 delete_executable : CMD = rm $(EXE)
 
 delete_executable :
-	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
+	@-$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 
+.PHONY : delete_objects
 delete_objects : CMD = rm -r $(OBJ_DIR)
 
 delete_objects : $(OBJ_DIR)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT_EXE)
 
-footerClean :
+.PHONY : _footerClean
+_footerClean :
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 # ============================================================================================

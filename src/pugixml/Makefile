@@ -5,11 +5,11 @@ SRCS = $(wildcard *.cpp)
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 .PHONY : all
-all : header $(SRCS) $(OBJS)
+all : _header $(SRCS) $(OBJS)
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
-.PHONY : header
-header :
+.PHONY : _header
+_header :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═════════[PugiXML]═════════$(NO_COLOR)\n"
 
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
