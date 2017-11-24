@@ -80,7 +80,7 @@ relink : _headerClean delete_executable _footerClean all
 # ============================================================================================
 
 .PHONY : nolink
-nolink : $(SRCS) $(OBJ_DIR) _header $(OBJS) _submodules
+nolink : $(OBJ_DIR) _header $(OBJS) _submodules
 
 # ============================================================================================
 
