@@ -6,11 +6,7 @@ include $(COMMON)
 
 MAKEFLAGS += -Otarget
 
-SRCS = $(wildcard src/*.cpp)
-
 export OBJ_DIR = $(PWD)/obj
-
-OBJS = $(patsubst src/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
@@ -19,26 +15,14 @@ EXE = run
 # ============================================================================================
 
 .PHONY : all
-all : $(OBJ_DIR) _header $(OBJS) _submodules $(EXE)
+all : $(OBJ_DIR) _submodules $(EXE)
 
 $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)
 
-.PHONY : _header
-_header :
-	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══════════[Src]═══════════$(NO_COLOR)\n"
-
-$(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
-
-$(OBJS) : $(OBJ_DIR)/%.o : src/%.cpp
-	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
-
 .PHONY : _submodules
 _submodules :
-	@$(MAKE) --no-print-directory -C src/pugixml
-	@$(MAKE) --no-print-directory -C src/grid
-	@$(MAKE) --no-print-directory -C src/interface
-	@printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
+	@$(MAKE) --no-print-directory -C src
 
 $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
@@ -56,6 +40,9 @@ help :
 	@printf "$(TARGET_COLOR)\"all\" or leave blank$(LABEL_COLOR):\n\
     1. Builds source files.\n\
     2. If there is no executable, links one together.\n\n"
+	@printf "$(TARGET_COLOR)\"link\"$(LABEL_COLOR):\n\
+    1. Deletes executable.\n\
+    2. Links executable.\n\n"
 	@printf "$(TARGET_COLOR)\"relink\"$(LABEL_COLOR):\n\
     1. Deletes executable.\n\
     2. Builds source files.\n\
@@ -74,23 +61,24 @@ help :
 
 # ============================================================================================
 
+.PHONY : link
+link : _headerClean delete_executable _footerClean $(EXE)
+
+# ============================================================================================
+
 .PHONY : relink
 relink : _headerClean delete_executable _footerClean all
 
 # ============================================================================================
 
 .PHONY : nolink
-nolink : $(OBJ_DIR) _header $(OBJS) _submodules
+nolink : $(OBJ_DIR) _submodules
 
 # ============================================================================================
 
 .PHONY : tree
-tree : _header
-	@$(LIST)
-	@$(MAKE) --no-print-directory -C src/pugixml tree
-	@$(MAKE) --no-print-directory -C src/grid tree
-	@$(MAKE) --no-print-directory -C src/interface tree
-	@printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
+tree :
+	@$(MAKE) --no-print-directory -C src tree
 
 # ============================================================================================
 

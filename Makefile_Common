@@ -32,9 +32,9 @@ PRINT                = LOG=$$($(CMD) 2>&1) ; if [ $$? -eq 1 ]; then $(ERR_MSG); 
 
 PRINT_EXE            = LOG=$$($(CMD) 2>&1) ; if [ $$? -eq 1 ]; then $(ERR_MSG_EXE); elif [ "$$LOG" != "" ]; then $(WARN_MSG_EXE); else $(OK_MSG_EXE); fi;
 
-PRINT_DEPTH          = for (( i=0; i<$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)║  $(NO_COLOR)"; done;
+PRINT_DEPTH          = for (( i=1; i<$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)║  $(NO_COLOR)"; done;
 
-PRINT_DEPTH_HEADER   = if [ $(MAKELEVEL) -gt 0 ]; then for (( i=1; i<$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)║  $(NO_COLOR)"; done && printf "$(LABEL_COLOR)╠══$(NO_COLOR)"; else printf "$(LABEL_COLOR)╔$(NO_COLOR)"; fi; if [ $(MAKELEVEL) -ge 1 ]; then printf "$(LABEL_COLOR)╦$(NO_COLOR)"; fi;
+PRINT_DEPTH_HEADER   = if [ $(MAKELEVEL) -gt 1 ]; then for (( i=2; i<$(MAKELEVEL); i++)); do printf "$(LABEL_COLOR)║  $(NO_COLOR)"; done && printf "$(LABEL_COLOR)╠══$(NO_COLOR)"; else printf "$(LABEL_COLOR)╔$(NO_COLOR)"; fi; if [ $(MAKELEVEL) -gt 1 ]; then printf "$(LABEL_COLOR)╦$(NO_COLOR)"; fi;
 
 LIST                 = $(foreach file, $(SRCS), $(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)$(FILE_COLOR)$(file)$(NO_COLOR)\n";)
 
