@@ -2,6 +2,10 @@ export COMMON = $(PWD)/Makefile_Common
 
 include $(COMMON)
 
+.NOTPARALLEL :
+
+MAKEFLAGS += -Otarget
+
 SRCS = $(wildcard src/*.cpp)
 
 export OBJ_DIR = $(PWD)/obj
