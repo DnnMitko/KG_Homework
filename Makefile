@@ -39,25 +39,25 @@ help : TARGET_COLOR = \033[01;35m
 help :
 	@printf "$(TARGET_COLOR)\"all\" or leave blank$(LABEL_COLOR):\n\
     1. Builds source files.\n\
-    2. If there is no executable, links one together.\n\n"
+    2. If there is no executable, links one together.$(NO_COLOR)\n\n"
 	@printf "$(TARGET_COLOR)\"link\"$(LABEL_COLOR):\n\
     1. Deletes executable.\n\
-    2. Links executable.\n\n"
+    2. Links executable.$(NO_COLOR)\n\n"
 	@printf "$(TARGET_COLOR)\"relink\"$(LABEL_COLOR):\n\
     1. Deletes executable.\n\
     2. Builds source files.\n\
-    3. Links executable.\n\n"
+    3. Links executable.$(NO_COLOR)\n\n"
 	@printf "$(TARGET_COLOR)\"nolink\"$(LABEL_COLOR):\n\
-    1. Builds source files.\n\n"
+    1. Builds source files.$(NO_COLOR)\n\n"
 	@printf "$(TARGET_COLOR)\"tree\"$(LABEL_COLOR):\n\
-    1. Print source tree.\n\n"
+    1. Print source tree.$(NO_COLOR)\n\n"
 	@printf "$(TARGET_COLOR)\"clean\"$(LABEL_COLOR):\n\
     1. Deletes executable.\n\
-    2. Deletes objects directory.\n\n"
+    2. Deletes objects directory.$(NO_COLOR)\n\n"
 	@printf "$(TARGET_COLOR)\"delete_executable\"$(LABEL_COLOR):\n\
-    1. Deletes executable.\n\n"
+    1. Deletes executable.$(NO_COLOR)\n\n"
 	@printf "$(TARGET_COLOR)\"delete_objects\"$(LABEL_COLOR):\n\
-    1. Deletes objects directory.\n\n"
+    1. Deletes objects directory.$(NO_COLOR)\n\n"
 
 # ============================================================================================
 
