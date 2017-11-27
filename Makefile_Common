@@ -1,13 +1,13 @@
-SHELL                = /bin/bash
+SHELL                := /bin/bash
 
-SCREEN_WIDTH         = $(shell tput cols)
+SCREEN_WIDTH         := $(shell tput cols)
 
-NO_COLOR             = \033[0m
-OK_COLOR             = \033[01;32m
-ERR_COLOR            = \033[01;31m
-WARN_COLOR           = \033[01;33m
-FILE_COLOR           = \033[01;36m
-LABEL_COLOR          = \033[01;34m
+NO_COLOR             := \033[0m
+OK_COLOR             := \033[01;32m
+ERR_COLOR            := \033[01;31m
+WARN_COLOR           := \033[01;33m
+FILE_COLOR           := \033[01;36m
+LABEL_COLOR          := \033[01;34m
 
 OK_STR               = $(OK_COLOR)[OK]$(NO_COLOR)
 ERR_STR              = $(ERR_COLOR)[ERRORS]$(NO_COLOR)
@@ -40,4 +40,4 @@ LIST                 = $(foreach file, $(SRCS), $(PRINT_DEPTH)printf "$(LABEL_CO
 
 CC = g++
 
-COMPILER_FLAGS       = -Wall -Wextra -fdiagnostics-color -g
+COMPILER_FLAGS       := -Wall -Wextra -fdiagnostics-color -g
