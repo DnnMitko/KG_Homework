@@ -6,6 +6,8 @@ include $(COMMON)
 
 MAKEFLAGS += -Otarget
 
+SRCDIR = src
+
 export OBJ_DIR = $(PWD)/obj
 
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
@@ -22,7 +24,7 @@ $(OBJ_DIR) :
 
 .PHONY : _submodules
 _submodules :
-	@$(MAKE) --no-print-directory -C src
+	@$(MAKE) --no-print-directory -C $(SRCDIR)
 
 $(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
@@ -78,7 +80,7 @@ nolink : $(OBJ_DIR) _submodules
 
 .PHONY : tree
 tree :
-	@$(MAKE) --no-print-directory -C src tree
+	@$(MAKE) --no-print-directory -C $(SRCDIR) tree
 
 # ============================================================================================
 
