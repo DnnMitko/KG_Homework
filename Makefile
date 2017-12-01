@@ -6,7 +6,7 @@ include $(COMMON)
 
 export SCREEN_WIDTH := $(shell tput cols)
 
-MAKEFLAGS += -Otarget
+MAKEFLAGS += -Otarget --silent
 
 SRCDIR = src
 
