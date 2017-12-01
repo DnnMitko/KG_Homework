@@ -1,7 +1,5 @@
 SHELL                := /bin/bash
 
-SCREEN_WIDTH         := $(shell tput cols)
-
 NO_COLOR             := \033[0m
 OK_COLOR             := \033[01;32m
 ERR_COLOR            := \033[01;31m

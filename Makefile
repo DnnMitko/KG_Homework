@@ -4,6 +4,8 @@ include $(COMMON)
 
 .NOTPARALLEL :
 
+export SCREEN_WIDTH := $(shell tput cols)
+
 MAKEFLAGS += -Otarget
 
 SRCDIR = src
