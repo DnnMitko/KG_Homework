@@ -68,10 +68,10 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
     m_iPixelCountWidth = m_GridPos.w / iSmallest;
     m_iPixelCountHeight = m_GridPos.h / iSmallest;
 
-    m_ppbPixelStatus = new bool*[m_iPixelCountWidth];
+    m_ppbPixelStatus = new char*[m_iPixelCountWidth];
     for( int i = 0; i < m_iPixelCountWidth; i++ )
     {
-        m_ppbPixelStatus[i] = new bool[m_iPixelCountHeight];
+        m_ppbPixelStatus[i] = new char[m_iPixelCountHeight];
     }
     ClearStatus();
 
@@ -89,6 +89,10 @@ void Grid::Draw()
     DrawGrid();
     DrawPixelStatus();
     DrawSim( m_bUseNormalBresenham );
+    if( m_eCurState == BoundryFill )
+    {
+        DrawExpansion();
+    }
 
     m_bHasChanged = false;
 }
@@ -226,8 +230,6 @@ void Grid::DrawPixelStatus()
 {
     if( m_iPixelSize != 1 )
     {
-        SDL_SetRenderDrawColor( m_Renderer, 0xA0, 0xA0, 0xA0, 0xFF );
-
         SDL_Rect temp;
         temp.w = m_iPixelSize - 2;
         temp.h = m_iPixelSize - 2;
@@ -239,8 +241,16 @@ void Grid::DrawPixelStatus()
                 int iSquarePosX = ( iX - m_GridPos.x ) / m_iPixelSize;
                 int iSquarePosY = ( iY - m_GridPos.y ) / m_iPixelSize;
 
-                if( m_ppbPixelStatus[iSquarePosX][iSquarePosY] )
+                if( m_ppbPixelStatus[iSquarePosX][iSquarePosY] == '1' )
                 {
+                    SDL_SetRenderDrawColor( m_Renderer, 0xA0, 0xA0, 0xA0, 0xFF );
+                    temp.x = iX + 1;
+                    temp.y = iY + 1;
+                    SDL_RenderFillRect( m_Renderer, &temp );
+                }
+                else if( m_ppbPixelStatus[iSquarePosX][iSquarePosY] == '2' )
+                {
+                    SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0x00, 0x00, 0xFF );
                     temp.x = iX + 1;
                     temp.y = iY + 1;
                     SDL_RenderFillRect( m_Renderer, &temp );
@@ -302,7 +312,7 @@ void Grid::ClearStatus()
     {
         for( int row = 0; row < m_iPixelCountHeight; row++ )
         {
-            m_ppbPixelStatus[col][row] = false;
+            m_ppbPixelStatus[col][row] = '0';
         }
     }
 }
@@ -401,7 +411,7 @@ void Grid::DrawPixel( int x, int y )
     }
 }
 
-void Grid::SetPixel( int x, int y )
+void Grid::SetPixel( int x, int y, char val )
 {
     MouseClick temp;
     temp.x = x;
@@ -412,7 +422,7 @@ void Grid::SetPixel( int x, int y )
         int iSquarePosX = ( x - m_GridPos.x ) / m_iPixelSize;
         int iSquarePosY = ( y - m_GridPos.y ) / m_iPixelSize;
 
-        m_ppbPixelStatus[iSquarePosX][iSquarePosY] = true;
+        m_ppbPixelStatus[iSquarePosX][iSquarePosY] = val;
     }
 }
 
@@ -422,9 +432,26 @@ void Grid::SetPixelByIndex( int x, int y )
     {
         if( y >= 0 && y < m_iPixelCountHeight )
         {
-            m_ppbPixelStatus[x][y] = true;
+            m_ppbPixelStatus[x][y] = '1';
         }
     }
+}
+
+char Grid::GetPixelStatus( int x, int y )
+{
+    MouseClick temp;
+    temp.x = x;
+    temp.y = y;
+
+    if( IsInGrid( temp ) )
+    {
+        int iSquarePosX = ( x - m_GridPos.x ) / m_iPixelSize;
+        int iSquarePosY = ( y - m_GridPos.y ) / m_iPixelSize;
+
+        return m_ppbPixelStatus[iSquarePosX][iSquarePosY];
+    }
+
+    return ' ';
 }
 
 void Grid::SetPixelOctant( MouseClick center, int x, int y )

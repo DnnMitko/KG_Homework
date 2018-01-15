@@ -66,8 +66,9 @@ private:
     void Recalculate();
 
     void DrawPixel( int, int );
-    void SetPixel( int, int );
+    void SetPixel( int, int, char = '1' );
     void SetPixelByIndex( int, int );
+    char GetPixelStatus( int, int );
 
     void SetPixelOctant( MouseClick, int, int );
     void DrawPixelOctant( MouseClick, int, int );
@@ -115,6 +116,12 @@ private:
     // SetMichener.cpp
     void SetMichener( MousePair );
     void SetCircle( MouseClick, int );
+
+    // Boundry_Full.cpp
+    void DrawExpansion();
+    void Expand( SpreadMap& );
+    void ProcessPoint( SpreadMap& );
+    void DrawRow( int, int, int );
 private:
     SDL_Renderer* m_Renderer;
 
@@ -129,7 +136,7 @@ private:
 
     bool m_bUseNormalBresenham;
 
-    bool** m_ppbPixelStatus;
+    char** m_ppbPixelStatus;
     int m_iPixelCountWidth;
     int m_iPixelCountHeight;
 
