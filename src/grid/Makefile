@@ -9,6 +9,7 @@ all : _header $(OBJS)
 	@$(MAKE) --no-print-directory -C bresenham
 	@$(MAKE) --no-print-directory -C michener
 	@$(MAKE) --no-print-directory -C boundry_full
+	@$(MAKE) --no-print-directory -C spline
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 .PHONY : _header
@@ -26,4 +27,5 @@ tree : _header
 	@$(MAKE) --no-print-directory -C bresenham tree
 	@$(MAKE) --no-print-directory -C michener tree
 	@$(MAKE) --no-print-directory -C boundry_full tree
+	@$(MAKE) --no-print-directory -C spline tree
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"

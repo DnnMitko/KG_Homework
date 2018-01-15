@@ -18,6 +18,7 @@ Grid::Grid()
     m_iPixelSize = 0;
 
     m_bUseNormalBresenham = true;
+    m_bReadyToDrawSpline = false;
 
     m_ppbPixelStatus = NULL;
     m_iPixelCountWidth = 0;
@@ -25,6 +26,7 @@ Grid::Grid()
 
     m_pvMousePairs = NULL;
     m_pvSpreadMaps = NULL;
+    m_pvMouseClicks = NULL;
 }
 
 Grid::~Grid()
@@ -37,10 +39,12 @@ Grid::~Grid()
 
     delete m_pvMousePairs;
     delete m_pvSpreadMaps;
+    delete m_pvMouseClicks;
 
     m_ppbPixelStatus = NULL;
     m_pvMousePairs = NULL;
     m_pvSpreadMaps = NULL;
+    m_pvMouseClicks = NULL;
 }
 
 void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
@@ -63,6 +67,7 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
     m_iPixelSize = m_xmlConstants->first_child().child( "GridScale" ).child( "Initial" ).text().as_int();
 
     m_bUseNormalBresenham = true;
+    m_bReadyToDrawSpline = false;
 
     int iSmallest = m_xmlConstants->first_child().child( "GridScale" ).child( "VerySmall" ).text().as_int();
     m_iPixelCountWidth = m_GridPos.w / iSmallest;
@@ -77,6 +82,7 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
 
     m_pvMousePairs = new vector<MousePair>;
     m_pvSpreadMaps = new vector<SpreadMap>;
+    m_pvMouseClicks = new vector<MouseClick>;
 }
 
 void Grid::Draw()
@@ -86,12 +92,19 @@ void Grid::Draw()
         return;
     }
 
-    DrawGrid();
+    if( m_eCurState != Spline )
+    {
+        DrawGrid();
+    }
     DrawPixelStatus();
     DrawSim( m_bUseNormalBresenham );
     if( m_eCurState == BoundryFill )
     {
         DrawExpansion();
+    }
+    if( m_eCurState == Spline && m_bReadyToDrawSpline )
+    {
+        DrawSpline();
     }
 
     m_bHasChanged = false;
@@ -106,11 +119,11 @@ void Grid::EventHandler( SDL_Event& e )
 
         if( IsInGrid( click ) )
         {
-            if( m_eCurState != BoundryFill )
+            if( m_eCurState != BoundryFill && m_eCurState != Spline )
             {
                 AddClick( click );
             }
-            else
+            else if( m_eCurState == BoundryFill )
             {
                 stack<MouseClick>* newStack = new stack<MouseClick>;
                 newStack->push( click );
@@ -122,6 +135,23 @@ void Grid::EventHandler( SDL_Event& e )
                 m_pvSpreadMaps->push_back( newMap );
 
                 m_bHasChanged = true;
+            }
+            else if( m_eCurState == Spline )
+            {
+                static int iCount = 0;
+
+                m_pvMouseClicks->push_back( click );
+
+                m_bHasChanged = true;
+
+                DrawLargeDot( click.x, click.y );
+
+                iCount++;
+                if( iCount == 5 )
+                {
+                    iCount = 0;
+                    m_bReadyToDrawSpline = true;
+                }
             }
         }
     }
@@ -152,6 +182,7 @@ void Grid::ClearGrid()
 
     m_pvMousePairs->clear();
     m_pvSpreadMaps->clear();
+    m_pvMouseClicks->clear();
 
     m_bHasChanged = true;
 
@@ -183,6 +214,10 @@ void Grid::ClearGrid()
         AddClick( click );
 
         m_eCurState = BoundryFill;
+    }
+    else if( m_eCurState == Spline )
+    {
+        DrawGrid();
     }
 }
 

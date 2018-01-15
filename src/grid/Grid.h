@@ -5,6 +5,8 @@
 
 #include "../pugixml/pugixml.hpp"
 
+#include "spline/spline.h"
+
 #include <vector>
 #include <stack>
 #include <cmath>
@@ -35,6 +37,7 @@ public:
         Bresenham,
         Michener,
         BoundryFill,
+        Spline,
         NumStates
     };
 public:
@@ -122,6 +125,11 @@ private:
     void Expand( SpreadMap& );
     void ProcessPoint( SpreadMap& );
     void DrawRow( int, int, int );
+
+    // Spline.cpp
+    void DrawLargeDot( int, int );
+    void DrawSpline();
+    void DrawCurve( tk::spline& );
 private:
     SDL_Renderer* m_Renderer;
 
@@ -135,6 +143,8 @@ private:
     int m_iPixelSize;
 
     bool m_bUseNormalBresenham;
+    
+    bool m_bReadyToDrawSpline;
 
     char** m_ppbPixelStatus;
     int m_iPixelCountWidth;
@@ -143,6 +153,8 @@ private:
     vector<MousePair>* m_pvMousePairs;
 
     vector<SpreadMap>* m_pvSpreadMaps;
+
+    vector<MouseClick>* m_pvMouseClicks;
 };
 
 #endif //__GRID_H__
