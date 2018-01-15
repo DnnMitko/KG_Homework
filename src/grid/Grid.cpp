@@ -283,6 +283,10 @@ void Grid::DrawSim( bool bUseNormalBresenham )
                     DrawMichener( *it );
                     break;
                 }
+                case BoundryFill:
+                {
+                    break;
+                }
                 default:
                 {
                     printf( "Error in recognizing state. Won't draw simulation figure.\n" );
