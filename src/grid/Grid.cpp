@@ -24,6 +24,7 @@ Grid::Grid()
     m_iPixelCountHeight = 0;
 
     m_pvMousePairs = NULL;
+    m_pvSpreadMaps = NULL;
 }
 
 Grid::~Grid()
@@ -35,9 +36,11 @@ Grid::~Grid()
     delete[] m_ppbPixelStatus;
 
     delete m_pvMousePairs;
+    delete m_pvSpreadMaps;
 
     m_ppbPixelStatus = NULL;
     m_pvMousePairs = NULL;
+    m_pvSpreadMaps = NULL;
 }
 
 void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
@@ -73,6 +76,7 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
     ClearStatus();
 
     m_pvMousePairs = new vector<MousePair>;
+    m_pvSpreadMaps = new vector<SpreadMap>;
 }
 
 void Grid::Draw()
@@ -98,7 +102,23 @@ void Grid::EventHandler( SDL_Event& e )
 
         if( IsInGrid( click ) )
         {
-            AddClick( click );
+            if( m_eCurState != BoundryFill )
+            {
+                AddClick( click );
+            }
+            else
+            {
+                stack<MouseClick>* newStack = new stack<MouseClick>;
+                newStack->push( click );
+
+                SpreadMap newMap;
+                newMap.points = *newStack;
+                newMap.isFinished = false;
+
+                m_pvSpreadMaps->push_back( newMap );
+
+                m_bHasChanged = true;
+            }
         }
     }
 }
@@ -127,8 +147,39 @@ void Grid::ClearGrid()
     ClearStatus();
 
     m_pvMousePairs->clear();
+    m_pvSpreadMaps->clear();
 
     m_bHasChanged = true;
+
+    if( m_eCurState == BoundryFill )
+    {
+        m_eCurState = Michener;
+
+        MouseClick click;
+
+        click.x = 150;
+        click.y = 65;
+        AddClick( click );
+        click.x = 600;
+        click.y = 300;
+        AddClick( click );
+
+        click.x = 1000;
+        click.y = 65;
+        AddClick( click );
+        click.x = 500;
+        click.y = 300;
+        AddClick( click );
+
+        click.x = 700;
+        click.y = 500;
+        AddClick( click );
+        click.x = 700;
+        click.y = 100;
+        AddClick( click );
+
+        m_eCurState = BoundryFill;
+    }
 }
 
 bool Grid::ToggleDrawBresenham()
@@ -308,6 +359,10 @@ void Grid::Calculate( MousePair coords )
         case Michener:
         {
             SetMichener( coords );
+            break;
+        }
+        case BoundryFill:
+        {
             break;
         }
         default:

@@ -6,9 +6,11 @@
 #include "../pugixml/pugixml.hpp"
 
 #include <vector>
+#include <stack>
 #include <cmath>
 
 using std::vector;
+using std::stack;
 
 class Grid
 {
@@ -17,17 +19,22 @@ class Grid
         int x;
         int y;
     };
-
     struct MousePair
     {
         MouseClick begin;
         MouseClick end;
+    };
+    struct SpreadMap
+    {
+        stack<MouseClick> points;
+        bool isFinished;
     };
 public:
     enum State
     {
         Bresenham,
         Michener,
+        BoundryFill,
         NumStates
     };
 public:
@@ -127,6 +134,8 @@ private:
     int m_iPixelCountHeight;
 
     vector<MousePair>* m_pvMousePairs;
+
+    vector<SpreadMap>* m_pvSpreadMaps;
 };
 
 #endif //__GRID_H__

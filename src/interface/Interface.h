@@ -58,7 +58,7 @@ private:
     Button* m_ButtonStateBresenham;
     Button* m_ButtonDraw;
     Button* m_ButtonStateMichener;
-    Button* m_ButtonStateTemp4;
+    Button* m_ButtonStateBoundryFill;
     Button* m_ButtonStateTemp5;
     Button* m_ButtonStateClear;
 };

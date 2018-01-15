@@ -14,7 +14,7 @@ void Interface::CreateButtons()
     m_ButtonStateBresenham = new Button();
     m_ButtonDraw = new Button();
     m_ButtonStateMichener = new Button();
-    m_ButtonStateTemp4 = new Button();
+    m_ButtonStateBoundryFill = new Button();
     m_ButtonStateTemp5 = new Button();
     m_ButtonStateClear = new Button();
 
@@ -30,11 +30,10 @@ void Interface::CreateButtons()
     m_ButtonStateBresenham->Init( m_xmlConstants, m_Renderer );
     m_ButtonDraw->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateMichener->Init( m_xmlConstants, m_Renderer );
-    m_ButtonStateTemp4->Init( m_xmlConstants, m_Renderer );
+    m_ButtonStateBoundryFill->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateTemp5->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateClear->Init( m_xmlConstants, m_Renderer );
 
-    m_ButtonStateTemp4->Disable();
     m_ButtonStateTemp5->Disable();
 
     // Left side
@@ -49,7 +48,7 @@ void Interface::CreateButtons()
     m_ButtonStateBresenham->SetText( "B", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonDraw->SetText( "> > >", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonStateMichener->SetText( "M", m_Font, {0x00, 0x00, 0x00, 0xFF} );
-    m_ButtonStateTemp4->SetText( " ", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateBoundryFill->SetText( "B F", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonStateTemp5->SetText( " ", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonStateClear->SetText( "Clear", m_Font, {0x00, 0x00, 0x00, 0xFF} );
 
@@ -73,7 +72,7 @@ void Interface::PositionButtons()
     m_ButtonStateBresenham->SetFieldSize( iWidth, iHeight );
     m_ButtonDraw->SetFieldSize( iWidth, iHeight );
     m_ButtonStateMichener->SetFieldSize( iWidth, iHeight );
-    m_ButtonStateTemp4->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateBoundryFill->SetFieldSize( iWidth, iHeight );
     m_ButtonStateTemp5->SetFieldSize( iWidth, iHeight );
     m_ButtonStateClear->SetFieldSize( iWidth, iHeight );
 
@@ -91,7 +90,7 @@ void Interface::PositionButtons()
     m_ButtonStateBresenham->SetX( iOffsetX );
     m_ButtonDraw->SetX( iOffsetX );
     m_ButtonStateMichener->SetX( iOffsetX );
-    m_ButtonStateTemp4->SetX( iOffsetX );
+    m_ButtonStateBoundryFill->SetX( iOffsetX );
     m_ButtonStateTemp5->SetX( iOffsetX );
     m_ButtonStateClear->SetX( iOffsetX );
 
@@ -109,7 +108,7 @@ void Interface::PositionButtons()
     m_ButtonStateBresenham->SetY( iOffsetY );
     m_ButtonDraw->SetY( iOffsetY + ( iHeight + iPaddingY ) );
     m_ButtonStateMichener->SetY( iOffsetY + 2 * ( iHeight + iPaddingY ) );
-    m_ButtonStateTemp4->SetY( iOffsetY + 3 * ( iHeight + iPaddingY ) );
+    m_ButtonStateBoundryFill->SetY( iOffsetY + 3 * ( iHeight + iPaddingY ) );
     m_ButtonStateTemp5->SetY( iOffsetY + 4 * ( iHeight + iPaddingY ) );
     m_ButtonStateClear->SetY( iOffsetY + 5 * ( iHeight + iPaddingY ) );
 }
@@ -169,9 +168,9 @@ bool Interface::ButtonEvents( SDL_Event& e )
             m_ButtonStateMichener->Press();
             bEventFound = true;
         }
-        else if( m_ButtonStateTemp4->IsIn( x, y ) )
+        else if( m_ButtonStateBoundryFill->IsIn( x, y ) )
         {
-            m_ButtonStateTemp4->Press();
+            m_ButtonStateBoundryFill->Press();
             bEventFound = true;
         }
         else if( m_ButtonStateTemp5->IsIn( x, y ) )
@@ -231,6 +230,15 @@ bool Interface::ButtonEvents( SDL_Event& e )
 
             m_TextFieldTitle->SetText( "Bresenham", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
 
+            m_ButtonDraw->Enable();
+
+            m_ButtonGridInitial->Enable();
+            m_ButtonGridVerySmall->Enable();
+            m_ButtonGridSmall->Enable();
+            m_ButtonGridMedium->Enable();
+            m_ButtonGridLarge->Enable();
+            m_ButtonGridVeryLarge->Enable();
+
             bEventFound = true;
         }
         else if( m_ButtonDraw->IsIn( x, y ) && m_ButtonDraw->IsPressed() )
@@ -252,11 +260,34 @@ bool Interface::ButtonEvents( SDL_Event& e )
 
             m_TextFieldTitle->SetText( "Michener", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
 
+            m_ButtonDraw->Disable();
+
+            m_ButtonGridInitial->Enable();
+            m_ButtonGridVerySmall->Enable();
+            m_ButtonGridSmall->Enable();
+            m_ButtonGridMedium->Enable();
+            m_ButtonGridLarge->Enable();
+            m_ButtonGridVeryLarge->Enable();
+
             bEventFound = true;
         }
-        else if( m_ButtonStateTemp4->IsIn( x, y ) && m_ButtonStateTemp4->IsPressed() )
+        else if( m_ButtonStateBoundryFill->IsIn( x, y ) && m_ButtonStateBoundryFill->IsPressed() )
         {
-            //TODO
+            m_pGrid->SetGridScale( "Small" );
+            
+            m_pGrid->SetState( Grid::BoundryFill );
+
+            m_TextFieldTitle->SetText( "Boundry Fill", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
+
+            m_ButtonDraw->Disable();
+
+            m_ButtonGridInitial->Disable();
+            m_ButtonGridVerySmall->Disable();
+            m_ButtonGridSmall->Disable();
+            m_ButtonGridMedium->Disable();
+            m_ButtonGridLarge->Disable();
+            m_ButtonGridVeryLarge->Disable();
+
             bEventFound = true;
         }
         else if( m_ButtonStateTemp5->IsIn( x, y ) && m_ButtonStateTemp5->IsPressed() )
@@ -290,7 +321,7 @@ void Interface::ReleaseButtons()
     m_ButtonStateBresenham->Release();
     m_ButtonDraw->Release();
     m_ButtonStateMichener->Release();
-    m_ButtonStateTemp4->Release();
+    m_ButtonStateBoundryFill->Release();
     m_ButtonStateTemp5->Release();
     m_ButtonStateClear->Release();
 }
@@ -309,7 +340,7 @@ void Interface::DrawButtons()
     m_ButtonStateBresenham->Draw();
     m_ButtonDraw->Draw();
     m_ButtonStateMichener->Draw();
-    m_ButtonStateTemp4->Draw();
+    m_ButtonStateBoundryFill->Draw();
     m_ButtonStateTemp5->Draw();
     m_ButtonStateClear->Draw();
 }
@@ -335,7 +366,7 @@ void Interface::DeleteButtons()
     delete m_ButtonStateBresenham;
     delete m_ButtonDraw;
     delete m_ButtonStateMichener;
-    delete m_ButtonStateTemp4;
+    delete m_ButtonStateBoundryFill;
     delete m_ButtonStateTemp5;
     delete m_ButtonStateClear;
 
@@ -343,7 +374,7 @@ void Interface::DeleteButtons()
     m_ButtonStateBresenham = NULL;
     m_ButtonDraw = NULL;
     m_ButtonStateMichener = NULL;
-    m_ButtonStateTemp4 = NULL;
+    m_ButtonStateBoundryFill = NULL;
     m_ButtonStateTemp5 = NULL;
     m_ButtonStateClear = NULL;
 }
