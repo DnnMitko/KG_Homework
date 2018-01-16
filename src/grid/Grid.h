@@ -15,26 +15,21 @@
 using std::vector;
 using std::stack;
 
-class Grid
-{
-    struct MouseClick
-    {
+class Grid {
+    struct MouseClick {
         int x;
         int y;
     };
-    struct MousePair
-    {
+    struct MousePair {
         MouseClick begin;
         MouseClick end;
     };
-    struct SpreadMap
-    {
+    struct SpreadMap {
         stack<MouseClick> points;
         bool isFinished;
     };
 public:
-    enum State
-    {
+    enum State {
         Bresenham,
         Michener,
         BoundryFill,
@@ -75,9 +70,6 @@ private:
     void SetPixelByIndex( int, int );
     char GetPixelStatus( int, int );
 
-    void SetPixelOctant( MouseClick, int, int );
-    void DrawPixelOctant( MouseClick, int, int );
-
     void SortUpX( MousePair& );
     void SortUpY( MousePair& );
     void SortDownX( MousePair& );
@@ -117,10 +109,12 @@ private:
     // DrawMichener.cpp
     void DrawMichener( MousePair );
     void DrawCircle( MouseClick, int );
+    void DrawPixelOctant( MouseClick, int, int );
 
     // SetMichener.cpp
     void SetMichener( MousePair );
     void SetCircle( MouseClick, int );
+    void SetPixelOctant( MouseClick, int, int );
 
     // Boundry_Full.cpp
     void DrawExpansion();

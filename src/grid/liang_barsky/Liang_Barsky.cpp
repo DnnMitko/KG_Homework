@@ -1,7 +1,6 @@
 #include "../Grid.h"
 
-void Grid::DrawClipping()
-{
+void Grid::DrawClipping() {
     MousePair newPair = m_pvMousePairs->back();
 
     SortUpX( newPair );
@@ -40,8 +39,7 @@ void Grid::DrawClipping()
     }
 }
 
-bool Grid::LeftClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta )
-{
+bool Grid::LeftClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta ) {
     int xStart = pair.begin.x;
     int yStart = pair.begin.y;
     int xEnd = pair.end.x;
@@ -74,8 +72,7 @@ bool Grid::LeftClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int
     return true;
 }
 
-bool Grid::RightClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta )
-{
+bool Grid::RightClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta ) {
     int xStart = pair.begin.x;
     int yStart = pair.begin.y;
     int xEnd = pair.end.x;
@@ -108,8 +105,7 @@ bool Grid::RightClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, in
     return true;
 }
 
-bool Grid::DownClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta )
-{
+bool Grid::DownClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta ) {
     int xStart = pair.begin.x;
     int yStart = pair.begin.y;
     int xEnd = pair.end.x;
@@ -142,8 +138,7 @@ bool Grid::DownClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int
     return true;
 }
 
-bool Grid::UpClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta )
-{
+bool Grid::UpClipCheck( MousePair& pair, float& t0, float& t1, int xDelta, int yDelta ) {
     int xStart = pair.begin.x;
     int yStart = pair.begin.y;
     int xEnd = pair.end.x;

@@ -3,8 +3,7 @@
 
 #include "Label.h"
 
-class TextField : public Label
-{
+class TextField : public Label {
 public:
     TextField();
     virtual ~TextField();

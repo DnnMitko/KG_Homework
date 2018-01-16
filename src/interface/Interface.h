@@ -12,8 +12,7 @@
 
 #include <cstdio>
 
-class Interface
-{
+class Interface {
 public:
     Interface();
     ~Interface();

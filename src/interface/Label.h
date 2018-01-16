@@ -5,8 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <string>
 
-class Label
-{
+class Label {
 public:
     Label();
     virtual ~Label();

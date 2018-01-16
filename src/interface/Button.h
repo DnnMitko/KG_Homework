@@ -6,8 +6,7 @@
 
 #include <SDL2/SDL_image.h>
 
-class Button: public TextField
-{
+class Button: public TextField {
 public:
     Button();
     virtual ~Button();

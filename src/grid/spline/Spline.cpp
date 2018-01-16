@@ -1,8 +1,7 @@
 #include "../Grid.h"
 #include "spline.h"
 
-void Grid::DrawLargeDot( int x, int y )
-{
+void Grid::DrawLargeDot( int x, int y ) {
     SDL_Rect rect;
     rect.x = x - 5;
     rect.y = y - 5;
@@ -13,12 +12,10 @@ void Grid::DrawLargeDot( int x, int y )
     SDL_RenderFillRect( m_Renderer, &rect );
 }
 
-void Grid::DrawSpline()
-{
+void Grid::DrawSpline() {
     vector<double> X(5), Y(5);
 
-    for( int i = 0; i < 5; i++ )
-    {
+    for( int i = 0; i < 5; i++ ) {
         X[i] = (*m_pvMouseClicks)[i].x;
         Y[i] = (*m_pvMouseClicks)[i].y;
         // DrawLargeDot( (*m_pvMouseClicks)[i].x, (*m_pvMouseClicks)[i].y );
@@ -34,10 +31,8 @@ void Grid::DrawSpline()
     m_bReadyToDrawSpline = false;
 }
 
-void Grid::DrawCurve( tk::spline& s )
-{
-    for( int i = 125; i < 1225; i++ )
-    {
+void Grid::DrawCurve( tk::spline& s ) {
+    for( int i = 125; i < 1225; i++ ) {
         DrawPixel( i, s(i) );
     }
 }

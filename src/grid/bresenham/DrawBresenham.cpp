@@ -1,7 +1,6 @@
 #include "../Grid.h"
 
-void Grid::DrawBresenham( MousePair coords )
-{
+void Grid::DrawBresenham( MousePair coords ) {
     int x1, x2;
     int iRun;
 
@@ -10,18 +9,15 @@ void Grid::DrawBresenham( MousePair coords )
 
     iRun = x2 - x1;
 
-    if( iRun == 0 )
-    {
+    if( iRun == 0 ) {
         DrawVertical( coords );
     }
-    else
-    {
+    else {
         DrawSlope( coords );
     }
 }
 
-void Grid::DrawVertical( MousePair coords )
-{
+void Grid::DrawVertical( MousePair coords ) {
     SortUpY( coords );
 
     int x = coords.begin.x;
@@ -30,14 +26,12 @@ void Grid::DrawVertical( MousePair coords )
 
     int iX = x;
 
-    for( int iY = y1; iY <= y2; iY++ )
-    {
+    for( int iY = y1; iY <= y2; iY++ ) {
         DrawPixel( iX, iY );
     }
 }
 
-void Grid::DrawSlope( MousePair coords )
-{
+void Grid::DrawSlope( MousePair coords ) {
     int x1 = coords.begin.x;
     int y1 = coords.begin.y;
     int x2 = coords.end.x;
@@ -48,18 +42,15 @@ void Grid::DrawSlope( MousePair coords )
 
     float fSlope = iRise / (float)iRun;
 
-    if( fSlope >= -1 && fSlope <= 1 )
-    {
+    if( fSlope >= -1 && fSlope <= 1 ) {
         DrawSlopeNormal( coords, fSlope );
     }
-    else
-    {
+    else {
         DrawSlopeInverse( coords );
     }
 }
 
-void Grid::DrawSlopeNormal( MousePair coords, float fSlope )
-{
+void Grid::DrawSlopeNormal( MousePair coords, float fSlope ) {
     SortUpX( coords );
 
     int x1 = coords.begin.x;
@@ -83,14 +74,12 @@ void Grid::DrawSlopeNormal( MousePair coords, float fSlope )
     int iThresholdInc = abs( iRun ) * 2;
 
     int iY = y1;
-    for( int iX = x1; iX <= x2; iX++ )
-    {
+    for( int iX = x1; iX <= x2; iX++ ) {
         DrawPixel( iX, iY );
 
         iOffset += iDelta;
 
-        if( iOffset >= iThreshold )
-        {
+        if( iOffset >= iThreshold ) {
             iY += iIncrement;
             // fThreshold += 1;         * abs( iRun ) * 2
             iThreshold += iThresholdInc;
@@ -98,8 +87,7 @@ void Grid::DrawSlopeNormal( MousePair coords, float fSlope )
     }
 }
 
-void Grid::DrawSlopeInverse( MousePair coords )
-{
+void Grid::DrawSlopeInverse( MousePair coords ) {
     SortUpY( coords );
 
     int x1 = coords.begin.x;
@@ -125,14 +113,12 @@ void Grid::DrawSlopeInverse( MousePair coords )
     int iThresholdInc = abs( iRise ) * 2;
 
     int iX = x1;
-    for( int iY = y1; iY <= y2; iY++ )
-    {
+    for( int iY = y1; iY <= y2; iY++ ) {
         DrawPixel( iX, iY );
 
         iOffset += iDelta;
 
-        if( iOffset >= iThreshold )
-        {
+        if( iOffset >= iThreshold ) {
             iX += iIncrement;
             // fThreshold += 1;         * abs( iRise ) * 2
             iThreshold += iThresholdInc;
