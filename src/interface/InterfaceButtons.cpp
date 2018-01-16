@@ -15,6 +15,7 @@ void Interface::CreateButtons()
     m_ButtonDraw = new Button();
     m_ButtonStateMichener = new Button();
     m_ButtonStateBoundryFill = new Button();
+    m_ButtonStateLiang_Barsky = new Button();
     m_ButtonStateSpline = new Button();
     m_ButtonStateClear = new Button();
 
@@ -31,6 +32,7 @@ void Interface::CreateButtons()
     m_ButtonDraw->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateMichener->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateBoundryFill->Init( m_xmlConstants, m_Renderer );
+    m_ButtonStateLiang_Barsky->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateSpline->Init( m_xmlConstants, m_Renderer );
     m_ButtonStateClear->Init( m_xmlConstants, m_Renderer );
 
@@ -47,6 +49,7 @@ void Interface::CreateButtons()
     m_ButtonDraw->SetText( "> > >", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonStateMichener->SetText( "M", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonStateBoundryFill->SetText( "B F", m_Font, {0x00, 0x00, 0x00, 0xFF} );
+    m_ButtonStateLiang_Barsky ->SetText( "L B", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonStateSpline->SetText( "S", m_Font, {0x00, 0x00, 0x00, 0xFF} );
     m_ButtonStateClear->SetText( "Clear", m_Font, {0x00, 0x00, 0x00, 0xFF} );
 
@@ -71,6 +74,7 @@ void Interface::PositionButtons()
     m_ButtonDraw->SetFieldSize( iWidth, iHeight );
     m_ButtonStateMichener->SetFieldSize( iWidth, iHeight );
     m_ButtonStateBoundryFill->SetFieldSize( iWidth, iHeight );
+    m_ButtonStateLiang_Barsky->SetFieldSize( iWidth, iHeight );
     m_ButtonStateSpline->SetFieldSize( iWidth, iHeight );
     m_ButtonStateClear->SetFieldSize( iWidth, iHeight );
 
@@ -89,6 +93,7 @@ void Interface::PositionButtons()
     m_ButtonDraw->SetX( iOffsetX );
     m_ButtonStateMichener->SetX( iOffsetX );
     m_ButtonStateBoundryFill->SetX( iOffsetX );
+    m_ButtonStateLiang_Barsky->SetX( iOffsetX );
     m_ButtonStateSpline->SetX( iOffsetX );
     m_ButtonStateClear->SetX( iOffsetX );
 
@@ -107,8 +112,9 @@ void Interface::PositionButtons()
     m_ButtonDraw->SetY( iOffsetY + ( iHeight + iPaddingY ) );
     m_ButtonStateMichener->SetY( iOffsetY + 2 * ( iHeight + iPaddingY ) );
     m_ButtonStateBoundryFill->SetY( iOffsetY + 3 * ( iHeight + iPaddingY ) );
-    m_ButtonStateSpline->SetY( iOffsetY + 4 * ( iHeight + iPaddingY ) );
-    m_ButtonStateClear->SetY( iOffsetY + 5 * ( iHeight + iPaddingY ) );
+    m_ButtonStateLiang_Barsky->SetY( iOffsetY + 4 * ( iHeight + iPaddingY ) );
+    m_ButtonStateSpline->SetY( iOffsetY + 5 * ( iHeight + iPaddingY ) );
+    m_ButtonStateClear->SetY( iOffsetY + 6 * ( iHeight + iPaddingY ) );
 }
 
 bool Interface::ButtonEvents( SDL_Event& e )
@@ -169,6 +175,11 @@ bool Interface::ButtonEvents( SDL_Event& e )
         else if( m_ButtonStateBoundryFill->IsIn( x, y ) )
         {
             m_ButtonStateBoundryFill->Press();
+            bEventFound = true;
+        }
+        else if( m_ButtonStateLiang_Barsky->IsIn( x, y ) )
+        {
+            m_ButtonStateLiang_Barsky->Press();
             bEventFound = true;
         }
         else if( m_ButtonStateSpline->IsIn( x, y ) )
@@ -288,13 +299,32 @@ bool Interface::ButtonEvents( SDL_Event& e )
 
             bEventFound = true;
         }
+        else if( m_ButtonStateLiang_Barsky->IsIn( x, y ) && m_ButtonStateLiang_Barsky->IsPressed() )
+        {
+            m_pGrid->SetGridScale( "Initial" );
+
+            m_pGrid->SetState( Grid::Liang_Barsky );
+
+            m_TextFieldTitle->SetText( "Liang-Barsky", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
+
+            m_ButtonDraw->Disable();
+
+            m_ButtonGridInitial->Disable();
+            m_ButtonGridVerySmall->Disable();
+            m_ButtonGridSmall->Disable();
+            m_ButtonGridMedium->Disable();
+            m_ButtonGridLarge->Disable();
+            m_ButtonGridVeryLarge->Disable();
+            
+            bEventFound = true;
+        }
         else if( m_ButtonStateSpline->IsIn( x, y ) && m_ButtonStateSpline->IsPressed() )
         {
             m_pGrid->SetGridScale( "Initial" );
 
             m_pGrid->SetState( Grid::Spline );
 
-            m_TextFieldTitle->SetText( "Spline", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
+            m_TextFieldTitle->SetText( "Cubic Spline", m_Font, {0xFF, 0xFF, 0xFF, 0xFF} );
 
             m_ButtonDraw->Disable();
 
@@ -334,6 +364,7 @@ void Interface::ReleaseButtons()
     m_ButtonDraw->Release();
     m_ButtonStateMichener->Release();
     m_ButtonStateBoundryFill->Release();
+    m_ButtonStateLiang_Barsky->Release();
     m_ButtonStateSpline->Release();
     m_ButtonStateClear->Release();
 }
@@ -353,6 +384,7 @@ void Interface::DrawButtons()
     m_ButtonDraw->Draw();
     m_ButtonStateMichener->Draw();
     m_ButtonStateBoundryFill->Draw();
+    m_ButtonStateLiang_Barsky->Draw();
     m_ButtonStateSpline->Draw();
     m_ButtonStateClear->Draw();
 }
@@ -379,6 +411,7 @@ void Interface::DeleteButtons()
     delete m_ButtonDraw;
     delete m_ButtonStateMichener;
     delete m_ButtonStateBoundryFill;
+    delete m_ButtonStateLiang_Barsky;
     delete m_ButtonStateSpline;
     delete m_ButtonStateClear;
 
@@ -387,6 +420,7 @@ void Interface::DeleteButtons()
     m_ButtonDraw = NULL;
     m_ButtonStateMichener = NULL;
     m_ButtonStateBoundryFill = NULL;
+    m_ButtonStateLiang_Barsky = NULL;
     m_ButtonStateSpline = NULL;
     m_ButtonStateClear = NULL;
 }

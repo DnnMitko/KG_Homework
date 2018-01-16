@@ -59,6 +59,7 @@ private:
     Button* m_ButtonDraw;
     Button* m_ButtonStateMichener;
     Button* m_ButtonStateBoundryFill;
+    Button* m_ButtonStateLiang_Barsky;
     Button* m_ButtonStateSpline;
     Button* m_ButtonStateClear;
 };

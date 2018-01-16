@@ -10,6 +10,7 @@ all : _header $(OBJS)
 	@$(MAKE) --no-print-directory -C michener
 	@$(MAKE) --no-print-directory -C boundry_full
 	@$(MAKE) --no-print-directory -C spline
+	@$(MAKE) --no-print-directory -C liang_barsky
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"
 
 .PHONY : _header
@@ -28,4 +29,5 @@ tree : _header
 	@$(MAKE) --no-print-directory -C michener tree
 	@$(MAKE) --no-print-directory -C boundry_full tree
 	@$(MAKE) --no-print-directory -C spline tree
+	@$(MAKE) --no-print-directory -C liang_barsky tree
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╚══$(NO_COLOR)\n"

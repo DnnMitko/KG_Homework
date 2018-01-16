@@ -10,6 +10,7 @@
 #include <vector>
 #include <stack>
 #include <cmath>
+#include <iterator>
 
 using std::vector;
 using std::stack;
@@ -37,6 +38,7 @@ public:
         Bresenham,
         Michener,
         BoundryFill,
+        Liang_Barsky,
         Spline,
         NumStates
     };
@@ -130,6 +132,13 @@ private:
     void DrawLargeDot( int, int );
     void DrawSpline();
     void DrawCurve( tk::spline& );
+
+    // liang_barsky.cpp
+    void DrawClipping();
+    bool LeftClipCheck( MousePair&, float&, float&, int, int );
+    bool RightClipCheck( MousePair&, float&, float&, int, int );
+    bool DownClipCheck( MousePair&, float&, float&, int, int );
+    bool UpClipCheck( MousePair&, float&, float&, int, int );
 private:
     SDL_Renderer* m_Renderer;
 
@@ -151,6 +160,8 @@ private:
     int m_iPixelCountHeight;
 
     vector<MousePair>* m_pvMousePairs;
+
+    vector<MousePair>* m_pvClippedLines;
 
     vector<SpreadMap>* m_pvSpreadMaps;
 

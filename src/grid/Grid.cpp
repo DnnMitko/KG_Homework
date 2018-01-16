@@ -10,10 +10,10 @@ Grid::Grid()
 
     m_bHasChanged = false;
 
-    m_GridPos.x = 0;
-    m_GridPos.y = 0;
-    m_GridPos.w = 0;
-    m_GridPos.h = 0;
+    m_GridPos.x = -1;
+    m_GridPos.y = -1;
+    m_GridPos.w = -1;
+    m_GridPos.h = -1;
 
     m_iPixelSize = 0;
 
@@ -25,6 +25,7 @@ Grid::Grid()
     m_iPixelCountHeight = 0;
 
     m_pvMousePairs = NULL;
+    m_pvClippedLines = NULL;
     m_pvSpreadMaps = NULL;
     m_pvMouseClicks = NULL;
 }
@@ -38,11 +39,13 @@ Grid::~Grid()
     delete[] m_ppbPixelStatus;
 
     delete m_pvMousePairs;
+    delete m_pvClippedLines;
     delete m_pvSpreadMaps;
     delete m_pvMouseClicks;
 
     m_ppbPixelStatus = NULL;
     m_pvMousePairs = NULL;
+    m_pvClippedLines = NULL;
     m_pvSpreadMaps = NULL;
     m_pvMouseClicks = NULL;
 }
@@ -81,6 +84,7 @@ void Grid::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer )
     ClearStatus();
 
     m_pvMousePairs = new vector<MousePair>;
+    m_pvClippedLines = new vector<MousePair>;
     m_pvSpreadMaps = new vector<SpreadMap>;
     m_pvMouseClicks = new vector<MouseClick>;
 }
@@ -92,7 +96,7 @@ void Grid::Draw()
         return;
     }
 
-    if( m_eCurState != Spline )
+    if( m_eCurState != Spline && m_eCurState != Liang_Barsky )
     {
         DrawGrid();
     }
@@ -181,6 +185,7 @@ void Grid::ClearGrid()
     ClearStatus();
 
     m_pvMousePairs->clear();
+    m_pvClippedLines->clear();
     m_pvSpreadMaps->clear();
     m_pvMouseClicks->clear();
 
@@ -218,6 +223,21 @@ void Grid::ClearGrid()
     else if( m_eCurState == Spline )
     {
         DrawGrid();
+    }
+    else if( m_eCurState == Liang_Barsky )
+    {
+        DrawGrid();
+
+        SDL_Rect rect;
+        rect.x = 420;
+        rect.y = 220;
+        rect.w = 500;
+        rect.h = 340;
+
+        SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
+        SDL_RenderDrawRect( m_Renderer, &rect );
+
+        m_bHasChanged = true;
     }
 }
 
@@ -298,10 +318,11 @@ void Grid::DrawPixelStatus()
 void Grid::DrawSim( bool bUseNormalBresenham )
 {
     vector<MousePair>::iterator it;
+    vector<MousePair>::iterator it2;
 
     SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
 
-    for( it = m_pvMousePairs->begin(); it != m_pvMousePairs->end(); it++ )
+    for( it = m_pvMousePairs->begin(), it2 = m_pvClippedLines->begin(); it != m_pvMousePairs->end(); it++, it2++ )
     {
         if( (*it).end.x == -1 )
         {
@@ -330,6 +351,26 @@ void Grid::DrawSim( bool bUseNormalBresenham )
                 }
                 case BoundryFill:
                 {
+                    break;
+                }
+                case Liang_Barsky:
+                {
+                    DrawBresenham( *it );
+
+                    if( it2->begin.x != -1 ) {
+                        SDL_RenderPresent( m_Renderer );
+
+                        if( std::next( it2 ) == m_pvClippedLines->end() )
+                        {
+                            SDL_Delay( 1000 );
+                        }
+
+                        SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0x00, 0x00, 0xFF );
+                        DrawBresenham( *it2 );
+
+                        SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
+                    }
+
                     break;
                 }
                 default:
@@ -383,6 +424,11 @@ void Grid::AddClick( MouseClick click )
         if( m_iPixelSize != 1 )
         {
             Calculate( m_pvMousePairs->back() );
+        }
+
+        if( m_eCurState == Liang_Barsky )
+        {
+            DrawClipping();
         }
 
         m_bHasChanged = true;
