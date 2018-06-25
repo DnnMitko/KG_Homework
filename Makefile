@@ -28,7 +28,7 @@ $(OBJ_DIR) :
 _submodules :
 	@$(MAKE) --no-print-directory -C $(SRCDIR)
 
-$(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
+$(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -I/constants -o $(EXE)
 
 $(EXE) :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══[Linking executable]════$(NO_COLOR)\n"
