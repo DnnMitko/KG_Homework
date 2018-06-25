@@ -2,7 +2,7 @@
 #define __XML_WRAPPER_H__
 
 #include "pugixml.hpp"
-#include "string"
+#include <string>
 
 using std::string;
 
@@ -13,6 +13,7 @@ public:
 public:
     int ReadInt( string ) const;
     int ReadInt( string, string ) const;
+
     string ReadString( string ) const;
     string ReadString( string, string ) const;
 private:

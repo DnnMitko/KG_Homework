@@ -1,4 +1,4 @@
-#include "../Grid.h"
+#include "Grid.h"
 
 void Grid::DrawMichener( MousePair coords ) {
     int iDeltaX = coords.begin.x - coords.end.x;

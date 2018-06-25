@@ -3,7 +3,10 @@
 
 #include "Button.h"
 
-#include "../grid/Grid.h"
+#include "Grid.h"
+
+#include "Settings.h"
+#include "ScreenController.h"
 
 class Panel {
 public:
@@ -25,6 +28,9 @@ private:
 
     void DrawButtons();
 private:
+    Settings settings;
+    ScreenController screenController;
+
     Grid* grid;
 
     TTF_Font* font;

@@ -22,8 +22,8 @@ void Button::Init() {
     fieldRect.h = 0;
 
     if( NULL == buttonTexture ) {
-        std::string sprite = config.getSettings()->ReadString( "Button", "Sprite" );
-        buttonTexture = renderTool.getScreenController()->LoadTexture( sprite );
+        std::string sprite = settings.getInstance()->ReadString( "Button", "Sprite" );
+        buttonTexture = screenController.getInstance()->LoadTexture( sprite );
 
         if( NULL == buttonTexture ) {
             printf( "Failed to load TextureBackground! SDL Error: %s\n", IMG_GetError() );
@@ -32,10 +32,10 @@ void Button::Init() {
 }
 
 void Button::Deinit() {
-    renderTool.getScreenController()->DestroyTexture( textTexturePressed );
+    screenController.getInstance()->DestroyTexture( textTexturePressed );
     textTexturePressed = NULL;
 
-    renderTool.getScreenController()->DestroyTexture( buttonTexture );
+    screenController.getInstance()->DestroyTexture( buttonTexture );
     buttonTexture = NULL;
 }
 
@@ -47,8 +47,8 @@ void Button::Draw() {
     }
 
     if( hasChanged ) {
-        int width = config.getSettings()->ReadInt( "Button", "SpriteWidth" );
-        int height = config.getSettings()->ReadInt( "Button", "SpriteHeight" );
+        int width = settings.getInstance()->ReadInt( "Button", "SpriteWidth" );
+        int height = settings.getInstance()->ReadInt( "Button", "SpriteHeight" );
 
         SDL_Rect sourceRect;
         sourceRect.w = width;
@@ -65,13 +65,13 @@ void Button::Draw() {
             sourceRect.y = 0;
         }
 
-        renderTool.getScreenController()->Render( buttonTexture, &sourceRect, &fieldRect );
+        screenController.getInstance()->Render( buttonTexture, &sourceRect, &fieldRect );
 
         if( isPressed ) {
-            renderTool.getScreenController()->Render( textTexturePressed, NULL, &textRect );
+            screenController.getInstance()->Render( textTexturePressed, NULL, &textRect );
         }
         else {
-            renderTool.getScreenController()->Render( textTexture, NULL, &textRect );
+            screenController.getInstance()->Render( textTexture, NULL, &textRect );
         }
 
         hasChanged = false;
@@ -81,17 +81,17 @@ void Button::Draw() {
 void Button::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
     Label::SetText( newText, font, color );
 
-    renderTool.getScreenController()->DestroyTexture( textTexturePressed );
+    screenController.getInstance()->DestroyTexture( textTexturePressed );
 
-    SDL_Surface* tempSurface = renderTool.getScreenController()->MakeSurfaceFromText( newText, font, {0xFF, 0xFF, 0xFF, 0xFF} );
+    SDL_Surface* tempSurface = screenController.getInstance()->MakeSurfaceFromText( newText, font, {0xFF, 0xFF, 0xFF, 0xFF} );
 
-    textTexturePressed = renderTool.getScreenController()->MakeTextureFromSurface( tempSurface );
+    textTexturePressed = screenController.getInstance()->MakeTextureFromSurface( tempSurface );
 
     if( NULL == textTexturePressed ) {
         printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", newText.c_str(), SDL_GetError() );
     }
 
-    renderTool.getScreenController()->DestroySurface( tempSurface );
+    screenController.getInstance()->DestroySurface( tempSurface );
     tempSurface = NULL;
 }
 

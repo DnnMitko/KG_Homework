@@ -2,7 +2,7 @@
 
 XML_Wrapper::XML_Wrapper() {
     if( false == Init() ) {
-        exit(-1);
+        exit( 2 );
     }
 }
 
@@ -27,15 +27,15 @@ string XML_Wrapper::ReadString( string nodeParent, string nodeChild ) const {
 }
 
 bool XML_Wrapper::Init() {
-    bool hasProblem = false;
+    bool isSuccessful = true;
 
     settingsFile = new pugi::xml_document();
-    if( false == settingsFile->load_file( "Constants.xml" ) ) {
+    if( false == settingsFile->load_file( "constants/Constants.xml" ) ) {
         printf( "Couldn't load constants from xml!\n" );
-        hasProblem = true;
+        isSuccessful = false;
     }
 
-    return hasProblem;
+    return isSuccessful;
 }
 
 void XML_Wrapper::Deinit() {

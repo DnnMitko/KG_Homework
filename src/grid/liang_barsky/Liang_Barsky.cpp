@@ -1,4 +1,4 @@
-#include "../Grid.h"
+#include "Grid.h"
 
 void Grid::DrawClipping() {
     MousePair newPair = m_pvMousePairs->back();

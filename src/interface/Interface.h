@@ -1,7 +1,7 @@
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
 
-#include "../utils/SDL/SDL_Singleton.h"
+#include "ScreenController.h"
 
 #include "Panel.h"
 
@@ -19,7 +19,7 @@ private:
 private:
     bool readyToQuit;
 
-    SDL_Singleton renderTool;
+    ScreenController screenController;
 
     Panel* panel;
 };

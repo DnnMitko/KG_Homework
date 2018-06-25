@@ -1,0 +1,25 @@
+SRCS = src\main.cpp src\grid\boundry_full\Boundry_full.cpp src\grid\bresenham\DrawBresenham.cpp src\grid\bresenham\DrawRevBresenham.cpp src\grid\bresenham\SetBresenham.cpp src\grid\bresenham\SetRevBresenham.cpp src\grid\liang_barsky\Liang_Barsky.cpp src\grid\michener\DrawMichener.cpp src\grid\michener\SetMichener.cpp src\grid\spline\Spline.cpp src\grid\Grid.cpp src\interface\Button.cpp src\interface\Interface.cpp src\interface\Label.cpp src\interface\Panel.cpp src\interface\TextField.cpp src\utils\pugixml\pugixml.cpp src\utils\pugixml\Settings.cpp src\utils\pugixml\XML_Wrapper.cpp src\utils\SDL\ScreenController.cpp src\utils\SDL\SDL_Wrapper.cpp
+
+OBJS = $(patsubst %.cpp,%.o,$(SRCS))
+
+CC = g++
+
+COMPILER_FLAGS = -fdiagnostics-color -g
+
+INCLUDE_PATHS = -Isrc\interface -Isrc\grid -Isrc\utils\pugixml -Isrc\utils\SDL
+
+LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+
+EXE = run.exe
+
+all : $(SRCS) $(OBJS) $(EXE)
+
+%.o : %.cpp
+	$(CC) $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c $< -o $@
+
+$(EXE) : $(OBJS)
+	$(CC) $(OBJS) $(LINKER_FLAGS) -o $(EXE)
+
+clean :
+	del /Q $(EXE)
+	del /Q $(OBJS)

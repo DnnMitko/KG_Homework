@@ -1,4 +1,4 @@
-#include "../Grid.h"
+#include "Grid.h"
 #include "spline.h"
 
 void Grid::DrawLargeDot( int x, int y ) {

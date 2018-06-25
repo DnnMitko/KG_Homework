@@ -8,24 +8,29 @@
 #include <string>
 #include <cstdio>
 
-#include "../pugixml/XML_Singleton.h"
+#include "Settings.h"
 
 class SDL_Wrapper {
 public:
     SDL_Wrapper();
     ~SDL_Wrapper();
 public:
-    void DestroyTexture( SDL_Texture* );
-    void Render( SDL_Texture*, SDL_Rect*, SDL_Rect* );
     SDL_Surface* MakeSurfaceFromText( std::string, TTF_Font*, SDL_Color );
     void DestroySurface( SDL_Surface* );
+
     SDL_Texture* MakeTextureFromSurface( SDL_Surface* );
-    void FillRect( SDL_Rect, Uint8, Uint8, Uint8, Uint8 );
     SDL_Texture* LoadTexture( std::string );
-    int PollEvents( SDL_Event* );
+    void DestroyTexture( SDL_Texture* );
+
+    void FillRect( SDL_Rect, Uint8, Uint8, Uint8, Uint8 );
+    void ClearScreen();
+
     TTF_Font* OpenFont( std::string, int );
     void CloseFont( TTF_Font* );
-    void ClearScreen();
+
+    int PollEvents( SDL_Event* );
+
+    void Render( SDL_Texture*, SDL_Rect*, SDL_Rect* );
     void Present();
 private:
     bool Init();

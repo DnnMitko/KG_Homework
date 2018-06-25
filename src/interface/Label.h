@@ -1,7 +1,7 @@
 #ifndef __LABEL_H__
 #define __LABEL_H__
 
-#include "../utils/SDL/SDL_Singleton.h"
+#include "ScreenController.h"
 #include <string>
 
 class Label {
@@ -25,7 +25,7 @@ protected:
     SDL_Rect textRect;
     SDL_Texture* textTexture;
 
-    SDL_Singleton renderTool;
+    ScreenController screenController;
 
     bool hasChanged;
 };

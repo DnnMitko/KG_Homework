@@ -1,7 +1,7 @@
 #include "Interface.h"
 
 Interface::Interface() {
-    renderTool.getScreenController()->ClearScreen();
+    screenController.getInstance()->ClearScreen();
     Init();
 }
 
@@ -34,5 +34,5 @@ bool Interface::GetQuit() const {
 void Interface::Draw() {
     panel->Draw();
 
-    renderTool.getScreenController()->Present();
+    screenController.getInstance()->Present();
 }

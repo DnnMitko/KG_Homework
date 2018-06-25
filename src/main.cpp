@@ -1,6 +1,6 @@
-#include "interface/Interface.h"
+#include "Interface.h"
 
-#include "utils/SDL/SDL_Singleton.h"
+#include "ScreenController.h"
 
 int main( int argc, char* args[] ) {
     // Used to avoid them listed as unused variables
@@ -8,13 +8,13 @@ int main( int argc, char* args[] ) {
     (void) args;
 
     Interface program;
-    SDL_Singleton screen;
+    ScreenController screen;
 
-    SDL_Event e;
+    SDL_Event event;
 
     while( false == program.GetQuit() ) {
-        while( screen.getScreenController()->PollEvents( &e ) != 0 ) {
-            program.EventHandler( e );
+        while( screen.getInstance()->PollEvents( &event ) != 0 ) {
+            program.EventHandler( event );
         }
 
         program.Draw();

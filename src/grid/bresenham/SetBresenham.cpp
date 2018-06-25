@@ -1,4 +1,4 @@
-#include "../Grid.h"
+#include "Grid.h"
 
 void Grid::SetBresenham( MousePair coords ) {
     int x1, x2;

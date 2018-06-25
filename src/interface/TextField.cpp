@@ -48,9 +48,9 @@ void TextField::Draw() {
     }
 
     if( hasChanged ) {
-        ScreenController.FillRect( fieldRect, 0x00, 0x00, 0x00, 0xFF );
+        screenController.getInstance()->FillRect( fieldRect, 0x00, 0x00, 0x00, 0xFF );
 
-        ScreenController.Render( textTexture, NULL, &textRect );
+        screenController.getInstance()->Render( textTexture, NULL, &textRect );
 
         hasChanged = false;
     }

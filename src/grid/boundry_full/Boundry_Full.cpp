@@ -1,4 +1,4 @@
-#include "../Grid.h"
+#include "Grid.h"
 
 void Grid::DrawExpansion() {
     vector<SpreadMap>::iterator it;
