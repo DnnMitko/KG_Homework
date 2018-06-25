@@ -10,7 +10,7 @@ all : _header $(OBJS)
 
 .PHONY : _header
 _header :
-	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[Bresenham]════════$(NO_COLOR)\n"
+	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[bresenham]════════$(NO_COLOR)\n"
 
 $(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
 

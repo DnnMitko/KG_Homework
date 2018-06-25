@@ -6,7 +6,9 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <string>
-#include <cstio>
+#include <cstdio>
+
+#include "../pugixml/XML_Wrapper.h"
 
 class SDL_Wrapper {
 public:
@@ -14,11 +16,11 @@ public:
     ~SDL_Wrapper();
 public:
     void DestroyTexture( SDL_Texture* );
-    void Render( SDL_Texture*, SDL_Rect, SDL_Rect );
+    void Render( SDL_Texture*, SDL_Rect*, SDL_Rect* );
     SDL_Surface* MakeSurfaceFromText( std::string, TTF_Font*, SDL_Color );
     void DestroySurface( SDL_Surface* );
     SDL_Texture* MakeTextureFromSurface( SDL_Surface* );
-    void FillRect( SDL_Rect*, Uint8, Uint8, Uint8, Uint8 );
+    void FillRect( SDL_Rect, Uint8, Uint8, Uint8, Uint8 );
     SDL_Texture* LoadTexture( std::string );
     int PollEvents( SDL_Event* );
     TTF_Font* OpenFont( std::string, int );
@@ -38,6 +40,6 @@ private:
     SDL_Renderer* renderer;
 };
 
-SDL_Wrapper ScreenController;
+extern SDL_Wrapper ScreenController;
 
 #endif //__SDL_WRAPPER_H__

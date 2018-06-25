@@ -1,11 +1,11 @@
-#include "homework/Homework.h"
+#include "interface/Interface.h"
 
 int main( int argc, char* args[] ) {
     // Used to avoid them listed as unused variables
     (void) argc;
     (void) args;
 
-    Homework program;
+    Interface program;
 
     SDL_Event e;
 

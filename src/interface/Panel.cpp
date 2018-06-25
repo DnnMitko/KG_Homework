@@ -8,7 +8,7 @@ Panel::~Panel() {
     Deinit();
 }
 
-Panel::Init() {
+void Panel::Init() {
     grid = new Grid();
 
     OpenFont();
@@ -19,7 +19,7 @@ Panel::Init() {
     PositionButtons();
 }
 
-Panel::Deinit() {
+void Panel::Deinit() {
     delete grid;
     grid = NULL;
 
@@ -82,7 +82,6 @@ void Panel::CreateButtons() {
     m_ButtonGridLarge->SetText( Settings.ReadString( "GridScale", "Large" ), font, color );
     m_ButtonGridVeryLarge->SetText( Settings.ReadString( "GridScale", "VeryLarge" ), font, color );
 
-    Settings.ReadString( "Button", "Clear" )
     // Right side
     m_ButtonStateBresenham->SetText( Settings.ReadString( "Button", "Bresenham" ), font, color );
     m_ButtonBresenhamDrawType->SetText( Settings.ReadString( "Button", "BresenhamDrawType_1" ), font, color );
@@ -187,10 +186,6 @@ void Panel::DestroyButtons() {
     m_ButtonStateClear = NULL;
 }
 
-bool Panel::ButtonEvents( SDL_Event& ) {
-    
-}
-
 void Panel::ReleaseButtons() {
     // Left side
     m_ButtonGridInitial->Release();
@@ -205,7 +200,7 @@ void Panel::ReleaseButtons() {
     m_ButtonBresenhamDrawType->Release();
     m_ButtonStateMichener->Release();
     m_ButtonStateBoundryFill->Release();
-    m_ButtonStateLiang_Barsky->Release();
+    m_ButtonStateLiangBarsky->Release();
     m_ButtonStateSpline->Release();
     m_ButtonStateClear->Release();
 }
@@ -232,12 +227,12 @@ void Panel::DrawButtons() {
     m_ButtonBresenhamDrawType->Draw();
     m_ButtonStateMichener->Draw();
     m_ButtonStateBoundryFill->Draw();
-    m_ButtonStateLiang_Barsky->Draw();
+    m_ButtonStateLiangBarsky->Draw();
     m_ButtonStateSpline->Draw();
     m_ButtonStateClear->Draw();
 }
 
-void Interface::EventHandler( SDL_Event& event ) {
+void Panel::EventHandler( SDL_Event& event ) {
     int x, y;
 
     if( event.type == SDL_MOUSEBUTTONDOWN ) {
@@ -273,8 +268,8 @@ void Interface::EventHandler( SDL_Event& event ) {
         else if( m_ButtonStateBoundryFill->IsIn( x, y ) ) {
             m_ButtonStateBoundryFill->Press();
         }
-        else if( m_ButtonStateLiang_Barsky->IsIn( x, y ) ) {
-            m_ButtonStateLiang_Barsky->Press();
+        else if( m_ButtonStateLiangBarsky->IsIn( x, y ) ) {
+            m_ButtonStateLiangBarsky->Press();
         }
         else if( m_ButtonStateSpline->IsIn( x, y ) ) {
             m_ButtonStateSpline->Press();
@@ -359,10 +354,10 @@ void Interface::EventHandler( SDL_Event& event ) {
             m_ButtonGridVeryLarge->Disable();
 
         }
-        else if( m_ButtonStateLiang_Barsky->IsIn( x, y ) && m_ButtonStateLiang_Barsky->IsPressed() ) {
+        else if( m_ButtonStateLiangBarsky->IsIn( x, y ) && m_ButtonStateLiangBarsky->IsPressed() ) {
             grid->SetGridScale( "Initial" );
 
-            grid->SetState( Grid::Liang_Barsky );
+            grid->SetState( Grid::LiangBarsky );
 
             textFieldTitle->SetText( "Liang-Barsky", font, {0xFF, 0xFF, 0xFF, 0xFF} );
 

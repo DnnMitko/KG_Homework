@@ -65,13 +65,13 @@ void Button::Draw() {
             sourceRect.y = 0;
         }
 
-        ScreenController.Render( buttonTexture, sourceRect, fieldRect );
+        ScreenController.Render( buttonTexture, &sourceRect, &fieldRect );
 
         if( isPressed ) {
-            ScreenController.Render( textTexturePressed, NULL, textRect );
+            ScreenController.Render( textTexturePressed, NULL, &textRect );
         }
         else {
-            ScreenController.Render( textTexture, NULL, textRect );
+            ScreenController.Render( textTexture, NULL, &textRect );
         }
 
         hasChanged = false;

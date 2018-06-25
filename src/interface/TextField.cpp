@@ -4,13 +4,18 @@ TextField::TextField() : Label() {
     Init();
 }
 
-TextField::~TextField(){}
+TextField::~TextField() {
+    Deinit();
+}
 
 void TextField::Init() {
     fieldRect.x = 0;
     fieldRect.y = 0;
     fieldRect.w = 0;
     fieldRect.h = 0;
+}
+
+void TextField::Deinit() {
 }
 
 int TextField::GetWidth() const {
@@ -45,7 +50,7 @@ void TextField::Draw() {
     if( hasChanged ) {
         ScreenController.FillRect( fieldRect, 0x00, 0x00, 0x00, 0xFF );
 
-        ScreenController.Render( textTexture, NULL, textRect );
+        ScreenController.Render( textTexture, NULL, &textRect );
 
         hasChanged = false;
     }

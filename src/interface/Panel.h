@@ -10,7 +10,7 @@ public:
     Panel();
     ~Panel();
 public:
-    bool EventHandler( SDL_Event& );
+    void EventHandler( SDL_Event& );
     void ReleaseButtons();
     void Draw();
 private:

@@ -22,6 +22,6 @@ private:
     pugi::xml_document* settingsFile;
 };
 
-XML_Wrapper Settings;
+extern XML_Wrapper Settings;
 
 #endif //__XML_WRAPPER_H__

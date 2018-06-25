@@ -3,7 +3,7 @@
 
 #include "SDL2/SDL.h"
 
-#include "../pugixml/pugixml.hpp"
+#include "../utils/pugixml/pugixml.hpp"
 
 #include "spline/spline.h"
 
@@ -33,7 +33,7 @@ public:
         Bresenham,
         Michener,
         BoundryFill,
-        Liang_Barsky,
+        LiangBarsky,
         Spline,
         NumStates
     };

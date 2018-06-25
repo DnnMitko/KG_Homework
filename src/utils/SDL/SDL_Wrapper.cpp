@@ -39,8 +39,8 @@ void SDL_Wrapper::DestroyTexture( SDL_Texture* texture ) {
     SDL_DestroyTexture( texture );
 }
 
-void SDL_Wrapper::Render( SDL_Texture* texture, SDL_Rect sourceRect, SDL_Rect destinationRect ) {
-    SDL_RenderCopy( renderer, texture, &sourceRect, &destinationRect );
+void SDL_Wrapper::Render( SDL_Texture* texture, SDL_Rect* sourceRect, SDL_Rect* destinationRect ) {
+    SDL_RenderCopy( renderer, texture, sourceRect, destinationRect );
 }
 
 SDL_Surface* SDL_Wrapper::MakeSurfaceFromText( std::string text, TTF_Font* font, SDL_Color color ) {
@@ -116,9 +116,9 @@ bool SDL_Wrapper::InitWindow() {
         printf( "Warning: Linear texture filtering not enabled!\n" );
     }
 
-    int screenHeight = m_xmlConstants->first_child().child( "ScreenHeight" ).text().as_int();
-    int screenWidth = m_xmlConstants->first_child().child( "ScreenWidth" ).text().as_int();
-    std::string windowName = m_xmlConstants->first_child().child( "WindowName" ).text().as_string();
+    int screenHeight = Settings.ReadInt( "ScreenHeight" );
+    int screenWidth = Settings.ReadInt( "ScreenWidth" );
+    std::string windowName = Settings.ReadString( "WindowName" );
 
     window = SDL_CreateWindow( windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                screenWidth, screenHeight, SDL_WINDOW_SHOWN );
@@ -138,12 +138,15 @@ bool SDL_Wrapper::InitWindow() {
 }
 
 bool SDL_Wrapper::InitImage() {
+    bool isSuccessful = true;
     int flags = IMG_INIT_PNG;
 
     if( ( IMG_Init( flags ) & flags ) != flags ) {
         printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
         isSuccessful = false;
     }
+
+    return isSuccessful;
 }
 
 bool SDL_Wrapper::InitTTF() {
@@ -156,3 +159,5 @@ bool SDL_Wrapper::InitTTF() {
 
     return isSuccessful;
 }
+
+SDL_Wrapper ScreenController;

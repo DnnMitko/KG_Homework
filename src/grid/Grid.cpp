@@ -89,7 +89,7 @@ void Grid::Draw() {
         return;
     }
 
-    if( m_eCurState != Spline && m_eCurState != Liang_Barsky ) {
+    if( m_eCurState != Spline && m_eCurState != LiangBarsky ) {
         DrawGrid();
     }
     DrawPixelStatus();
@@ -201,7 +201,7 @@ void Grid::ClearGrid() {
     else if( m_eCurState == Spline ) {
         DrawGrid();
     }
-    else if( m_eCurState == Liang_Barsky ) {
+    else if( m_eCurState == LiangBarsky ) {
         DrawGrid();
 
         SDL_Rect rect;
@@ -304,7 +304,7 @@ void Grid::DrawSim( bool bUseNormalBresenham ) {
                     break;
                 case BoundryFill:
                     break;
-                case Liang_Barsky:
+                case LiangBarsky:
                     DrawBresenham( *it );
 
                     if( it2->begin.x != -1 ) {
@@ -362,7 +362,7 @@ void Grid::AddClick( MouseClick click ) {
             Calculate( m_pvMousePairs->back() );
         }
 
-        if( m_eCurState == Liang_Barsky ) {
+        if( m_eCurState == LiangBarsky ) {
             DrawClipping();
         }
 
