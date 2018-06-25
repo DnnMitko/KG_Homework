@@ -2,7 +2,8 @@
 #define __BUTTON_H__
 
 #include "TextField.h"
-#include "../Globals.h"
+#include "../utils/SDL/SDL_Singleton.h"
+#include "../utils/pugixml/XML_Singleton.h"
 
 class Button: public TextField {
 public:
@@ -26,6 +27,9 @@ private:
     void Init();
     void Deinit();
 private:
+    SDL_Singleton renderTool;
+    XML_Singleton config;
+
     bool isPressed;
     bool isEnabled;
 

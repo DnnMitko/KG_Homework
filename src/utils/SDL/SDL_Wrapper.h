@@ -8,7 +8,7 @@
 #include <string>
 #include <cstdio>
 
-#include "../pugixml/XML_Wrapper.h"
+#include "../pugixml/XML_Singleton.h"
 
 class SDL_Wrapper {
 public:

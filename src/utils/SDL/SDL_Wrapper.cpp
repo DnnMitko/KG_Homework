@@ -116,9 +116,10 @@ bool SDL_Wrapper::InitWindow() {
         printf( "Warning: Linear texture filtering not enabled!\n" );
     }
 
-    int screenHeight = Settings->ReadInt( "ScreenHeight" );
-    int screenWidth = Settings->ReadInt( "ScreenWidth" );
-    std::string windowName = Settings->ReadString( "WindowName" );
+    XML_Singleton settings;
+    int screenHeight = settings.getSettings()->ReadInt( "ScreenHeight" );
+    int screenWidth = settings.getSettings()->ReadInt( "ScreenWidth" );
+    std::string windowName = settings.getSettings()->ReadString( "WindowName" );
 
     window = SDL_CreateWindow( windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                screenWidth, screenHeight, SDL_WINDOW_SHOWN );
