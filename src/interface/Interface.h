@@ -1,7 +1,7 @@
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
 
-#include "../utils/Global.h"
+#include "../Global.h"
 
 #include "Panel.h"
 

@@ -2,7 +2,7 @@
 #define __BUTTON_H__
 
 #include "TextField.h"
-#include "../utils/Global.h"
+#include "../Globals.h"
 
 class Button: public TextField {
 public:

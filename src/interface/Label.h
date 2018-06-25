@@ -1,7 +1,7 @@
 #ifndef __LABEL_H__
 #define __LABEL_H__
 
-#include "../utils/Global.h"
+#include "../Global.h"
 #include <string>
 
 class Label {
