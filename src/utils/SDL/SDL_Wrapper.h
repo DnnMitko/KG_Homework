@@ -12,7 +12,7 @@
 
 class SDL_Wrapper {
 public:
-    SDL_Wrapper( XML_Wrapper* );
+    SDL_Wrapper();
     ~SDL_Wrapper();
 public:
     void DestroyTexture( SDL_Texture* );
@@ -38,8 +38,6 @@ private:
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
-
-    XML_Wrapper* settings;
 };
 
 #endif //__SDL_WRAPPER_H__

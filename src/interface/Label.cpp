@@ -20,7 +20,7 @@ void Label::Init() {
 }
 
 void Label::Deinit() {
-    global.GetScreenController()->DestroyTexture( textTexture );
+    ScreenController.DestroyTexture( textTexture );
     textTexture = NULL;
 }
 
@@ -50,20 +50,20 @@ void Label::Draw() {
     }
 
     if( hasChanged ) {
-        global.GetScreenController()->Render( textTexture, NULL, &textRect );
+        ScreenController.Render( textTexture, NULL, &textRect );
         hasChanged = false;
     }
 }
 
 void Label::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
-    global.GetScreenController()->DestroyTexture( textTexture );
+    ScreenController.DestroyTexture( textTexture );
 
-    SDL_Surface* tempSurface = global.GetScreenController()->MakeSurfaceFromText( newText, font, color );
+    SDL_Surface* tempSurface = ScreenController.MakeSurfaceFromText( newText, font, color );
 
     textRect.w = tempSurface->w;
     textRect.h = tempSurface->h;
 
-    textTexture = global.GetScreenController()->MakeTextureFromSurface( tempSurface );
+    textTexture = ScreenController.MakeTextureFromSurface( tempSurface );
 
     if( NULL == textTexture ) {
         printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", newText.c_str(),
@@ -76,7 +76,7 @@ void Label::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
         hasChanged = true;
     }
 
-    global.GetScreenController()->DestroySurface( tempSurface );
+    ScreenController.DestroySurface( tempSurface );
     tempSurface = NULL;
 }
 

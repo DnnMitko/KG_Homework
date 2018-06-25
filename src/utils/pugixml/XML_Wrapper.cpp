@@ -30,7 +30,7 @@ bool XML_Wrapper::Init() {
     bool hasProblem = false;
 
     settingsFile = new pugi::xml_document();
-    if( !settingsFile->load_file( "../../../constants/Constants.xml" ) ) {
+    if( false == settingsFile->load_file( "../../../constants/Constants.xml" ) ) {
         printf( "Couldn't load constants from xml!\n" );
         hasProblem = true;
     }

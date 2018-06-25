@@ -1,7 +1,7 @@
 #include "Interface.h"
 
 Interface::Interface() {
-    global.GetScreenController()->ClearScreen();
+    ScreenController.ClearScreen();
     Init();
 }
 
@@ -34,5 +34,5 @@ bool Interface::GetQuit() const {
 void Interface::Draw() {
     panel->Draw();
 
-    global.GetScreenController()->Present();
+    ScreenController.Present();
 }
