@@ -1,16 +1,10 @@
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include "SDL2/SDL_ttf.h"
+#include "../utils/SDL/SDL_Wrapper.h"
+#include "../utils/pugixml/XML_Wrapper.h"
 
-#include "../pugixml/pugixml.hpp"
-
-#include "../grid/Grid.h"
-#include "Button.h"
-
-#include <cstdio>
+#include "Panel.h"
 
 class Interface {
 public:
@@ -21,46 +15,12 @@ public:
     bool GetQuit() const;
     void Draw();
 private:
-    bool InitSDL();
-    void DeInitSDL();
-
-    void Create();
-    void CreateTitle();
-
-    //InterfaceButtons.cpp
-    void CreateButtons();
-    void PositionButtons();
-    bool ButtonEvents( SDL_Event& );
-    void ReleaseButtons();
-    void DrawButtons();
-    void DeleteButtons();
+    void Init();
+    void DeInit();
 private:
-    SDL_Window* m_Window;
-    SDL_Renderer* m_Renderer;
+    bool readyToQuit;
 
-    bool m_bQuit;
-
-    pugi::xml_document* m_xmlConstants;
-
-    Grid* m_pGrid;
-
-    TTF_Font* m_Font;
-
-    TextField* m_TextFieldTitle;
-
-    Button* m_ButtonGridInitial;
-    Button* m_ButtonGridVerySmall;
-    Button* m_ButtonGridSmall;
-    Button* m_ButtonGridMedium;
-    Button* m_ButtonGridLarge;
-    Button* m_ButtonGridVeryLarge;
-    Button* m_ButtonStateBresenham;
-    Button* m_ButtonDraw;
-    Button* m_ButtonStateMichener;
-    Button* m_ButtonStateBoundryFill;
-    Button* m_ButtonStateLiang_Barsky;
-    Button* m_ButtonStateSpline;
-    Button* m_ButtonStateClear;
+    Panel* panel;
 };
 
 #endif //__INTERFACE_H__

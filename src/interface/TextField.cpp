@@ -1,63 +1,72 @@
 #include "TextField.h"
 
 TextField::TextField() : Label() {
-    m_FieldRect.x = 0;
-    m_FieldRect.y = 0;
-    m_FieldRect.w = 0;
-    m_FieldRect.h = 0;
+    Init();
 }
 
 TextField::~TextField(){}
 
-void TextField::Init( SDL_Renderer* pNewRenderer ) {
-    Label::Init( pNewRenderer );
+void TextField::Init() {
+    fieldRect.x = 0;
+    fieldRect.y = 0;
+    fieldRect.w = 0;
+    fieldRect.h = 0;
 }
 
 int TextField::GetWidth() const {
-    return m_FieldRect.w;
+    return fieldRect.w;
 }
 
 int TextField::GetHeight() const {
-    return m_FieldRect.h;
+    return fieldRect.h;
 }
 
-void TextField::SetX( int iX ) {
-    m_FieldRect.x = iX;
+void TextField::SetX( int newX ) {
+    fieldRect.x = newX;
 
-    m_bHasChanged = true;
+    CalculateTextPosition();
+
+    hasChanged = true;
 }
 
-void TextField::SetY( int iY ) {
-    m_FieldRect.y = iY;
+void TextField::SetY( int newY ) {
+    fieldRect.y = newY;
 
-    m_bHasChanged = true;
+    CalculateTextPosition();
+
+    hasChanged = true;
 }
 
 void TextField::Draw() {
-    if( m_Renderer == NULL || m_TextureText == NULL ) {
+    if( NULL == textTexture ) {
         return;
     }
 
-    if( m_bHasChanged ) {
-        m_bHasChanged = false;
+    if( hasChanged ) {
+        ScreenController.FillRect( fieldRect, 0x00, 0x00, 0x00, 0xFF );
 
-        SDL_SetRenderDrawColor( m_Renderer, 0x00, 0x00, 0x00, 0xFF );
-        SDL_RenderFillRect( m_Renderer, &m_FieldRect );
+        ScreenController.Render( textTexture, NULL, textRect );
 
-        m_TextRect.x = m_FieldRect.x + ( m_FieldRect.w - m_TextRect.w ) / 2;
-        m_TextRect.y = m_FieldRect.y + ( m_FieldRect.h - m_TextRect.h ) / 2;
-
-        SDL_RenderCopy( m_Renderer, m_TextureText, NULL, &m_TextRect );
+        hasChanged = false;
     }
 }
 
 void TextField::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
     Label::SetText( newText, font, color );
+
+    CalculateTextPosition();
 }
 
 void TextField::SetFieldSize( int newW, int newH ) {
-    m_FieldRect.w = newW;
-    m_FieldRect.h = newH;
+    fieldRect.w = newW;
+    fieldRect.h = newH;
 
-    m_bHasChanged = true;
+    CalculateTextPosition();
+
+    hasChanged = true;
+}
+
+void TextField::CalculateTextPosition() {
+    textRect.x = fieldRect.x + ( fieldRect.w - textRect.w ) / 2;
+    textRect.y = fieldRect.y + ( fieldRect.h - textRect.h ) / 2;
 }

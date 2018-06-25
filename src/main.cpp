@@ -1,19 +1,20 @@
-#include "interface/Interface.h"
+#include "homework/Homework.h"
 
 int main( int argc, char* args[] ) {
+    // Used to avoid them listed as unused variables
     (void) argc;
     (void) args;
 
-    Interface controller;
+    Homework program;
 
     SDL_Event e;
 
-    while( !controller.GetQuit() ) {
-        while( SDL_PollEvent( &e ) != 0 ) {
-            controller.EventHandler( e );
+    while( false == program.GetQuit() ) {
+        while( ScreenController.PollEvents( &e ) != 0 ) {
+            program.EventHandler( e );
         }
 
-        controller.Draw();
+        program.Draw();
     }
 
     return 0;

@@ -1,88 +1,82 @@
 #include "Label.h"
 
 Label::Label() {
-    m_Renderer = NULL;
-
-    m_TextureText = NULL;
-
-    m_TextRect.x = 0;
-    m_TextRect.y = 0;
-    m_TextRect.w = 0;
-    m_TextRect.h = 0;
-
-    m_bHasChanged = false;
+    Init();
 }
 
 Label::~Label() {
-    SDL_DestroyTexture( m_TextureText );
-    
-    m_TextureText = NULL;
+    Deinit();
 }
 
-void Label::Init( SDL_Renderer* pNewRenderer ) {
-    m_Renderer = pNewRenderer;
+void Label::Init() {
+    textTexture = NULL;
 
-    m_TextureText = NULL;
+    textRect.x = 0;
+    textRect.y = 0;
+    textRect.w = 0;
+    textRect.h = 0;
 
-    m_TextRect.x = 0;
-    m_TextRect.y = 0;
-    m_TextRect.w = 0;
-    m_TextRect.h = 0;
+    hasChanged = true;
+}
 
-    m_bHasChanged = true;
+void Label::Deinit() {
+    ScreenController.DestroyTexture( textTexture );
+    textTexture = NULL;
 }
 
 int Label::GetWidth() const {
-    return m_TextRect.w;
+    return textRect.w;
 }
 
 int Label::GetHeight() const {
-    return m_TextRect.h;
+    return textRect.h;
 }
 
-void Label::SetX( int iX ) {
-    m_TextRect.x = iX;
+void Label::SetX( int newX ) {
+    textRect.x = newX;
 
-    m_bHasChanged = true;
+    hasChanged = true;
 }
 
-void Label::SetY( int iY ) {
-    m_TextRect.y = iY;
+void Label::SetY( int newY ) {
+    textRect.y = newY;
 
-    m_bHasChanged = true;
+    hasChanged = true;
 }
 
 void Label::Draw() {
-    if( m_Renderer == NULL || m_TextureText == NULL ) {
+    if( NULL == textTexture ) {
         return;
     }
 
-    if( m_bHasChanged ) {
-        SDL_RenderCopy( m_Renderer, m_TextureText, NULL, &m_TextRect );
-        m_bHasChanged = false;
+    if( hasChanged ) {
+        ScreenController.Render( textTexture, NULL, &textRect );
+        hasChanged = false;
     }
 }
 
 void Label::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
-    SDL_DestroyTexture( m_TextureText );
+    ScreenController.DestroyTexture( textTexture );
 
-    m_bHasChanged = true;
+    SDL_Surface* tempSurface = ScreenController.MakeSurfaceFromText( newText, font, color );
 
-    SDL_Surface* tempSurface = TTF_RenderText_Blended( font, newText.c_str(), color );
+    textRect.w = tempSurface->w;
+    textRect.h = tempSurface->h;
 
-    m_TextRect.w = tempSurface->w;
-    m_TextRect.h = tempSurface->h;
+    textTexture = ScreenController.MakeTextureFromSurface( tempSurface );
 
-    m_TextureText = SDL_CreateTextureFromSurface( m_Renderer, tempSurface );
+    if( NULL == textTexture ) {
+        printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", newText.c_str(),
+                                                                                       SDL_GetError() );
 
-    if( m_TextureText == NULL ) {
-        printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", newText.c_str(), SDL_GetError() );
-
-        m_TextRect.w = 0;
-        m_TextRect.h = 0;
+        textRect.w = 0;
+        textRect.h = 0;
+    }
+    else {
+        hasChanged = true;
     }
 
-    SDL_FreeSurface( tempSurface );
+    ScreenController.DestroySurface( tempSurface );
     tempSurface = NULL;
 }
 

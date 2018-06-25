@@ -1,8 +1,7 @@
 #ifndef __LABEL_H__
 #define __LABEL_H__
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include "../utils/SDL/SDL_Wrapper.h"
 #include <string>
 
 class Label {
@@ -10,8 +9,6 @@ public:
     Label();
     virtual ~Label();
 public:
-    void Init( SDL_Renderer* );
-
     virtual int GetWidth() const;
     virtual int GetHeight() const;
 
@@ -21,13 +18,14 @@ public:
     virtual void Draw();
 
     virtual void SetText( std::string, TTF_Font*, SDL_Color );
+private:
+    virtual void Init();
+    virtual void Deinit();
 protected:
-    SDL_Renderer* m_Renderer;
-    
-    SDL_Rect m_TextRect;
-    SDL_Texture* m_TextureText;
+    SDL_Rect textRect;
+    SDL_Texture* textTexture;
 
-    bool m_bHasChanged;
+    bool hasChanged;
 };
 
 #endif //__LABEL_H__

@@ -8,21 +8,23 @@ public:
     TextField();
     virtual ~TextField();
 public:
-    void Init( SDL_Renderer* );
-
     int GetWidth() const;
     int GetHeight() const;
-    
+
     void SetX( int );
     void SetY( int );
-    
-    virtual void Draw();
 
     virtual void SetText( std::string, TTF_Font*, SDL_Color );
-
     void SetFieldSize( int, int );
+
+    virtual void Draw();
+private:
+    virtual void Init();
+    virtual void Deinit();
+
+    void CalculateTextPosition();
 protected:
-    SDL_Rect m_FieldRect;
+    SDL_Rect fieldRect;
 };
 
 #endif //__TEXTFIELD_H__

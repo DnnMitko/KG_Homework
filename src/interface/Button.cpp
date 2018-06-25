@@ -1,109 +1,105 @@
 #include "Button.h"
 
-SDL_Texture* Button::m_TextureButton = NULL;
+SDL_Texture* Button::buttonTexture = NULL;
 
 Button::Button() : TextField() {
-    m_xmlConstants = NULL;
-
-    m_TextureTextPressed = NULL;
-
-    m_bIsPressed = false;
-    m_bEnabled = true;
+    Init();
 }
 
 Button::~Button() {
-    SDL_DestroyTexture( m_TextureTextPressed );
-    m_TextureTextPressed = NULL;
-
-    SDL_DestroyTexture( m_TextureButton );
-    m_TextureButton = NULL;
+    Deinit();
 }
 
-void Button::Init( pugi::xml_document* pConstants, SDL_Renderer* pNewRenderer ) {
-    TextField::Init( pNewRenderer );
+void Button::Init() {
+    textTexturePressed = NULL;
 
-    m_xmlConstants = pConstants;
+    isPressed = false;
+    isEnabled = true;
 
-    m_TextureTextPressed = NULL;
+    fieldRect.x = 0;
+    fieldRect.y = 0;
+    fieldRect.w = 0;
+    fieldRect.h = 0;
 
-    m_bIsPressed = false;
-    m_bEnabled = true;
+    if( NULL == buttonTexture ) {
+        std::string sprite = Settings.ReadString( "Button", "Sprite" );
+        buttonTexture = ScreenController.LoadTexture( sprite );
 
-    if( !m_TextureButton ) {
-        std::string sSprite = m_xmlConstants->first_child().child( "Button" ).child( "Sprite" ).text().as_string();
-        m_TextureButton = IMG_LoadTexture( m_Renderer, sSprite.c_str() );
-
-        if( m_TextureButton == NULL ) {
+        if( NULL == buttonTexture ) {
             printf( "Failed to load TextureBackground! SDL Error: %s\n", IMG_GetError() );
         }
     }
 }
 
+void Button::Deinit() {
+    ScreenController.DestroyTexture( textTexturePressed );
+    textTexturePressed = NULL;
+
+    ScreenController.DestroyTexture( buttonTexture );
+    buttonTexture = NULL;
+}
+
 void Button::Draw() {
-    if( m_Renderer == NULL
-        || m_TextureText == NULL
-        || m_TextureTextPressed == NULL
-        || m_TextureButton == NULL ) {
+    if( NULL == textTexture
+        || NULL == textTexturePressed
+        || NULL == buttonTexture ) {
             return;
     }
 
-    if( m_bHasChanged ) {
-        m_bHasChanged = false;
+    if( hasChanged ) {
+        int width = Settings.ReadInt( "Button", "SpriteWidth" );
+        int height = Settings.ReadInt( "Button", "SpriteHeight" );
 
-        int iWidth = m_xmlConstants->first_child().child( "Button" ).child( "SpriteWidth" ).text().as_int();
-        int iHeight = m_xmlConstants->first_child().child( "Button" ).child( "SpriteHeight" ).text().as_int();
+        SDL_Rect sourceRect;
+        sourceRect.w = width;
+        sourceRect.h = height;
+        sourceRect.x = 0;
 
-        SDL_Rect tempRect;
-        tempRect.w = iWidth;
-        tempRect.h = iHeight;
-        tempRect.x = 0;
-
-        if( !m_bEnabled ) {
-            tempRect.y = iHeight * 2;
+        if( false == isEnabled ) {
+            sourceRect.y = height * 2;
         }
-        else if( m_bIsPressed ) {
-            tempRect.y = iHeight;
+        else if( isPressed ) {
+            sourceRect.y = height;
         }
         else {
-            tempRect.y = 0;
+            sourceRect.y = 0;
         }
 
-        SDL_RenderCopy( m_Renderer, m_TextureButton, &tempRect, &m_FieldRect );
+        ScreenController.Render( buttonTexture, sourceRect, fieldRect );
 
-        m_TextRect.x = m_FieldRect.x + ( m_FieldRect.w - m_TextRect.w ) / 2;
-        m_TextRect.y = m_FieldRect.y + ( m_FieldRect.h - m_TextRect.h ) / 2;
-
-        if( m_bIsPressed ) {
-            SDL_RenderCopy( m_Renderer, m_TextureTextPressed, NULL, &m_TextRect );
+        if( isPressed ) {
+            ScreenController.Render( textTexturePressed, NULL, textRect );
         }
         else {
-            SDL_RenderCopy( m_Renderer, m_TextureText, NULL, &m_TextRect );
+            ScreenController.Render( textTexture, NULL, textRect );
         }
+
+        hasChanged = false;
     }
 }
 
 void Button::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
     Label::SetText( newText, font, color );
 
-    SDL_DestroyTexture( m_TextureTextPressed );
+    ScreenController.DestroyTexture( textTexturePressed );
 
-    SDL_Surface* tempSurface = TTF_RenderText_Blended( font, newText.c_str(), {0xFF, 0xFF, 0xFF, 0xFF} );
+    SDL_Surface* tempSurface = ScreenController.MakeSurfaceFromText( newText, font, {0xFF, 0xFF, 0xFF, 0xFF} );
 
-    m_TextureTextPressed = SDL_CreateTextureFromSurface( m_Renderer, tempSurface );
+    textTexturePressed = ScreenController.MakeTextureFromSurface( tempSurface );
 
-    if( m_TextureTextPressed == NULL ) {
+    if( NULL == textTexturePressed ) {
         printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", newText.c_str(), SDL_GetError() );
     }
 
-    SDL_FreeSurface( tempSurface );
+    ScreenController.DestroySurface( tempSurface );
     tempSurface = NULL;
 }
 
-bool Button::IsIn( int iX, int iY ) const {
-    if( iX < m_FieldRect.x || iX > ( m_FieldRect.x + m_FieldRect.w ) ) {
+bool Button::IsIn( int x, int y ) const {
+    if( x < fieldRect.x || x > ( fieldRect.x + fieldRect.w ) ) {
         return false;
     }
-    else if( iY < m_FieldRect.y || iY > ( m_FieldRect.y + m_FieldRect.h ) ) {
+    else if( y < fieldRect.y || y > ( fieldRect.y + fieldRect.h ) ) {
         return false;
     }
 
@@ -111,29 +107,29 @@ bool Button::IsIn( int iX, int iY ) const {
 }
 
 void Button::Enable() {
-    m_bEnabled = true;
-    m_bHasChanged = true;
+    isEnabled = true;
+    hasChanged = true;
 }
 
 void Button::Disable() {
-    m_bEnabled = false;
-    m_bHasChanged = true;
+    isEnabled = false;
+    hasChanged = true;
 }
 
 void Button::Press() {
-    if( m_bEnabled ) {
-        m_bIsPressed = true;
-        m_bHasChanged =  true;
+    if( isEnabled ) {
+        isPressed = true;
+        hasChanged =  true;
     }
 }
 
 void Button::Release() {
-    if( m_bEnabled ) {
-        m_bIsPressed = false;
-        m_bHasChanged = true;
+    if( isEnabled ) {
+        isPressed = false;
+        hasChanged = true;
     }
 }
 
 bool Button::IsPressed() const {
-    return m_bIsPressed;
+    return isPressed;
 }
