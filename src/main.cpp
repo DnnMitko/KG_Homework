@@ -10,7 +10,7 @@ int main( int argc, char* args[] ) {
     SDL_Event e;
 
     while( false == program.GetQuit() ) {
-        while( global.GetScreenController().PollEvents( &e ) != 0 ) {
+        while( global.GetScreenController()->PollEvents( &e ) != 0 ) {
             program.EventHandler( e );
         }
 

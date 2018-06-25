@@ -1,5 +1,8 @@
 #include "Global.h"
 
+XML_Wrapper* Global::Settings = NULL;
+SDL_Wrapper* Global::ScreenController = NULL;
+
 Global::Global() {
     Init();
 }
@@ -10,7 +13,7 @@ Global::~Global() {
 
 void Global::Init() {
     Settings = new XML_Wrapper();
-    ScreenController = new SDL_Wrapper();
+    ScreenController = new SDL_Wrapper( Settings );
 }
 
 void Global::Deinit() {
@@ -21,11 +24,11 @@ void Global::Deinit() {
     Settings = NULL;
 }
 
-static SDL_Wrapper* GetScreenController() {
+SDL_Wrapper* Global::GetScreenController() {
     return ScreenController;
 }
 
-static XML_Wrapper* GetSettings() {
+XML_Wrapper* Global::GetSettings() {
     return Settings;
 }
 

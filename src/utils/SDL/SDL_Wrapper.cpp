@@ -1,6 +1,8 @@
 #include "SDL_Wrapper.h"
 
-SDL_Wrapper::SDL_Wrapper() {
+SDL_Wrapper::SDL_Wrapper( XML_Wrapper* settings ) {
+    this->settings = settings;
+
     if( false == Init() ) {
         exit(-1);
     }
@@ -116,9 +118,9 @@ bool SDL_Wrapper::InitWindow() {
         printf( "Warning: Linear texture filtering not enabled!\n" );
     }
 
-    int screenHeight = global.GetSettings().ReadInt( "ScreenHeight" );
-    int screenWidth = global.GetSettings().ReadInt( "ScreenWidth" );
-    std::string windowName = global.GetSettings().ReadString( "WindowName" );
+    int screenHeight = settings->ReadInt( "ScreenHeight" );
+    int screenWidth = settings->ReadInt( "ScreenWidth" );
+    std::string windowName = settings->ReadString( "WindowName" );
 
     window = SDL_CreateWindow( windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                screenWidth, screenHeight, SDL_WINDOW_SHOWN );
