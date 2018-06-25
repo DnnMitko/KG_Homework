@@ -2,7 +2,7 @@
 #define __BUTTON_H__
 
 #include "TextField.h"
-#include "../utils/pugixml/XML_Wrapper.h"
+#include "../utils/Global.h"
 
 class Button: public TextField {
 public:

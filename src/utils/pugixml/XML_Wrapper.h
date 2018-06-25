@@ -19,9 +19,7 @@ private:
     bool Init();
     void Deinit();
 private:
-    pugi::xml_document* settingsFile;
+    pugi::xml_document* global.GetSettings()File;
 };
-
-extern XML_Wrapper Settings;
 
 #endif //__XML_WRAPPER_H__

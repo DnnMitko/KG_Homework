@@ -1,8 +1,7 @@
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
 
-#include "../utils/SDL/SDL_Wrapper.h"
-#include "../utils/pugixml/XML_Wrapper.h"
+#include "../utils/Global.h"
 
 #include "Panel.h"
 

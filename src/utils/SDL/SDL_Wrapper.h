@@ -40,6 +40,4 @@ private:
     SDL_Renderer* renderer;
 };
 
-extern SDL_Wrapper ScreenController;
-
 #endif //__SDL_WRAPPER_H__

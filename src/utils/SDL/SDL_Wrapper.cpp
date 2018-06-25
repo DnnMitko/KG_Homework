@@ -116,9 +116,9 @@ bool SDL_Wrapper::InitWindow() {
         printf( "Warning: Linear texture filtering not enabled!\n" );
     }
 
-    int screenHeight = Settings.ReadInt( "ScreenHeight" );
-    int screenWidth = Settings.ReadInt( "ScreenWidth" );
-    std::string windowName = Settings.ReadString( "WindowName" );
+    int screenHeight = global.GetSettings().ReadInt( "ScreenHeight" );
+    int screenWidth = global.GetSettings().ReadInt( "ScreenWidth" );
+    std::string windowName = global.GetSettings().ReadString( "WindowName" );
 
     window = SDL_CreateWindow( windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                screenWidth, screenHeight, SDL_WINDOW_SHOWN );
@@ -159,5 +159,3 @@ bool SDL_Wrapper::InitTTF() {
 
     return isSuccessful;
 }
-
-SDL_Wrapper ScreenController;

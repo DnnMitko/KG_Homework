@@ -1,7 +1,7 @@
 #ifndef __LABEL_H__
 #define __LABEL_H__
 
-#include "../utils/SDL/SDL_Wrapper.h"
+#include "../utils/Global.h"
 #include <string>
 
 class Label {

@@ -23,7 +23,7 @@ void Panel::Deinit() {
     delete grid;
     grid = NULL;
 
-    ScreenController.CloseFont( font );
+    global.GetScreenController().CloseFont( font );
     font = NULL;
 
     delete textFieldTitle;
@@ -35,10 +35,10 @@ void Panel::Deinit() {
 void Panel::OpenFont() {
     font = NULL;
 
-    std::string newFont = Settings.ReadString( "Button", "Font" );
-    int fontSize = Settings.ReadInt( "Button", "FontSize" );
+    std::string newFont = global.GetSettings().ReadString( "Button", "Font" );
+    int fontSize = global.GetSettings().ReadInt( "Button", "FontSize" );
 
-    font = ScreenController.OpenFont( newFont, fontSize );
+    font = global.GetScreenController().OpenFont( newFont, fontSize );
 }
 
 void Panel::CreateTitle() {
@@ -46,9 +46,9 @@ void Panel::CreateTitle() {
 
     textFieldTitle->SetText( "Bresenham", font, {0xFF, 0xFF, 0xFF, 0xFF} );
 
-    int screenWidth = Settings.ReadInt( "ScreenWidth" );
-    int gridOffsetY = Settings.ReadInt( "GridPos", "y" );
-    int titleWidth = Settings.ReadInt( "TitleWidth" );
+    int screenWidth = global.GetSettings().ReadInt( "ScreenWidth" );
+    int gridOffsetY = global.GetSettings().ReadInt( "GridPos", "y" );
+    int titleWidth = global.GetSettings().ReadInt( "TitleWidth" );
 
     textFieldTitle->SetFieldSize( titleWidth, gridOffsetY );
     textFieldTitle->SetX( ( screenWidth - titleWidth ) / 2 );
@@ -75,26 +75,26 @@ void Panel::CreateButtons() {
 
     SDL_Color color = {0x00, 0x00, 0x00, 0xFF};
     // Left side
-    m_ButtonGridInitial->SetText( Settings.ReadString( "GridScale", "Initial" ), font, color );
-    m_ButtonGridVerySmall->SetText( Settings.ReadString( "GridScale", "VerySmall" ), font, color );
-    m_ButtonGridSmall->SetText( Settings.ReadString( "GridScale", "Small" ), font, color );
-    m_ButtonGridMedium->SetText( Settings.ReadString( "GridScale", "Medium" ), font, color );
-    m_ButtonGridLarge->SetText( Settings.ReadString( "GridScale", "Large" ), font, color );
-    m_ButtonGridVeryLarge->SetText( Settings.ReadString( "GridScale", "VeryLarge" ), font, color );
+    m_ButtonGridInitial->SetText( global.GetSettings().ReadString( "GridScale", "Initial" ), font, color );
+    m_ButtonGridVerySmall->SetText( global.GetSettings().ReadString( "GridScale", "VerySmall" ), font, color );
+    m_ButtonGridSmall->SetText( global.GetSettings().ReadString( "GridScale", "Small" ), font, color );
+    m_ButtonGridMedium->SetText( global.GetSettings().ReadString( "GridScale", "Medium" ), font, color );
+    m_ButtonGridLarge->SetText( global.GetSettings().ReadString( "GridScale", "Large" ), font, color );
+    m_ButtonGridVeryLarge->SetText( global.GetSettings().ReadString( "GridScale", "VeryLarge" ), font, color );
 
     // Right side
-    m_ButtonStateBresenham->SetText( Settings.ReadString( "Button", "Bresenham" ), font, color );
-    m_ButtonBresenhamDrawType->SetText( Settings.ReadString( "Button", "BresenhamDrawType_1" ), font, color );
-    m_ButtonStateMichener->SetText( Settings.ReadString( "Button", "Michener" ), font, color );
-    m_ButtonStateBoundryFill->SetText( Settings.ReadString( "Button", "BoundryFill" ), font, color );
-    m_ButtonStateLiangBarsky ->SetText( Settings.ReadString( "Button", "LiangBarsky" ), font, color );
-    m_ButtonStateSpline->SetText( Settings.ReadString( "Button", "Spline" ), font, color );
-    m_ButtonStateClear->SetText( Settings.ReadString( "Button", "Clear" ), font, color );
+    m_ButtonStateBresenham->SetText( global.GetSettings().ReadString( "Button", "Bresenham" ), font, color );
+    m_ButtonBresenhamDrawType->SetText( global.GetSettings().ReadString( "Button", "BresenhamDrawType_1" ), font, color );
+    m_ButtonStateMichener->SetText( global.GetSettings().ReadString( "Button", "Michener" ), font, color );
+    m_ButtonStateBoundryFill->SetText( global.GetSettings().ReadString( "Button", "BoundryFill" ), font, color );
+    m_ButtonStateLiangBarsky ->SetText( global.GetSettings().ReadString( "Button", "LiangBarsky" ), font, color );
+    m_ButtonStateSpline->SetText( global.GetSettings().ReadString( "Button", "Spline" ), font, color );
+    m_ButtonStateClear->SetText( global.GetSettings().ReadString( "Button", "Clear" ), font, color );
 }
 
 void Panel::PositionButtons() {
-    int width = Settings.ReadInt( "Button", "Width" );
-    int height = Settings.ReadInt( "Button", "Height" );
+    int width = global.GetSettings().ReadInt( "Button", "Width" );
+    int height = global.GetSettings().ReadInt( "Button", "Height" );
 
     // Left side
     m_ButtonGridInitial->SetFieldSize( width, height );
@@ -114,7 +114,7 @@ void Panel::PositionButtons() {
     m_ButtonStateClear->SetFieldSize( width, height );
 
     // Left side
-    int offsetX = Settings.ReadInt( "Button", "OffsetX" );
+    int offsetX = global.GetSettings().ReadInt( "Button", "OffsetX" );
     m_ButtonGridInitial->SetX( offsetX );
     m_ButtonGridVerySmall->SetX( offsetX );
     m_ButtonGridSmall->SetX( offsetX );
@@ -123,7 +123,7 @@ void Panel::PositionButtons() {
     m_ButtonGridVeryLarge->SetX( offsetX );
 
     // Right side
-    offsetX = Settings.ReadInt( "ScreenWidth" ) - offsetX - width;
+    offsetX = global.GetSettings().ReadInt( "ScreenWidth" ) - offsetX - width;
     m_ButtonStateBresenham->SetX( offsetX );
     m_ButtonBresenhamDrawType->SetX( offsetX );
     m_ButtonStateMichener->SetX( offsetX );
@@ -133,8 +133,8 @@ void Panel::PositionButtons() {
     m_ButtonStateClear->SetX( offsetX );
 
     // Left side
-    int offsetY = Settings.ReadInt( "Button", "OffsetY" );
-    int paddingY = Settings.ReadInt( "Button", "PaddingY" );
+    int offsetY = global.GetSettings().ReadInt( "Button", "OffsetY" );
+    int paddingY = global.GetSettings().ReadInt( "Button", "PaddingY" );
     m_ButtonGridInitial->SetY( offsetY );
     m_ButtonGridVerySmall->SetY( offsetY + ( height + paddingY ) );
     m_ButtonGridSmall->SetY( offsetY + 2 * ( height + paddingY ) );
@@ -315,10 +315,10 @@ void Panel::EventHandler( SDL_Event& event ) {
         }
         else if( m_ButtonBresenhamDrawType->IsIn( x, y ) && m_ButtonBresenhamDrawType->IsPressed() ) {
             if( grid->ToggleDrawBresenham() ) {
-                m_ButtonBresenhamDrawType->SetText( Settings.ReadString( "Button", "BresenhamDrawType_1" ), font, {0x00, 0x00, 0x00, 0xFF} );
+                m_ButtonBresenhamDrawType->SetText( global.GetSettings().ReadString( "Button", "BresenhamDrawType_1" ), font, {0x00, 0x00, 0x00, 0xFF} );
             }
             else {
-                m_ButtonBresenhamDrawType->SetText( Settings.ReadString( "Button", "BresenhamDrawType_2" ), font, {0x00, 0x00, 0x00, 0xFF} );
+                m_ButtonBresenhamDrawType->SetText( global.GetSettings().ReadString( "Button", "BresenhamDrawType_2" ), font, {0x00, 0x00, 0x00, 0xFF} );
             }
 
         }
