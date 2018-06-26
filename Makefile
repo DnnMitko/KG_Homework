@@ -1,6 +1,6 @@
 export COMMON = $(PWD)/Makefile_Common
 
-export INCLUDES = -I$(PWD)/src/interface -I$(PWD)/src/grid -I$(PWD)/src/utils/pugixml -I$(PWD)/src/utils/SDL
+export INCLUDE_DIRS = -I$(PWD)/src/interface -I$(PWD)/src/grid -I$(PWD)/src/utils/pugixml -I$(PWD)/src/utils/SDL
 
 include $(COMMON)
 
