@@ -41,8 +41,8 @@ void Button::Deinit() {
 
 void Button::Draw() {
     if( NULL == textTexture
-        || NULL == textTexturePressed
-        || NULL == buttonTexture ) {
+     || NULL == textTexturePressed
+     || NULL == buttonTexture ) {
             return;
     }
 
@@ -79,7 +79,7 @@ void Button::Draw() {
 }
 
 void Button::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
-    Label::SetText( newText, font, color );
+    TextField::SetText( newText, font, color );
 
     screenController.getInstance()->DestroyTexture( textTexturePressed );
 

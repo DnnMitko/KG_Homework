@@ -36,8 +36,8 @@
         <PaddingY>10</PaddingY>
 
         <Bresenham>B</Bresenham>
-        <BresenhamDrawType_1>> > ></BresenhamDrawType_1>
-        <BresenhamDrawType_2>>> <<</BresenhamDrawType_2>
+        <BresenhamDrawType_1>1-way</BresenhamDrawType_1>
+        <BresenhamDrawType_2>2-way</BresenhamDrawType_2>
         <Michener>M</Michener>
         <BoundryFill>B F</BoundryFill>
         <LiangBarsky>L B</LiangBarsky>

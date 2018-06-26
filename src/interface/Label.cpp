@@ -65,16 +65,7 @@ void Label::SetText( std::string newText, TTF_Font* font, SDL_Color color ) {
 
     textTexture = screenController.getInstance()->MakeTextureFromSurface( tempSurface );
 
-    if( NULL == textTexture ) {
-        printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", newText.c_str(),
-                                                                                       SDL_GetError() );
-
-        textRect.w = 0;
-        textRect.h = 0;
-    }
-    else {
-        hasChanged = true;
-    }
+    hasChanged = true;
 
     screenController.getInstance()->DestroySurface( tempSurface );
     tempSurface = NULL;

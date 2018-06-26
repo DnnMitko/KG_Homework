@@ -44,7 +44,8 @@ void SDL_Wrapper::Render( SDL_Texture* texture, SDL_Rect* sourceRect, SDL_Rect* 
 }
 
 SDL_Surface* SDL_Wrapper::MakeSurfaceFromText( std::string text, TTF_Font* font, SDL_Color color ) {
-    static SDL_Surface* surface = TTF_RenderText_Blended( font, text.c_str(), color );
+    static SDL_Surface* surface;
+    surface = TTF_RenderText_Blended( font, text.c_str(), color );
 
     return surface;
 }
@@ -54,7 +55,8 @@ void SDL_Wrapper::DestroySurface( SDL_Surface* surface ) {
 }
 
 SDL_Texture* SDL_Wrapper::MakeTextureFromSurface( SDL_Surface* surface ) {
-    static SDL_Texture* texture = SDL_CreateTextureFromSurface( renderer, surface );
+    static SDL_Texture* texture;
+    texture = SDL_CreateTextureFromSurface( renderer, surface );
 
     return texture;
 }
@@ -65,7 +67,8 @@ void SDL_Wrapper::FillRect( SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a ) 
 }
 
 SDL_Texture* SDL_Wrapper::LoadTexture( std::string textureAddress ) {
-    static SDL_Texture* texture = IMG_LoadTexture( renderer, textureAddress.c_str() );
+    static SDL_Texture* texture;
+    texture = IMG_LoadTexture( renderer, textureAddress.c_str() );
 
     return texture;
 }
@@ -75,7 +78,8 @@ int SDL_Wrapper::PollEvents( SDL_Event* event ) {
 }
 
 TTF_Font* SDL_Wrapper::OpenFont( std::string fontAddress, int fontSize ) {
-    static TTF_Font* font = TTF_OpenFont( fontAddress.c_str(), fontSize );
+    static TTF_Font* font;
+    font = TTF_OpenFont( fontAddress.c_str(), fontSize );
 
     return font;
 }
