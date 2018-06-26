@@ -1,5 +1,7 @@
 export COMMON = $(PWD)/Makefile_Common
 
+export INCLUDES = -I$(PWD)/src/interface -I$(PWD)/src/grid -I$(PWD)/src/utils/pugixml -I$(PWD)/src/utils/SDL
+
 include $(COMMON)
 
 .NOTPARALLEL :
@@ -28,7 +30,7 @@ $(OBJ_DIR) :
 _submodules :
 	@$(MAKE) --no-print-directory -C $(SRCDIR)
 
-$(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -I/constants -o $(EXE)
+$(EXE) : CMD = $(CC) $(OBJ_DIR)/*.o $(LINKER_FLAGS) -o $(EXE)
 
 $(EXE) :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)═══[Linking executable]════$(NO_COLOR)\n"

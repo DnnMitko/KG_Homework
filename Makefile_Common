@@ -38,4 +38,4 @@ LIST                 = $(foreach file, $(SRCS), $(PRINT_DEPTH)printf "$(LABEL_CO
 
 CC = g++
 
-COMPILER_FLAGS       := -Wall -Wextra -fdiagnostics-color -g
+COMPILER_FLAGS       := -fdiagnostics-color -g

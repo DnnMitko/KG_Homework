@@ -12,7 +12,7 @@ all : _header $(OBJS)
 _header :
 	@$(PRINT_DEPTH_HEADER)printf "$(LABEL_COLOR)════════[bresenham]════════$(NO_COLOR)\n"
 
-$(OBJS) : CMD = $(CC) $(COMPILER_FLAGS) -c $< -o $@
+$(OBJS) : CMD = $(CC) $(INCLUDES) $(COMPILER_FLAGS) -c $< -o $@
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp
 	@$(PRINT_DEPTH)printf "$(LABEL_COLOR)╠═$(NO_COLOR)";$(PRINT)
