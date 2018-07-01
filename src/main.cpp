@@ -1,4 +1,4 @@
-#include "Interface.h"
+#include "Program.h"
 
 #include "ScreenController.h"
 
@@ -7,17 +7,17 @@ int main( int argc, char* args[] ) {
     (void) argc;
     (void) args;
 
-    Interface program;
+    Program demo;
     ScreenController screen;
 
     SDL_Event event;
 
-    while( false == program.GetQuit() ) {
+    while( false == demo.GetQuit() ) {
         while( screen.getInstance()->PollEvents( &event ) != 0 ) {
-            program.EventHandler( event );
+            demo.EventHandler( event );
         }
 
-        program.Draw();
+        demo.Draw();
     }
 
     return 0;
